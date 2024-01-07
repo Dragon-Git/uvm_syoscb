@@ -174,45 +174,47 @@ window.onload = initDynSections;
 <a name="l00084"></a>00084       end
 <a name="l00085"></a>00085     end
 <a name="l00086"></a>00086 
-<a name="l00087"></a>00087     if(secondary_item_found.size() != 0) begin
-<a name="l00088"></a>00088       string queue_name;
-<a name="l00089"></a>00089       `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;Found match for primary queue item : %s&quot;,
-<a name="l00090"></a>00090                                    primary_queue_iter.get_item().sprint()), UVM_FULL);
-<a name="l00091"></a>00091 
-<a name="l00092"></a>00092       <span class="comment">// Remove from primary</span>
-<a name="l00093"></a>00093       if(!primary_queue.delete_item(primary_queue_iter.get_idx())) begin
-<a name="l00094"></a>00094         `uvm_error(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete item idx %0d from queue %s&quot;,
-<a name="l00095"></a>00095                                             primary_queue_iter.get_idx(), primary_queue.get_name()));
-<a name="l00096"></a>00096       end
-<a name="l00097"></a>00097 
-<a name="l00098"></a>00098       <span class="comment">// Remove from all secondaries</span>
-<a name="l00099"></a>00099       while(secondary_item_found.next(queue_name)) begin
-<a name="l00100"></a>00100         <a class="code" href="classcl__syoscb__queue.html">cl_syoscb_queue</a> secondary_queue;
-<a name="l00101"></a>00101 
-<a name="l00102"></a>00102         if(!$cast(secondary_queue, this.get_cfg().queues[queue_name])) begin
-<a name="l00103"></a>00103           `uvm_fatal(&quot;TYPE_ERROR&quot;, $sformatf(&quot;Unable to cast type %0s to type %0s&quot;,
-<a name="l00104"></a>00104                                              this.get_cfg().queues[primary_queue_name].get_type_name(),
-<a name="l00105"></a>00105                                              primary_queue.get_type_name()));
-<a name="l00106"></a>00106         end
-<a name="l00107"></a>00107         if(!secondary_queue.delete_item(secondary_item_found[queue_name])) begin
-<a name="l00108"></a>00108           `uvm_error(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete item idx %0d from queue %s&quot;,
-<a name="l00109"></a>00109                                               secondary_item_found[queue_name], secondary_queue.get_name()));
-<a name="l00110"></a>00110         end
-<a name="l00111"></a>00111       end
-<a name="l00112"></a>00112     end
-<a name="l00113"></a>00113 
-<a name="l00114"></a>00114     if(!primary_queue_iter.next()) begin
-<a name="l00115"></a>00115       `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to get next element from iterator on parimary queue: %s&quot;, primary_queue_name));
-<a name="l00116"></a>00116     end
-<a name="l00117"></a>00117   end
-<a name="l00118"></a>00118 
-<a name="l00119"></a>00119   if(!primary_queue.delete_iterator(primary_queue_iter)) begin
-<a name="l00120"></a>00120     `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete iterator from primary queue: %s&quot;, primary_queue_name));
-<a name="l00121"></a>00121   end
-<a name="l00122"></a>00122 
-<a name="l00123"></a>00123   <span class="comment">// TBD: See note in cl_scbsyo_compare_base.svh</span>
-<a name="l00124"></a>00124   return(1&apos;b1);
-<a name="l00125"></a>00125 endfunction : <a class="code" href="classcl__syoscb__compare__ooo.html#a3d5d3650ead69b37364524b622831881">compare_do</a>
+<a name="l00087"></a>00087     <span class="comment">// Only start to remove items if all slave items are found (One from each slave queue)</span>
+<a name="l00088"></a>00088     if(secondary_item_found.size() == queue_names.size()-1) begin
+<a name="l00089"></a>00089       string queue_name;
+<a name="l00090"></a>00090       `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;Found match for primary queue item : %s&quot;,
+<a name="l00091"></a>00091                                    primary_queue_iter.get_item().sprint()), UVM_FULL);
+<a name="l00092"></a>00092 
+<a name="l00093"></a>00093       <span class="comment">// Remove from primary</span>
+<a name="l00094"></a>00094       if(!primary_queue.delete_item(primary_queue_iter.get_idx())) begin
+<a name="l00095"></a>00095         `uvm_error(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete item idx %0d from queue %s&quot;,
+<a name="l00096"></a>00096                                             primary_queue_iter.get_idx(), primary_queue.get_name()));
+<a name="l00097"></a>00097       end
+<a name="l00098"></a>00098 
+<a name="l00099"></a>00099       <span class="comment">// Remove from all secondaries</span>
+<a name="l00100"></a>00100       while(secondary_item_found.next(queue_name)) begin
+<a name="l00101"></a>00101         <a class="code" href="classcl__syoscb__queue.html">cl_syoscb_queue</a> secondary_queue;
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103         if(!$cast(secondary_queue, this.get_cfg().queues[queue_name])) begin
+<a name="l00104"></a>00104           `uvm_fatal(&quot;TYPE_ERROR&quot;, $sformatf(&quot;Unable to cast type %0s to type %0s&quot;,
+<a name="l00105"></a>00105                                              this.get_cfg().queues[primary_queue_name].get_type_name(),
+<a name="l00106"></a>00106                                              primary_queue.get_type_name()));
+<a name="l00107"></a>00107         end
+<a name="l00108"></a>00108         if(!secondary_queue.delete_item(secondary_item_found[queue_name])) begin
+<a name="l00109"></a>00109           `uvm_error(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete item idx %0d from queue %s&quot;,
+<a name="l00110"></a>00110                                               secondary_item_found[queue_name], secondary_queue.get_name()));
+<a name="l00111"></a>00111         end
+<a name="l00112"></a>00112       end
+<a name="l00113"></a>00113     end
+<a name="l00114"></a>00114 
+<a name="l00115"></a>00115     <span class="comment">// TBD: Call .next() blindly since we do  ot care about the</span>
+<a name="l00116"></a>00116     <span class="comment">//      return value, since we might be at the end of the queue.</span>
+<a name="l00117"></a>00117     <span class="comment">//      Thus, .next() will fail</span>
+<a name="l00118"></a>00118     void&apos;(primary_queue_iter.next());
+<a name="l00119"></a>00119   end
+<a name="l00120"></a>00120 
+<a name="l00121"></a>00121   if(!primary_queue.delete_iterator(primary_queue_iter)) begin
+<a name="l00122"></a>00122     `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete iterator from primary queue: %s&quot;, primary_queue_name));
+<a name="l00123"></a>00123   end
+<a name="l00124"></a>00124 
+<a name="l00125"></a>00125   <span class="comment">// TBD: See note in cl_scbsyo_compare_base.svh</span>
+<a name="l00126"></a>00126   return(1&apos;b1);
+<a name="l00127"></a>00127 endfunction : <a class="code" href="classcl__syoscb__compare__ooo.html#a3d5d3650ead69b37364524b622831881">compare_do</a>
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -272,7 +274,7 @@ window.onload = initDynSections;
   <tr>
     <td width = "20%">
        <address style="text-align: left;"><small>
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.0<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.1<br>
        </small></address>
     </td>
     <td width = "60%">
@@ -297,7 +299,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Thu Oct 30 05:34:49 2014</small></address>
+      Mon Nov 24 09:24:22 2014</small></address>
    </td>
   </tr>
 </table>

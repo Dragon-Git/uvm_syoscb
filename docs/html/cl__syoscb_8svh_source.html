@@ -126,74 +126,75 @@ window.onload = initDynSections;
 <a name="l00036"></a>00036          this.<a class="code" href="classcl__syoscb.html#ad2ae3f40dfef089783087874787ab1b7">cfg</a>.<a class="code" href="classcl__syoscb.html#a4f5ac6f44453c7e25ad753723693c9d1">queues</a>[queue_name] = this.<a class="code" href="classcl__syoscb.html#a4f5ac6f44453c7e25ad753723693c9d1">queues</a>[idx++];
 <a name="l00037"></a>00037       end
 <a name="l00038"></a>00038    end
-<a name="l00039"></a>00039    this.<a class="code" href="classcl__syoscb.html#a71521d7baf421c4f12073b16f71b8220">compare_strategy</a> = <a class="code" href="classcl__syoscb.html#a34d30eb8ec451e2257e972b427ebc9a7">new</a>(.name(&quot;compare_strategy&quot;), .parent(this));
-<a name="l00040"></a>00040 
-<a name="l00041"></a>00041    <span class="comment">// TBD: This should either be passed as args to constructor</span>
-<a name="l00042"></a>00042    <span class="comment">//      or the objects should query the CFG DB directly if possible</span>
-<a name="l00043"></a>00043    <span class="comment">//      The parent path is not available anymore after we changed to uvm_object</span>
-<a name="l00044"></a>00044    this.<a class="code" href="classcl__syoscb.html#a71521d7baf421c4f12073b16f71b8220">compare_strategy</a>.compare_algo.set_cfg(this.cfg);
-<a name="l00045"></a>00045       
-<a name="l00046"></a>00046    begin
-<a name="l00047"></a>00047       <a class="code" href="classcl__syoscb__report__catcher.html">cl_syoscb_report_catcher</a> catcher = <a class="code" href="classcl__syoscb.html#a34d30eb8ec451e2257e972b427ebc9a7">new</a>();
-<a name="l00048"></a>00048       uvm_report_cb::add(null, catcher);
-<a name="l00049"></a>00049    end
-<a name="l00050"></a>00050 endfunction : <a class="code" href="classcl__syoscb.html#aff5b55683b8bb74b5b75f607ac043602">build_phase</a>
-<a name="l00051"></a>00051 
-<a name="l00052"></a><a class="code" href="classcl__syoscb.html#afa4a72326d0672809361fdc3e57fc78d">00052</a> function bit <a class="code" href="classcl__syoscb.html">cl_syoscb</a>::<a class="code" href="classcl__syoscb.html#afa4a72326d0672809361fdc3e57fc78d">compare</a>();
-<a name="l00053"></a>00053    return(this.compare_strategy.compare());
-<a name="l00054"></a>00054 endfunction: <a class="code" href="classcl__syoscb.html#afa4a72326d0672809361fdc3e57fc78d">compare</a>
-<a name="l00055"></a>00055 <span class="comment"></span>
-<a name="l00056"></a>00056 <span class="comment">///////////////////////////////////////</span>
-<a name="l00057"></a>00057 <span class="comment"></span><span class="comment">// Function based API</span><span class="comment"></span>
-<a name="l00058"></a>00058 <span class="comment">///////////////////////////////////////</span>
-<a name="l00059"></a><a class="code" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f">00059</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb.html">cl_syoscb</a>::<a class="code" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f">add_item</a>(string queue_name, string producer, uvm_sequence_item item);
-<a name="l00060"></a>00060    <span class="comment">// TBD: Add checks of correct queue and producer</span>
-<a name="l00061"></a>00061    if(!this.cfg.queues[queue_name].add_item(producer, item)) begin
-<a name="l00062"></a>00062      `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to add item to queue: %s&quot;, queue_name));
-<a name="l00063"></a>00063    end
-<a name="l00064"></a>00064 
-<a name="l00065"></a>00065    <span class="comment">// TBD: This should be revised according to how it was in the old SCB</span>
-<a name="l00066"></a>00066    <span class="comment">// TBD: Return value from compare() should also be handled</span>
-<a name="l00067"></a>00067    void&apos;(this.compare());
-<a name="l00068"></a>00068 endfunction : <a class="code" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f">add_item</a>
-<a name="l00069"></a>00069 <span class="comment"></span>
-<a name="l00070"></a>00070 <span class="comment">///////////////////////////////////////</span>
-<a name="l00071"></a>00071 <span class="comment"></span><span class="comment">// Transaction based API</span><span class="comment"></span>
-<a name="l00072"></a>00072 <span class="comment">///////////////////////////////////////</span>
-<a name="l00073"></a>00073 <span class="comment"></span><span class="comment">// TBD</span>
-<a name="l00074"></a>00074 
-<a name="l00075"></a><a class="code" href="classcl__syoscb.html#a065af329e4379b0416c7632c87158943">00075</a> function void <a class="code" href="classcl__syoscb.html">cl_syoscb</a>::<a class="code" href="classcl__syoscb.html#a065af329e4379b0416c7632c87158943">check_phase</a>(uvm_phase phase);
-<a name="l00076"></a>00076    string queue_names[];
-<a name="l00077"></a>00077    <a class="code" href="classcl__syoscb__queue__std.html">cl_syoscb_queue_std</a> queue;
-<a name="l00078"></a>00078    super.<a class="code" href="classcl__syoscb.html#a065af329e4379b0416c7632c87158943">check_phase</a>(phase);
-<a name="l00079"></a>00079 
-<a name="l00080"></a>00080    this.<a class="code" href="classcl__syoscb.html#ad2ae3f40dfef089783087874787ab1b7">cfg</a>.get_queues(queue_names);
-<a name="l00081"></a>00081    foreach (queue_names[i]) begin
-<a name="l00082"></a>00082       $cast(queue, this.cfg.queues[queue_names[i]]);
-<a name="l00083"></a>00083       if (queue.items.size()!=0) begin
-<a name="l00084"></a>00084          string firstitem = queue.items[0].sprint();
-<a name="l00085"></a>00085          `uvm_error(&quot;SYOSCB&quot;, $psprintf(&quot;Queue %s not empty, entries : %d, first element : \n%s&quot;, queue_names[i], queue.items.size(), firstitem));
-<a name="l00086"></a>00086          <span class="comment">// TBD dump first parts of each queue !</span>
-<a name="l00087"></a>00087          <span class="comment">// will we use std UVM report mechanisms or a special channel we can redirect ?</span>
-<a name="l00088"></a>00088       end
-<a name="l00089"></a>00089    end
-<a name="l00090"></a>00090 endfunction : <a class="code" href="classcl__syoscb.html#a065af329e4379b0416c7632c87158943">check_phase</a>
-<a name="l00091"></a>00091 
-<a name="l00092"></a><a class="code" href="classcl__syoscb.html#ae54aafecd74c7f5a6531349d4bbe7c65">00092</a> function void <a class="code" href="classcl__syoscb.html">cl_syoscb</a>::<a class="code" href="classcl__syoscb.html#ae54aafecd74c7f5a6531349d4bbe7c65">report_phase</a>(uvm_phase phase);
-<a name="l00093"></a>00093    super.<a class="code" href="classcl__syoscb.html#ae54aafecd74c7f5a6531349d4bbe7c65">report_phase</a>(phase);
-<a name="l00094"></a>00094    <span class="comment">// TBD this should NOT  call the report phase of the compare method !</span>
-<a name="l00095"></a>00095    <span class="comment">// as cl_syoscb_compare_base extends uvm_component the compare method should just perform its end of test checks in</span>
-<a name="l00096"></a>00096    <span class="comment">// uvm_check_phase, from the UVM 1.1 class ref manual:</span>
-<a name="l00097"></a>00097    <span class="comment">// uvm_build_phase      Create and configure of testbench structure</span>
-<a name="l00098"></a>00098    <span class="comment">// uvm_connect_phase      Establish cross-component connections.</span>
-<a name="l00099"></a>00099    <span class="comment">// uvm_end_of_elaboration_phase      Fine-tune the testbench.</span>
-<a name="l00100"></a>00100    <span class="comment">// uvm_start_of_simulation_phase      Get ready for DUT to be simulated.</span>
-<a name="l00101"></a>00101    <span class="comment">// uvm_run_phase      Stimulate the DUT.</span>
-<a name="l00102"></a>00102    <span class="comment">// uvm_extract_phase      Extract data from different points of the verficiation environment.</span>
-<a name="l00103"></a>00103    <span class="comment">// uvm_check_phase      Check for any unexpected conditions in the verification environment.</span>
-<a name="l00104"></a>00104    <span class="comment">// uvm_report_phase      Report results of the test.</span>
-<a name="l00105"></a>00105    <span class="comment">// uvm_final_phase      Tie up loose ends.</span>
-<a name="l00106"></a>00106 endfunction : <a class="code" href="classcl__syoscb.html#ae54aafecd74c7f5a6531349d4bbe7c65">report_phase</a>
+<a name="l00039"></a>00039 
+<a name="l00040"></a>00040    this.<a class="code" href="classcl__syoscb.html#a71521d7baf421c4f12073b16f71b8220">compare_strategy</a> = <a class="code" href="classcl__syoscb__compare.html">cl_syoscb_compare</a>::type_id::create(.name(&quot;compare_strategy&quot;), .parent(this));
+<a name="l00041"></a>00041 
+<a name="l00042"></a>00042    <span class="comment">// TBD: This should either be passed as args to constructor</span>
+<a name="l00043"></a>00043    <span class="comment">//      or the objects should query the CFG DB directly if possible</span>
+<a name="l00044"></a>00044    <span class="comment">//      The parent path is not available anymore after we changed to uvm_object</span>
+<a name="l00045"></a>00045    this.<a class="code" href="classcl__syoscb.html#a71521d7baf421c4f12073b16f71b8220">compare_strategy</a>.compare_algo.set_cfg(this.cfg);
+<a name="l00046"></a>00046       
+<a name="l00047"></a>00047    begin
+<a name="l00048"></a>00048       <a class="code" href="classcl__syoscb__report__catcher.html">cl_syoscb_report_catcher</a> catcher = <a class="code" href="classcl__syoscb.html#a34d30eb8ec451e2257e972b427ebc9a7">new</a>();
+<a name="l00049"></a>00049       uvm_report_cb::add(null, catcher);
+<a name="l00050"></a>00050    end
+<a name="l00051"></a>00051 endfunction : <a class="code" href="classcl__syoscb.html#aff5b55683b8bb74b5b75f607ac043602">build_phase</a>
+<a name="l00052"></a>00052 
+<a name="l00053"></a><a class="code" href="classcl__syoscb.html#afa4a72326d0672809361fdc3e57fc78d">00053</a> function bit <a class="code" href="classcl__syoscb.html">cl_syoscb</a>::<a class="code" href="classcl__syoscb.html#afa4a72326d0672809361fdc3e57fc78d">compare</a>();
+<a name="l00054"></a>00054    return(this.compare_strategy.compare());
+<a name="l00055"></a>00055 endfunction: <a class="code" href="classcl__syoscb.html#afa4a72326d0672809361fdc3e57fc78d">compare</a>
+<a name="l00056"></a>00056 <span class="comment"></span>
+<a name="l00057"></a>00057 <span class="comment">///////////////////////////////////////</span>
+<a name="l00058"></a>00058 <span class="comment"></span><span class="comment">// Function based API</span><span class="comment"></span>
+<a name="l00059"></a>00059 <span class="comment">///////////////////////////////////////</span>
+<a name="l00060"></a><a class="code" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f">00060</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb.html">cl_syoscb</a>::<a class="code" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f">add_item</a>(string queue_name, string producer, uvm_sequence_item item);
+<a name="l00061"></a>00061    <span class="comment">// TBD: Add checks of correct queue and producer</span>
+<a name="l00062"></a>00062    if(!this.cfg.queues[queue_name].add_item(producer, item)) begin
+<a name="l00063"></a>00063      `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to add item to queue: %s&quot;, queue_name));
+<a name="l00064"></a>00064    end
+<a name="l00065"></a>00065 
+<a name="l00066"></a>00066    <span class="comment">// TBD: This should be revised according to how it was in the old SCB</span>
+<a name="l00067"></a>00067    <span class="comment">// TBD: Return value from compare() should also be handled</span>
+<a name="l00068"></a>00068    void&apos;(this.compare());
+<a name="l00069"></a>00069 endfunction : <a class="code" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f">add_item</a>
+<a name="l00070"></a>00070 <span class="comment"></span>
+<a name="l00071"></a>00071 <span class="comment">///////////////////////////////////////</span>
+<a name="l00072"></a>00072 <span class="comment"></span><span class="comment">// Transaction based API</span><span class="comment"></span>
+<a name="l00073"></a>00073 <span class="comment">///////////////////////////////////////</span>
+<a name="l00074"></a>00074 <span class="comment"></span><span class="comment">// TBD</span>
+<a name="l00075"></a>00075 
+<a name="l00076"></a><a class="code" href="classcl__syoscb.html#a065af329e4379b0416c7632c87158943">00076</a> function void <a class="code" href="classcl__syoscb.html">cl_syoscb</a>::<a class="code" href="classcl__syoscb.html#a065af329e4379b0416c7632c87158943">check_phase</a>(uvm_phase phase);
+<a name="l00077"></a>00077    string queue_names[];
+<a name="l00078"></a>00078    <a class="code" href="classcl__syoscb__queue__std.html">cl_syoscb_queue_std</a> queue;
+<a name="l00079"></a>00079    super.<a class="code" href="classcl__syoscb.html#a065af329e4379b0416c7632c87158943">check_phase</a>(phase);
+<a name="l00080"></a>00080 
+<a name="l00081"></a>00081    this.<a class="code" href="classcl__syoscb.html#ad2ae3f40dfef089783087874787ab1b7">cfg</a>.get_queues(queue_names);
+<a name="l00082"></a>00082    foreach (queue_names[i]) begin
+<a name="l00083"></a>00083       $cast(queue, this.cfg.queues[queue_names[i]]);
+<a name="l00084"></a>00084       if (queue.items.size()!=0) begin
+<a name="l00085"></a>00085          string firstitem = queue.items[0].sprint();
+<a name="l00086"></a>00086          `uvm_error(&quot;SYOSCB&quot;, $psprintf(&quot;Queue %s not empty, entries : %d, first element : \n%s&quot;, queue_names[i], queue.items.size(), firstitem));
+<a name="l00087"></a>00087          <span class="comment">// TBD dump first parts of each queue !</span>
+<a name="l00088"></a>00088          <span class="comment">// will we use std UVM report mechanisms or a special channel we can redirect ?</span>
+<a name="l00089"></a>00089       end
+<a name="l00090"></a>00090    end
+<a name="l00091"></a>00091 endfunction : <a class="code" href="classcl__syoscb.html#a065af329e4379b0416c7632c87158943">check_phase</a>
+<a name="l00092"></a>00092 
+<a name="l00093"></a><a class="code" href="classcl__syoscb.html#ae54aafecd74c7f5a6531349d4bbe7c65">00093</a> function void <a class="code" href="classcl__syoscb.html">cl_syoscb</a>::<a class="code" href="classcl__syoscb.html#ae54aafecd74c7f5a6531349d4bbe7c65">report_phase</a>(uvm_phase phase);
+<a name="l00094"></a>00094    super.<a class="code" href="classcl__syoscb.html#ae54aafecd74c7f5a6531349d4bbe7c65">report_phase</a>(phase);
+<a name="l00095"></a>00095    <span class="comment">// TBD this should NOT  call the report phase of the compare method !</span>
+<a name="l00096"></a>00096    <span class="comment">// as cl_syoscb_compare_base extends uvm_component the compare method should just perform its end of test checks in</span>
+<a name="l00097"></a>00097    <span class="comment">// uvm_check_phase, from the UVM 1.1 class ref manual:</span>
+<a name="l00098"></a>00098    <span class="comment">// uvm_build_phase      Create and configure of testbench structure</span>
+<a name="l00099"></a>00099    <span class="comment">// uvm_connect_phase      Establish cross-component connections.</span>
+<a name="l00100"></a>00100    <span class="comment">// uvm_end_of_elaboration_phase      Fine-tune the testbench.</span>
+<a name="l00101"></a>00101    <span class="comment">// uvm_start_of_simulation_phase      Get ready for DUT to be simulated.</span>
+<a name="l00102"></a>00102    <span class="comment">// uvm_run_phase      Stimulate the DUT.</span>
+<a name="l00103"></a>00103    <span class="comment">// uvm_extract_phase      Extract data from different points of the verficiation environment.</span>
+<a name="l00104"></a>00104    <span class="comment">// uvm_check_phase      Check for any unexpected conditions in the verification environment.</span>
+<a name="l00105"></a>00105    <span class="comment">// uvm_report_phase      Report results of the test.</span>
+<a name="l00106"></a>00106    <span class="comment">// uvm_final_phase      Tie up loose ends.</span>
+<a name="l00107"></a>00107 endfunction : <a class="code" href="classcl__syoscb.html#ae54aafecd74c7f5a6531349d4bbe7c65">report_phase</a>
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -253,7 +254,7 @@ window.onload = initDynSections;
   <tr>
     <td width = "20%">
        <address style="text-align: left;"><small>
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.0<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.1<br>
        </small></address>
     </td>
     <td width = "60%">
@@ -278,7 +279,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Thu Oct 30 05:34:49 2014</small></address>
+      Mon Nov 24 09:24:22 2014</small></address>
    </td>
   </tr>
 </table>

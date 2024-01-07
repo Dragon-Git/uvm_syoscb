@@ -101,7 +101,7 @@ Accessing the UVM scoreboard from your own code</a></h2>
      ...
 </pre></div><h2><a class="anchor" id="sInstantiation">
 Instantiating the UVM scoreboard</a></h2>
-<p>The UVM scoreboard itself needs to be instantiated along with the configuration object. The simplest way to to this is to add the UVM scorebaord and the configuration object to the UVM environment:</p>
+<p>The UVM scoreboard itself needs to be instantiated along with the configuration object. The simplest way to to this is to add the UVM scoreboard and the configuration object to the UVM environment - note that the configuration object is passed to the scoreboard via the config_db:</p>
 <div class="fragment"><pre class="fragment">   <span class="keyword">import</span> pk_syoscb::*;
 
    <span class="keyword">class </span>cl_scbtest_env <span class="keyword">extends</span> uvm_env;
@@ -121,7 +121,13 @@ Instantiating the UVM scoreboard</a></h2>
    function void cl_scbtest_env::build_phase(uvm_phase phase);
      super.build_phase(phase);
    
+     <span class="comment">// Create the scoreboard configuration object</span>
      this.syoscb_cfg = <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>::type_id::create(&quot;syoscb_cfg&quot;);
+
+     <span class="comment">// Pass the scoreboard configuration object to the config_db</span>
+     uvm_config_db #(cl_syoscb_cfg)::set(this, &quot;syoscb&quot;, &quot;cfg&quot;, this.syoscb_cfg);
+
+     <span class="comment">// Create the scoreaboard</span>
      this.syoscb = <a class="code" href="classcl__syoscb.html">cl_syoscb</a>::type_id::create(&quot;syoscb&quot;, this);
    
      ...
@@ -133,12 +139,19 @@ Configuring the UVM scoreboard</a></h2>
 <div class="fragment"><pre class="fragment">   function <span class="keywordtype">void</span> cl_scbtest_env::build_phase(uvm_phase phase);
      super.build_phase(phase);
    
+     <span class="comment">// Create the scoreboard configuration object</span>
      this.syoscb_cfg = cl_syoscb_cfg::type_id::create(<span class="stringliteral">&quot;syoscb_cfg&quot;</span>);
-     this.syoscb = cl_syoscb::type_id::create(<span class="stringliteral">&quot;syoscb&quot;</span>, <span class="keyword">this</span>);
-   
+
+     <span class="comment">// Configure the scoreboard</span>
      this.syoscb_cfg.set_queues({<span class="stringliteral">&quot;Q1&quot;</span>, <span class="stringliteral">&quot;Q2&quot;</span>});
      <span class="keywordtype">void</span><span class="stringliteral">&apos;(this.syoscb_cfg.set_primary_queue(&quot;Q1&quot;)); </span>
 <span class="stringliteral">     void&apos;</span>(this.syoscb_cfg.set_producer(<span class="stringliteral">&quot;P1&quot;</span>, {<span class="stringliteral">&quot;Q1&quot;</span>, <span class="stringliteral">&quot;Q2&quot;</span>})); 
+
+     <span class="comment">// Pass the scoreboard configuration object to the config_db</span>
+     uvm_config_db #(<a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>)::<span class="keyword">set</span>(<span class="keyword">this</span>, <span class="stringliteral">&quot;syoscb&quot;</span>, <span class="stringliteral">&quot;cfg&quot;</span>, this.syoscb_cfg);
+
+     <span class="comment">// Create the scoreaboard</span>
+     this.syoscb = cl_syoscb::type_id::create(<span class="stringliteral">&quot;syoscb&quot;</span>, <span class="keyword">this</span>);
                
      ...
 
@@ -146,6 +159,7 @@ Configuring the UVM scoreboard</a></h2>
 </pre></div><h2><a class="anchor" id="sFactory">
 Factory overwrites</a></h2>
 <p>Finally, the wanted queue and compare algorithm implementation needs to be selected. This is done by facotry overwrites since they can be changed test etc.</p>
+<p><b>NOTE: This MUST be done before creating the scoreboard!</b></p>
 <p>The following queue implemenations are available:</p>
 <ol type="1">
 <li>Standard SV squeue (<a class="el" href="classcl__syoscb__queue__std.html">cl_syoscb_queue_std</a>)</li>
@@ -154,7 +168,7 @@ Factory overwrites</a></h2>
 <ol type="1">
 <li>Out-of-Order (<a class="el" href="classcl__syoscb__compare__ooo.html">cl_syoscb_compare_ooo</a>)</li>
 </ol>
-<p>The folloing example shows how they are configured:</p>
+<p>The following example shows how they are configured:</p>
 <div class="fragment"><pre class="fragment">   cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              
                                               cl_syoscb_queue_std::get_type(),
                                               <span class="stringliteral">&quot;*&quot;</span>);
@@ -162,6 +176,37 @@ Factory overwrites</a></h2>
    factory.set_type_override_by_type(cl_syoscb_compare_base::get_type(),
                                      cl_syoscb_compare_ooo::get_type(),
                                      <span class="stringliteral">&quot;*&quot;</span>);
+</pre></div><p>The full build phase, including the factory overwrites, of cl_scbtest_env is shown here for completeness:</p>
+<div class="fragment"><pre class="fragment">   function <span class="keywordtype">void</span> cl_scbtest_env::build_phase(uvm_phase phase);
+     super.build_phase(phase);
+
+     <span class="comment">// USe the standard SV queue implementation as scoreboard queue</span>
+     cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              
+                                                cl_syoscb_queue_std::get_type(),
+                                                <span class="stringliteral">&quot;*&quot;</span>);
+
+     <span class="comment">// Set the compare strategy to be OOO</span>
+     factory.set_type_override_by_type(cl_syoscb_compare_base::get_type(),
+                                       cl_syoscb_compare_ooo::get_type(),
+                                       <span class="stringliteral">&quot;*&quot;</span>);
+
+     <span class="comment">// Create the scoreboard configuration object</span>
+     this.syoscb_cfg = cl_syoscb_cfg::type_id::create(<span class="stringliteral">&quot;syoscb_cfg&quot;</span>);
+
+     <span class="comment">// Configure the scoreboard</span>
+     this.syoscb_cfg.set_queues({<span class="stringliteral">&quot;Q1&quot;</span>, <span class="stringliteral">&quot;Q2&quot;</span>});
+     <span class="keywordtype">void</span><span class="stringliteral">&apos;(this.syoscb_cfg.set_primary_queue(&quot;Q1&quot;)); </span>
+<span class="stringliteral">     void&apos;</span>(this.syoscb_cfg.set_producer(<span class="stringliteral">&quot;P1&quot;</span>, {<span class="stringliteral">&quot;Q1&quot;</span>, <span class="stringliteral">&quot;Q2&quot;</span>})); 
+
+     <span class="comment">// Pass the scoreboard configuration object to the config_db</span>
+     uvm_config_db #(<a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>)::<span class="keyword">set</span>(<span class="keyword">this</span>, <span class="stringliteral">&quot;syoscb&quot;</span>, <span class="stringliteral">&quot;cfg&quot;</span>, this.syoscb_cfg);
+
+     <span class="comment">// Create the scoreaboard</span>
+     this.syoscb = cl_syoscb::type_id::create(<span class="stringliteral">&quot;syoscb&quot;</span>, <span class="keyword">this</span>);
+               
+     ...
+
+   endfunction: build_phase
 </pre></div> </div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -221,7 +266,7 @@ Factory overwrites</a></h2>
   <tr>
     <td width = "20%">
        <address style="text-align: left;"><small>
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.0<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.1<br>
        </small></address>
     </td>
     <td width = "60%">
@@ -246,7 +291,7 @@ Factory overwrites</a></h2>
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Thu Oct 30 05:34:49 2014</small></address>
+      Mon Nov 24 09:24:23 2014</small></address>
    </td>
   </tr>
 </table>

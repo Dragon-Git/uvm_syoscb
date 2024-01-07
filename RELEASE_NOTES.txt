@@ -19,7 +19,7 @@
 #######################################################################
 # RELASE NOTES for UVM scoreboard
 #
-# Oct 30 2014
+# Now 24 2014
 #
 # Copyright 2014 SyoSil ApS
 # All Rights Reserved Worldwide 
@@ -44,20 +44,30 @@ Versatile UVM Scoreboarding.
 #######################################################################
 # [2]: Bug Fixes
 #######################################################################
-Currently none.
+
+  * Changed the create of the compare strategy to a factory create
+    instead of a normal constructor invocation
+
+  * Corrected two problems in out-of-order compare:
+    * Incorrect deletion of slave items
+    * Incorrect usage of a queues .next() function. This caused the compare to
+      break immaturely
 
 #######################################################################
 # [3]: New Features
 #######################################################################
-Everything is new due to the fact that this is the very first alpha
-release.
+
+  * Slightly improved documentation:
+    * Added note on usage of the uvm_config_db
+    * Added note on when the factory overwrites should occur
 
 #######################################################################
 # [4]: Known Limitations
 #######################################################################
 The current known limitations for this relase are:
 
-  1. The TLM API is not supported 
+  1. The TLM API is not supported. Thus, the user needs to implement tasks
+     which calls the scoreboards add_item() method
   2. Only Out-of-Order compare is supported
   3. Only a standard SystemVerilog queue is supported
 

@@ -102,7 +102,8 @@ function bit cl_syoscb_compare_ooo::compare_do();
       end
     end
 
-    if(secondary_item_found.size() != 0) begin
+    // Only start to remove items if all slave items are found (One from each slave queue)
+    if(secondary_item_found.size() == queue_names.size()-1) begin
       string queue_name;
       `uvm_info("DEBUG", $sformatf("Found match for primary queue item : %s",
                                    primary_queue_iter.get_item().sprint()), UVM_FULL);
@@ -129,9 +130,10 @@ function bit cl_syoscb_compare_ooo::compare_do();
       end
     end
 
-    if(!primary_queue_iter.next()) begin
-      `uvm_fatal("QUEUE_ERROR", $sformatf("Unable to get next element from iterator on parimary queue: %s", primary_queue_name));
-    end
+    // TBD: Call .next() blindly since we do  ot care about the
+    //      return value, since we might be at the end of the queue.
+    //      Thus, .next() will fail
+    void'(primary_queue_iter.next());
   end
 
   if(!primary_queue.delete_iterator(primary_queue_iter)) begin

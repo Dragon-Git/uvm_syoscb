@@ -54,7 +54,8 @@ function void cl_syoscb::build_phase(uvm_phase phase);
          this.cfg.queues[queue_name] = this.queues[idx++];
       end
    end
-   this.compare_strategy = new(.name("compare_strategy"), .parent(this));
+
+   this.compare_strategy = cl_syoscb_compare::type_id::create(.name("compare_strategy"), .parent(this));
 
    // TBD: This should either be passed as args to constructor
    //      or the objects should query the CFG DB directly if possible

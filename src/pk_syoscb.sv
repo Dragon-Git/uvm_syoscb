@@ -56,7 +56,7 @@
 /// @endcode
 ///
 /// @section sInstantiation Instantiating the UVM scoreboard
-/// The UVM scoreboard itself needs to be instantiated along with the configuration object. The simplest way to to this is to add the UVM scorebaord and the configuration object to the UVM environment:
+/// The UVM scoreboard itself needs to be instantiated along with the configuration object. The simplest way to to this is to add the UVM scoreboard and the configuration object to the UVM environment - note that the configuration object is passed to the scoreboard via the config_db:
 ///
 /// @code
 ///   import pk_syoscb::*;
@@ -78,7 +78,13 @@
 ///   function void cl_scbtest_env::build_phase(uvm_phase phase);
 ///     super.build_phase(phase);
 ///   
+///     // Create the scoreboard configuration object
 ///     this.syoscb_cfg = cl_syoscb_cfg::type_id::create("syoscb_cfg");
+///
+///     // Pass the scoreboard configuration object to the config_db
+///     uvm_config_db #(cl_syoscb_cfg)::set(this, "syoscb", "cfg", this.syoscb_cfg);
+///
+///     // Create the scoreaboard
 ///     this.syoscb = cl_syoscb::type_id::create("syoscb", this);
 ///   
 ///     ...
@@ -93,12 +99,19 @@
 ///   function void cl_scbtest_env::build_phase(uvm_phase phase);
 ///     super.build_phase(phase);
 ///   
+///     // Create the scoreboard configuration object
 ///     this.syoscb_cfg = cl_syoscb_cfg::type_id::create("syoscb_cfg");
-///     this.syoscb = cl_syoscb::type_id::create("syoscb", this);
-///   
+///
+///     // Configure the scoreboard
 ///     this.syoscb_cfg.set_queues({"Q1", "Q2"});
 ///     void'(this.syoscb_cfg.set_primary_queue("Q1")); 
 ///     void'(this.syoscb_cfg.set_producer("P1", {"Q1", "Q2"})); 
+///
+///     // Pass the scoreboard configuration object to the config_db
+///     uvm_config_db #(cl_syoscb_cfg)::set(this, "syoscb", "cfg", this.syoscb_cfg);
+///
+///     // Create the scoreaboard
+///     this.syoscb = cl_syoscb::type_id::create("syoscb", this);
 ///               
 ///     ...
 ///
@@ -108,6 +121,8 @@
 /// @section sFactory Factory overwrites
 /// Finally, the wanted queue and compare algorithm implementation needs to be selected. This is done by facotry overwrites since they can be changed test etc.
 ///
+/// <B>NOTE: This MUST be done before creating the scoreboard!</B>
+///
 /// The following queue implemenations are available:
 ///
 ///   -# Standard SV squeue (cl_syoscb_queue_std)
@@ -116,7 +131,7 @@
 ///
 ///  -# Out-of-Order (cl_syoscb_compare_ooo)
 ///
-/// The folloing example shows how they are configured:
+/// The following example shows how they are configured:
 ///
 /// @code
 ///   cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              
@@ -127,7 +142,41 @@
 ///                                     cl_syoscb_compare_ooo::get_type(),
 ///                                     "*");
 /// @endcode
-
+///
+/// The full build phase, including the factory overwrites, of cl_scbtest_env is shown here for completeness:
+///
+/// @code
+///   function void cl_scbtest_env::build_phase(uvm_phase phase);
+///     super.build_phase(phase);
+///
+///     // USe the standard SV queue implementation as scoreboard queue
+///     cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              
+///                                                cl_syoscb_queue_std::get_type(),
+///                                                "*");
+///
+///     // Set the compare strategy to be OOO
+///     factory.set_type_override_by_type(cl_syoscb_compare_base::get_type(),
+///                                       cl_syoscb_compare_ooo::get_type(),
+///                                       "*");
+///
+///     // Create the scoreboard configuration object
+///     this.syoscb_cfg = cl_syoscb_cfg::type_id::create("syoscb_cfg");
+///
+///     // Configure the scoreboard
+///     this.syoscb_cfg.set_queues({"Q1", "Q2"});
+///     void'(this.syoscb_cfg.set_primary_queue("Q1")); 
+///     void'(this.syoscb_cfg.set_producer("P1", {"Q1", "Q2"})); 
+///
+///     // Pass the scoreboard configuration object to the config_db
+///     uvm_config_db #(cl_syoscb_cfg)::set(this, "syoscb", "cfg", this.syoscb_cfg);
+///
+///     // Create the scoreaboard
+///     this.syoscb = cl_syoscb::type_id::create("syoscb", this);
+///               
+///     ...
+///
+///   endfunction: build_phase
+/// @endcode
 package pk_syoscb;
 
   ////////////////////////////////////////////////////////////////////////////

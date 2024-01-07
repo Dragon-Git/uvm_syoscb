@@ -37,6 +37,7 @@ function bit cl_syoscb_queue_iterator_std::next();
     this.position++;
     return 1;
   end else begin
+    // TBD: Discuss if we need this debug statement. It confuses the user
     `uvm_info("OUT_OF_BOUNDS", $sformatf("Not possible to increment position of queue %s: at end of queue",
                                          this.get_queue().get_name()), UVM_MEDIUM)
     return 0;
