@@ -59,10 +59,10 @@ endfunction : new
 /// Gets the global scoreboard configuration and creates the compare algorithm, e.g. out-of-order.
 function void cl_syoscb_compare::build_phase(uvm_phase phase);
   if (!uvm_config_db #(cl_syoscb_cfg)::get(this, "", "cfg", this.cfg)) begin
-    `uvm_fatal("CFG_ERROR", "Configuration object not passed.")
+    `uvm_fatal("CFG_ERROR", $sformatf("[%s]: Configuration object not passed.", this.cfg.get_scb_name()))
   end
-
-  this.compare_algo = cl_syoscb_compare_base::type_id::create("compare_algo");
+  
+  this.compare_algo = cl_syoscb_compare_base::type_id::create("compare_algo", this);
   this.compare_algo.set_cfg(this.cfg);
 endfunction
 

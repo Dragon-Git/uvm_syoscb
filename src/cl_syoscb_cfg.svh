@@ -42,6 +42,10 @@ class cl_syoscb_cfg extends uvm_object;
 // TBD::JSA   local int unsigned     item_time_out_queue[string];
 // TBD::JSA   local int unsigned     item_time_out_producer[string];
 
+  // The name of the SCB. Default will be the instance name of
+  // the SCB component if the name is not set explicitly
+  local string           scb_name;
+  
   //-------------------------------------
   // UVM Macros
   //-------------------------------------
@@ -51,6 +55,7 @@ class cl_syoscb_cfg extends uvm_object;
     `uvm_field_string(primary_queue,         UVM_DEFAULT) 
     `uvm_field_int(disable_clone,            UVM_DEFAULT)
     `uvm_field_aa_int_string(max_queue_size, UVM_DEFAULT)
+    `uvm_field_string(scb_name,              UVM_DEFAULT) 
   `uvm_object_utils_end
 
   //-------------------------------------
@@ -77,6 +82,8 @@ class cl_syoscb_cfg extends uvm_object;
   extern function bit get_disable_clone();
   extern function void set_max_queue_size(string queue_name, int unsigned mqs);
   extern function int unsigned get_max_queue_size(string queue_name);
+  extern function string get_scb_name();
+  extern function void set_scb_name(string scb_name);
 endclass : cl_syoscb_cfg
 
 function cl_syoscb_cfg::new(string name = "cl_syoscb_cfg");
@@ -87,7 +94,7 @@ endfunction: new
 function cl_syoscb_queue cl_syoscb_cfg::get_queue(string queue_name);
   // If queue does not exist then return NULL
   if(!this.exist_queue(queue_name)) begin
-    `uvm_info("CFG_ERROR", $sformatf("Queue: %0s is not found", queue_name), UVM_DEBUG);
+    `uvm_info("CFG_ERROR", $sformatf("[%s]: Queue: %0s is not found", this.scb_name, queue_name), UVM_DEBUG);
     return(null);
   end
 
@@ -138,7 +145,7 @@ function cl_syoscb_cfg_pl cl_syoscb_cfg::get_producer(string producer);
   if(this.exist_producer(producer)) begin
     return(this.producers[producer]);
   end else begin
-    `uvm_info("CFG_ERROR", $sformatf("Unable to get producer: %s", producer), UVM_DEBUG);
+    `uvm_info("CFG_ERROR", $sformatf("[%s]: Unable to get producer: %s", this.scb_name, producer), UVM_DEBUG);
     return(null);
   end
 endfunction: get_producer
@@ -155,13 +162,13 @@ function bit cl_syoscb_cfg::set_producer(string producer, queue_names[]);
       if(!unique_queue_name.exists(queue_names[i])) begin
         unique_queue_name[queue_names[i]] = 1'b1;
       end else begin
-        `uvm_info("CFG_ERROR", $sformatf("Unable to set producer: %s. List of queue names contains dublicates", producer), UVM_DEBUG);
+        `uvm_info("CFG_ERROR", $sformatf("[%s]: Unable to set producer: %s. List of queue names contains dublicates", this.scb_name, producer), UVM_DEBUG);
         return(1'b0);
       end
 
       // If queue does not exist then return 1'b0
       if(!this.exist_queue(queue_names[i])) begin
-        `uvm_info("CFG_ERROR", $sformatf("Queue: %0s is not found", queue_names[i]), UVM_DEBUG);
+        `uvm_info("CFG_ERROR", $sformatf("[%s]: Queue: %0s is not found", this.scb_name, queue_names[i]), UVM_DEBUG);
         return(1'b0);
       end
     end
@@ -204,7 +211,7 @@ endfunction: get_primary_queue
 function bit cl_syoscb_cfg::set_primary_queue(string primary_queue_name);
   // If queue does not exist then return 1'b0
   if(!this.exist_queue(primary_queue_name)) begin
-    `uvm_info("CFG_ERROR", $sformatf("Queue: %0s is not found", primary_queue_name), UVM_DEBUG);
+    `uvm_info("CFG_ERROR", $sformatf("[%s]: Queue: %0s is not found", this.scb_name, primary_queue_name), UVM_DEBUG);
     return(1'b0);
   end
 
@@ -231,7 +238,7 @@ function void cl_syoscb_cfg::set_max_queue_size(string queue_name, int unsigned 
   if(this.exist_queue(queue_name)) begin
     this.max_queue_size[queue_name] = mqs;
   end else begin
-    `uvm_fatal("CFG_ERROR", $sformatf("Queue: %s not found when trying to set max_queue_size", queue_name))  
+    `uvm_fatal("CFG_ERROR", $sformatf("[%s]: Queue: %s not found when trying to set max_queue_size", this.scb_name, queue_name))  
   end
 endfunction
 
@@ -241,7 +248,15 @@ function int unsigned cl_syoscb_cfg::get_max_queue_size(string queue_name);
   if(this.exist_queue(queue_name)) begin
     return(this.max_queue_size[queue_name]);
   end else begin
-    `uvm_fatal("CFG_ERROR", $sformatf("Queue: %s not found when trying to get max_queue_size", queue_name))
+    `uvm_fatal("CFG_ERROR", $sformatf("[%s]: Queue: %s not found when trying to get max_queue_size", this.scb_name, queue_name))
     return(0);
   end
 endfunction
+
+function string cl_syoscb_cfg::get_scb_name();
+  return(this.scb_name);
+endfunction: get_scb_name
+
+function void cl_syoscb_cfg::set_scb_name(string scb_name);
+  this.scb_name = scb_name;
+endfunction: set_scb_name

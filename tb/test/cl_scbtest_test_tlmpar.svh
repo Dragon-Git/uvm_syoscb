@@ -173,15 +173,15 @@ function void cl_scbtest_test_tlmpar::connect_phase(uvm_phase phase);
 
     // Get the subscriber for Producer: P1 for queue: Q1 and connect it
     // to the UVM monitor producing transactions for this queue
-    subscriber = this.scbtest_env.syoscb.get_subscriber("Q1", "P1");
+    subscriber = this.scbtest_env.syoscb[0].get_subscriber("Q1", "P1");
 
-    $cast(subscriber, this.scbtest_env.syoscb.get_subscriber("Q1", "P1"));
+    $cast(subscriber, this.scbtest_env.syoscb[0].get_subscriber("Q1", "P1"));
 
     this.monQ1P1.anls_port.connect(subscriber.analysis_export);
 
     // Get the subscriber for Producer: P1 for queue: Q2 and connect it
     // to the UVM monitor producing transactions for this queue
-    subscriber = this.scbtest_env.syoscb.get_subscriber("Q2", "P1");
+    subscriber = this.scbtest_env.syoscb[0].get_subscriber("Q2", "P1");
     this.monQ2P1.anls_port.connect(subscriber.analysis_export);
   end
 endfunction: connect_phase
@@ -193,7 +193,7 @@ task cl_scbtest_test_tlmpar::run_phase(uvm_phase phase);
   super.run_phase(phase);
 
   // *NOTE*: This test is intentionally empty since
-  //         All of the stimulti is coming from the TLM monitors
+  //         All of the stimuli is coming from the TLM monitors
 
   // Drop objection
   phase.drop_objection(this);

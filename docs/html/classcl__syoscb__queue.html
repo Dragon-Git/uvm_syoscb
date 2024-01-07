@@ -103,7 +103,7 @@ Collaboration diagram for cl_syoscb_queue:</div>
 <div class="dynsection">
 <div class="center"><img src="classcl__syoscb__queue__coll__graph.png" border="0" usemap="#cl__syoscb__queue_coll__map" alt="Collaboration graph"/></div>
 <map name="cl__syoscb__queue_coll__map" id="cl__syoscb__queue_coll__map">
-<area shape="rect" id="node2" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard." alt="" coords="5,101,120,131"/><area shape="rect" id="node5" href="classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues." alt="" coords="147,101,379,131"/></map>
+<area shape="rect" id="node2" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard." alt="" coords="5,101,120,131"/><area shape="rect" id="node5" href="classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues." alt="" coords="52,197,284,227"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="classcl__syoscb__queue-members.html">List of all members.</a></p>
@@ -115,6 +115,9 @@ void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28b1b880efb1f93eeb48890914685e43"></a><!-- doxytag: member="cl_syoscb_queue::check_phase" ref="a28b1b880efb1f93eeb48890914685e43" args="(uvm_phase phase)" -->
 void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a28b1b880efb1f93eeb48890914685e43">check_phase</a> (uvm_phase phase)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Checks if the queue is empty. If not then a UVM error is issued. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aac9a0b845a8b1947365fcddc7f37206a"></a><!-- doxytag: member="cl_syoscb_queue::report_phase" ref="aac9a0b845a8b1947365fcddc7f37206a" args="(uvm_phase phase)" -->
+void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#aac9a0b845a8b1947365fcddc7f37206a">report_phase</a> (uvm_phase phase)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Prints queue stats. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#ada66fbc0eb1ef86b417fcdeaa5e9b9e0">add_item</a> (string producer, uvm_sequence_item item)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Queue API:</b> Adds an uvm_sequence_item.  <a href="#ada66fbc0eb1ef86b417fcdeaa5e9b9e0"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ff5e60a18767a97056e02baf47b26b8"></a><!-- doxytag: member="cl_syoscb_queue::delete_item" ref="a0ff5e60a18767a97056e02baf47b26b8" args="(int unsigned idx)" -->
@@ -187,7 +190,7 @@ semaphore&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href=
 
 <p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#a68f61e7f53901acb3cc50a9001193c0f">cl_syoscb_queue_std</a>, and <a class="el" href="classcl__syoscb__queue__std.html#aa131215a6166ff20ec3146386666a1f2">cl_syoscb_queue_std</a>.</p>
 
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00084">84</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
+<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00105">105</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
 
 </div>
 </div>
@@ -211,7 +214,7 @@ semaphore&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href=
 
 <p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#a812d7f4d7143c9bef1f3181e24347d5c">cl_syoscb_queue_std</a>, and <a class="el" href="classcl__syoscb__queue__std.html#aa63237c16ac2ca71f9ca07131e9d79c8">cl_syoscb_queue_std</a>.</p>
 
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00109">109</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
+<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00130">130</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
 
 </div>
 </div>
@@ -251,7 +254,7 @@ semaphore&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href=
 
 <p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#ad293b78071120f596e3884980e36a9fa">cl_syoscb_queue_std</a>, and <a class="el" href="classcl__syoscb__queue__std.html#aca0fb79ae56d3b0394c6c6d1bfc3bbd3">cl_syoscb_queue_std</a>.</p>
 
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00116">116</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
+<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00137">137</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
 
 </div>
 </div>
@@ -320,7 +323,7 @@ semaphore&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href=
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.4<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.5<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -342,7 +345,7 @@ semaphore&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href=
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Oct 26 03:49:55 2015</small></address>
+      Sat Nov 28 05:41:55 2015</small></address>
    </td>
   </tr>
 </table>

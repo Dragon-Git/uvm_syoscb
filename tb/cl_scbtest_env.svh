@@ -20,15 +20,15 @@ class cl_scbtest_env extends uvm_env;
   //-------------------------------------
   // Non randomizable variables
   //-------------------------------------
-  cl_syoscb     syoscb;   
-  cl_syoscb_cfg syoscb_cfg;
+  cl_syoscb     syoscb[];   
+  cl_syoscb_cfg syoscb_cfg[];
 
   //-------------------------------------
   // UVM Macros
   //-------------------------------------
   `uvm_component_utils_begin(cl_scbtest_env)
-    `uvm_field_object(syoscb,     UVM_ALL_ON)
-    `uvm_field_object(syoscb_cfg, UVM_ALL_ON)
+    `uvm_field_array_object(syoscb,     UVM_ALL_ON)
+    `uvm_field_array_object(syoscb_cfg, UVM_ALL_ON)
   `uvm_component_utils_end
   
   //-------------------------------------
@@ -50,31 +50,38 @@ endfunction: new
 function void cl_scbtest_env::build_phase(uvm_phase phase);
   super.build_phase(phase);
 
-  this.syoscb_cfg = cl_syoscb_cfg::type_id::create("syoscb_cfg");
+  this.syoscb = new[2];
+  this.syoscb_cfg = new[2];
+  
+  for(int unsigned i= 0; i<2; i++) begin
+    this.syoscb_cfg[i] = cl_syoscb_cfg::type_id::create($sformatf("syoscb_cfg%0d", i));
 
-  // Set queues Q1 and Q2
-  this.syoscb_cfg.set_queues({"Q1", "Q2"});
+    // Set queues Q1 and Q2
+    this.syoscb_cfg[i].set_queues({"Q1", "Q2"});
 
-  // Set the maximum queue size for Q1 to 100 elements
-  this.syoscb_cfg.set_max_queue_size("Q1", 100);
+    // Set the maximum queue size for Q1 to 100 elements
+    this.syoscb_cfg[i].set_max_queue_size("Q1", 100);
 
-  // Set the primary queue
-  if(!this.syoscb_cfg.set_primary_queue("Q1")) begin
-    `uvm_fatal("CFG_ERROR", "syoscb_cfg.set_primary_queue call failed!")
+    // Set the primary queue
+    if(!this.syoscb_cfg[i].set_primary_queue("Q1")) begin
+      `uvm_fatal("CFG_ERROR", "syoscb_cfg.set_primary_queue call failed!")
+    end
+
+    // Set producer "P1" for queues: "Q1" and "Q2"
+    if(!this.syoscb_cfg[i].set_producer("P1", {"Q1", "Q2"})) begin
+      `uvm_fatal("CFG_ERROR", "syoscb_cfg.set_producer call failed!")
+    end
+
+    // Set producer "P2" for queues: "Q1" and "Q2"
+    if(!this.syoscb_cfg[i].set_producer("P2", {"Q1", "Q2"})) begin
+  	 `uvm_fatal("CFG_ERROR", "syoscb_cfg.set_producer call failed!")
+    end
+
+    uvm_config_db #(cl_syoscb_cfg)::set(this, $sformatf("syoscb%0d", i), "cfg", this.syoscb_cfg[i]); 
+
+    this.syoscb[i] = cl_syoscb::type_id::create($sformatf("syoscb%0d", i), this);
+    this.syoscb_cfg[i].set_scb_name($sformatf("syoscb%0d", i));
   end
-
-  // Set producer "P1" for queues: "Q1" and "Q2"
-  if(!this.syoscb_cfg.set_producer("P1", {"Q1", "Q2"})) begin
-    `uvm_fatal("CFG_ERROR", "syoscb_cfg.set_producer call failed!")
-  end
-
-  // Set producer "P2" for queues: "Q1" and "Q2"
-  if(!this.syoscb_cfg.set_producer("P2", {"Q1", "Q2"})) begin
-  	`uvm_fatal("CFG_ERROR", "syoscb_cfg.set_producer call failed!")
-  end
-
-  uvm_config_db #(cl_syoscb_cfg)::set(this, "syoscb", "cfg", this.syoscb_cfg); 
-  this.syoscb = cl_syoscb::type_id::create("syoscb", this);            
 endfunction: build_phase
 
 function void cl_scbtest_env::connect_phase(uvm_phase phase);

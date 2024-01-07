@@ -37,9 +37,10 @@ class cl_syoscb extends uvm_scoreboard;
   // UVM Macros
   //-------------------------------------
   `uvm_component_utils_begin(cl_syoscb)
-    `uvm_field_object(cfg, UVM_ALL_ON)
-    `uvm_field_array_object(queues, UVM_ALL_ON)
-    `uvm_field_object(compare_strategy, UVM_ALL_ON)
+    `uvm_field_object(cfg,                   UVM_DEFAULT)
+    `uvm_field_array_object(queues,          UVM_DEFAULT)
+    `uvm_field_object(compare_strategy,      UVM_DEFAULT)
+    `uvm_field_aa_object_string(subscribers, UVM_DEFAULT)
   `uvm_component_utils_end
 
   //-------------------------------------
@@ -73,9 +74,16 @@ endfunction : new
 /// it also creates the compare strategy via a factory create call.
 function void cl_syoscb::build_phase(uvm_phase phase);
   if (!uvm_config_db #(cl_syoscb_cfg)::get(this, "", "cfg", this.cfg)) begin
+    // *NOTE*: If no cfg object is given then no scb name is available
+    //         Thus, no scb name is printed here
     `uvm_fatal("CFG_ERROR", "Configuration object not passed.")
   end
 
+  // Set the default SCB name if not specified explicitly
+  if(this.cfg.get_scb_name() == "") begin
+    this.cfg.set_scb_name(this.get_name());
+  end
+  
   // Create list of queues
   this.queues = new[this.cfg.size_queues()];
 
@@ -140,19 +148,19 @@ function void cl_syoscb::add_item(string queue_name, string producer, uvm_sequen
 
   // Check queue
   if(!this.cfg.exist_queue(queue_name)) begin
-    `uvm_fatal("CFG_ERROR", $sformatf("Queue: %0s is not found", queue_name));
+    `uvm_fatal("CFG_ERROR", $sformatf("[%s]: Queue: %0s is not found", this.cfg.get_scb_name(), queue_name));
   end
 
   // Check producer
   if(!this.cfg.exist_producer(producer)) begin
-    `uvm_fatal("CFG_ERROR", $sformatf("Producer: %0s is not found", producer));
+    `uvm_fatal("CFG_ERROR", $sformatf("[%s]: Producer: %0s is not found", this.cfg.get_scb_name(), producer));
   end
 
   // Clone the item if not disabled
   // Clone the item in order to isolate the UVM scb from the rest of the TB
   if(this.cfg.get_disable_clone() == 1'b0) begin
     if(!$cast(item_clone, item.clone())) begin
-      `uvm_fatal("QUEUE_ERROR", "Unable to cast cloned item to uvm_sequence_item");
+      `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: Unable to cast cloned item to uvm_sequence_item", this.cfg.get_scb_name()));
     end
   end else begin
     item_clone = item;
@@ -165,13 +173,15 @@ function void cl_syoscb::add_item(string queue_name, string producer, uvm_sequen
     queue = this.cfg.get_queue(queue_name);
    
     if(queue == null) begin
-      `uvm_fatal("QUEUE_ERROR", $sformatf("Queue: %s not found by add_item method", queue_name));
+      `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: Queue: %s not found by add_item method", this.cfg.get_scb_name(), queue_name));
     end
 
     if(!queue.add_item(producer, item_clone)) begin
-      `uvm_fatal("QUEUE_ERROR", $sformatf("Unable to add item to queue: %s", queue_name));
+      `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: Unable to add item to queue: %s", this.cfg.get_scb_name(), queue_name));
     end
   end
+
+  `uvm_info("DEBUG", $sformatf("[%s]: Trigger compare by queue: %s, producer: %s", this.cfg.get_scb_name(), queue_name, producer), UVM_FULL);
 
   // Invoke the compare algorithm
   void'(this.compare());
@@ -189,7 +199,7 @@ function cl_syoscb_subscriber cl_syoscb::get_subscriber(string queue_name, strin
   if(this.subscribers.exists({queue_name, producer})) begin
     return(this.subscribers[{queue_name, producer}]);
   end else begin
-  	`uvm_fatal("SUBSCRIBER_ERROR", $sformatf("Unable to get subscriber for queue: %s and producer: %s", queue_name, producer));
+  	`uvm_fatal("SUBSCRIBER_ERROR", $sformatf("[%s]: Unable to get subscriber for queue: %s and producer: %s", this.cfg.get_scb_name(), queue_name, producer));
 	return(null);
   end
 endfunction: get_subscriber

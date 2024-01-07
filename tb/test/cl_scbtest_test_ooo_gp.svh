@@ -102,7 +102,7 @@ task cl_scbtest_test_ooo_gp::run_phase(uvm_phase phase);
 
     gp.print();
 
-    scbtest_env.syoscb.add_item("Q1", "P1", gp);
+    scbtest_env.syoscb[0].add_item("Q1", "P1", gp);
   end
 
   begin
@@ -152,6 +152,6 @@ task cl_scbtest_test_ooo_gp::run_phase(uvm_phase phase);
 
     gp.print();
 
-    scbtest_env.syoscb.add_item("Q2", "P1", gp);
+    scbtest_env.syoscb[0].add_item("Q2", "P1", gp);
   end
 endtask: run_phase

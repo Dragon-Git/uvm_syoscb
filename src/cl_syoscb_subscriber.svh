@@ -29,7 +29,10 @@ class cl_syoscb_subscriber extends uvm_subscriber#(uvm_sequence_item);
   //-------------------------------------
   // UVM Macros
   //-------------------------------------
-  `uvm_component_utils(cl_syoscb_subscriber)
+  `uvm_component_utils_begin(cl_syoscb_subscriber)
+    `uvm_field_string(queue_name, UVM_DEFAULT);
+    `uvm_field_string(producer,   UVM_DEFAULT);
+  `uvm_component_utils_end
 
   //-------------------------------------
   // Constructor
@@ -66,11 +69,14 @@ function void cl_syoscb_subscriber::write(uvm_sequence_item t);
     tmp_parent = this.get_parent();
 
     if(!$cast(parent, tmp_parent)) begin
+      // *NOTE*: Here the parent cannot be cast. Thus, the print cannot contain the SCB name
       `uvm_fatal("IMPL_ERROR", "Unable to cast parent of subscriber");
     end
   end
 
-  // Add the 
+  `uvm_info("DEBUG", $sformatf("Trigger add_item by subscriber: %s (Queue: %s, Producer: %s)", this.get_name(), this.queue_name, this.producer), UVM_FULL);
+  
+  // Add the item to the queue
   parent.add_item(this.queue_name, this.producer, t);
 endfunction
 

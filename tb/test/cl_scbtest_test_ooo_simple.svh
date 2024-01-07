@@ -60,14 +60,14 @@ task cl_scbtest_test_ooo_simple::run_phase(uvm_phase phase);
       cl_scbtest_seq_item item1;
       item1 = cl_scbtest_seq_item::type_id::create("item1");
       item1.int_a = i;
-      scbtest_env.syoscb.add_item("Q1", "P1", item1);
+      scbtest_env.syoscb[0].add_item("Q1", "P1", item1);
     end
 
     for(int i=9; i>=0; i--) begin
       cl_scbtest_seq_item item1;
       item1 = cl_scbtest_seq_item::type_id::create("item1");
       item1.int_a = i;
-      scbtest_env.syoscb.add_item("Q2", "P1", item1);
+      scbtest_env.syoscb[0].add_item("Q2", "P1", item1);
     end
   join
 endtask: run_phase

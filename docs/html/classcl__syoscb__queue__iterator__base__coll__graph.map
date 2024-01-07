@@ -1,4 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" id="node2" href="$classcl__syoscb__queue.html" title="Class which base concet of a queue." alt="" coords="55,101,188,131"/>
-<area shape="rect" id="node4" href="$classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard." alt="" coords="64,197,179,227"/>
+<area shape="rect" id="node4" href="$classcl__syoscb__queue.html" title="Class which base concet of a queue." alt="" coords="5,101,139,131"/>
+<area shape="rect" id="node2" href="$classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard." alt="" coords="92,197,207,227"/>
 </map>

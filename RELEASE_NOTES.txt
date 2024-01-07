@@ -17,9 +17,9 @@
 #   permissions and limitations under the License.
 #######################################################################
 #######################################################################
-# RELASE NOTES for UVM scoreboard version 1.0 RC build 5
+# RELASE NOTES for UVM scoreboard version 1.0 RC build 6
 #
-# October 26 2015
+# November 28 2015
 #
 #######################################################################
 This file contains miscellanous information about this particular
@@ -36,7 +36,7 @@ The index:
 #######################################################################
 # [1]: General Information
 #######################################################################
-This version of the UVM scoreboard is the fifth RC for version 1.0 of the
+This version of the UVM scoreboard is the sixth RC for version 1.0 of the
 UVM scoreboard architecture presented at DVCon 2015 in the paper:
 Versatile UVM Scoreboarding. Never versions will be made accesible via:
 
@@ -46,18 +46,16 @@ Versatile UVM Scoreboarding. Never versions will be made accesible via:
 # [2]: Bug Fixes
 #######################################################################
 
-  * Fixed a bug in the In-Order compare
-  * Added error check in cl_syoscb::get_subscriber()
+  * Fixed problem with multiple instances (Kudos to John Aynsley)
+  * Added missing break in compare loops when a mismatch was located
 
 #######################################################################
 # [3]: New Features
 #######################################################################
 
-  * Now implemented and tested using UVM 1.2 instead of UVM 1.1d
-  * Added support fro switching UVM version
-  * Added In-Order by producer compare algorithm
-  * Added tests for In-Order compare algorithm
-  * Added tests for In-Order by producer compare algorithm
+  * Added simple statistics which are printed by a queues report_phase
+  * Added more debug statements to all compare algorithms. Run with
+    UVM_VERBOSITY=UVM_FULL to enable
 
 #######################################################################
 # [4]: Known Limitations

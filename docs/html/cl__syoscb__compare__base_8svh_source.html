@@ -122,17 +122,17 @@ window.onload = initDynSections;
 <a name="l00033"></a>00033 endfunction: new
 <a name="l00034"></a>00034 <span class="comment"></span>
 <a name="l00035"></a>00035 <span class="comment">/// &lt;b&gt;Compare API&lt;/b&gt;: This method is the compare algorithms public compare method. It is called when the</span>
-<a name="l00036"></a>00036 <span class="comment">/// compare algorithm is asked to do a compare. Typically, this method is used to check state variables etc. to compte if the compare shall be done or not. If so then do_compare() is called.</span>
+<a name="l00036"></a>00036 <span class="comment">/// compare algorithm is asked to do a compare. Typically, this method is used to check state variables etc. to compute if the compare shall be done or not. If so then do_compare() is called.</span>
 <a name="l00037"></a>00037 <span class="comment">///</span>
-<a name="l00038"></a>00038 <span class="comment">/// &lt;b&gt;NOTE:&lt;/b&gt; This method must be implemted.</span>
+<a name="l00038"></a>00038 <span class="comment">/// &lt;b&gt;NOTE:&lt;/b&gt; This method must be implemented.</span>
 <a name="l00039"></a><a class="code" href="classcl__syoscb__compare__base.html#ae16d1f2c1a75d56ed5c955e3a14dd9db">00039</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__compare__base.html" title="Base class for all comapre algorithms.">cl_syoscb_compare_base</a>::<a class="code" href="classcl__syoscb__compare__base.html#ae16d1f2c1a75d56ed5c955e3a14dd9db" title="Compare API: This method is the compare algorithms public compare method.">compare</a>();
-<a name="l00040"></a>00040   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_compare_base::compare() *MUST* be overwritten&quot;));
+<a name="l00040"></a>00040   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;[%s]: cl_syoscb_compare_base::compare() *MUST* be overwritten&quot;, this.cfg.get_scb_name()));
 <a name="l00041"></a>00041 endfunction
 <a name="l00042"></a>00042 <span class="comment"></span>
 <a name="l00043"></a>00043 <span class="comment">/// &lt;b&gt;Compare API&lt;/b&gt;: Does the actual compare.</span>
 <a name="l00044"></a>00044 <span class="comment">/// &lt;b&gt;NOTE:&lt;/b&gt; This method must be implemted.</span>
 <a name="l00045"></a><a class="code" href="classcl__syoscb__compare__base.html#ab2cef03989c4c28994c6cf52c5742bc9">00045</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__compare__base.html" title="Base class for all comapre algorithms.">cl_syoscb_compare_base</a>::<a class="code" href="classcl__syoscb__compare__base.html#ab2cef03989c4c28994c6cf52c5742bc9" title="Compare API: Does the actual compare.">compare_do</a>();
-<a name="l00046"></a>00046   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_compare_base::compare_do() *MUST* be overwritten&quot;));
+<a name="l00046"></a>00046   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;[%s]: cl_syoscb_compare_base::compare_do() *MUST* be overwritten&quot;, this.cfg.get_scb_name()));
 <a name="l00047"></a>00047 endfunction
 <a name="l00048"></a>00048 <span class="comment"></span>
 <a name="l00049"></a>00049 <span class="comment">/// &lt;b&gt;Compare API&lt;/b&gt;: Passes the configuration object on to the compare algorithm for faster access.</span>
@@ -213,7 +213,7 @@ window.onload = initDynSections;
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.4<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.5<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -235,7 +235,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Oct 26 03:49:53 2015</small></address>
+      Sat Nov 28 05:41:54 2015</small></address>
    </td>
   </tr>
 </table>

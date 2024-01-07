@@ -130,10 +130,10 @@ window.onload = initDynSections;
 <a name="l00041"></a>00041 <span class="comment">/// Gets the global scoreboard configuration and creates the compare algorithm, e.g. out-of-order.</span>
 <a name="l00042"></a><a class="code" href="classcl__syoscb__compare.html#ab556332caf700e78e9e5e93c1ced4c45">00042</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__compare.html" title="Class which act as the root of the compare algorithm.">cl_syoscb_compare</a>::<a class="code" href="classcl__syoscb__compare.html#ab556332caf700e78e9e5e93c1ced4c45" title="Gets the global scoreboard configuration and creates the compare algorithm, e.g....">build_phase</a>(uvm_phase phase);
 <a name="l00043"></a>00043   if (!uvm_config_db #(cl_syoscb_cfg)::get(this, &quot;&quot;, &quot;cfg&quot;, this.cfg)) begin
-<a name="l00044"></a>00044     `uvm_fatal(&quot;CFG_ERROR&quot;, &quot;Configuration object not passed.&quot;)
+<a name="l00044"></a>00044     `uvm_fatal(&quot;CFG_ERROR&quot;, $sformatf(&quot;[%s]: Configuration object not passed.&quot;, this.cfg.get_scb_name()))
 <a name="l00045"></a>00045   end
-<a name="l00046"></a>00046 
-<a name="l00047"></a>00047   this.compare_algo = <a class="code" href="classcl__syoscb__compare__base.html" title="Base class for all comapre algorithms.">cl_syoscb_compare_base</a>::type_id::create(&quot;compare_algo&quot;);
+<a name="l00046"></a>00046   
+<a name="l00047"></a>00047   this.compare_algo = <a class="code" href="classcl__syoscb__compare__base.html" title="Base class for all comapre algorithms.">cl_syoscb_compare_base</a>::type_id::create(&quot;compare_algo&quot;, this);
 <a name="l00048"></a>00048   this.compare_algo.set_cfg(this.cfg);
 <a name="l00049"></a>00049 endfunction
 <a name="l00050"></a>00050 <span class="comment"></span>
@@ -203,7 +203,7 @@ window.onload = initDynSections;
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.4<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.5<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -225,7 +225,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Oct 26 03:49:53 2015</small></address>
+      Sat Nov 28 05:41:54 2015</small></address>
    </td>
   </tr>
 </table>

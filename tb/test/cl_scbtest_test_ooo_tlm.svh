@@ -147,12 +147,12 @@ function void cl_scbtest_test_ooo_tlm::connect_phase(uvm_phase phase);
 
     // Get the subscriber for Producer: P1 for queue: Q1 and connect it
     // to the UVM monitor producing transactions for this queue
-    subscriber = this.scbtest_env.syoscb.get_subscriber("Q1", "P1");
+    subscriber = this.scbtest_env.syoscb[0].get_subscriber("Q1", "P1");
     this.monQ1P1.anls_port.connect(subscriber.analysis_export);
 
     // Get the subscriber for Producer: P1 for queue: Q2 and connect it
     // to the UVM monitor producing transactions for this queue
-    subscriber = this.scbtest_env.syoscb.get_subscriber("Q2", "P1");
+    subscriber = this.scbtest_env.syoscb[0].get_subscriber("Q2", "P1");
     this.monQ2P1.anls_port.connect(subscriber.analysis_export);
   end
 endfunction: connect_phase

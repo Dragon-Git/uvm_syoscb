@@ -65,7 +65,8 @@ function bit cl_syoscb_queue_std::add_item(string producer, uvm_sequence_item it
   // Check that the max_queue_size for this queue is not reached
   if(this.cfg.get_max_queue_size(this.get_name())>0 &&
      this.get_size()==this.cfg.get_max_queue_size(this.get_name())) begin
-    `uvm_error("QUEUE_ERROR", $sformatf("Maximum number of items (%0d) for queue: %s reached",
+    `uvm_error("QUEUE_ERROR", $sformatf("[%s]: Maximum number of items (%0d) for queue: %s reached",
+                                       this.cfg.get_scb_name(), 
                                        this.cfg.get_max_queue_size(this.get_name()),
                                        this.get_name()))
     return(1'b0);
@@ -93,6 +94,9 @@ function bit cl_syoscb_queue_std::add_item(string producer, uvm_sequence_item it
   // Insert the item in the queue
   this.items.push_back(new_item);
 
+  // Count the number of inserts
+  this.cnt_add_item++;
+  
   // Signal that it worked
   return 1;
 endfunction: add_item
@@ -116,7 +120,7 @@ function bit cl_syoscb_queue_std::delete_item(int unsigned idx);
     this.iter_sem.put();
     return 1;
   end else begin
-    `uvm_info("OUT_OF_BOUNDS", $sformatf("Idx: %0d is not present in queue: %0s", idx, this.get_name()), UVM_DEBUG);
+    `uvm_info("OUT_OF_BOUNDS", $sformatf("[%s]: Idx: %0d is not present in queue: %0s", this.cfg.get_scb_name(), idx, this.get_name()), UVM_DEBUG);
     return 0;
   end
 endfunction: delete_item
@@ -126,7 +130,7 @@ function cl_syoscb_item cl_syoscb_queue_std::get_item(int unsigned idx);
   if(idx < this.items.size()) begin
     return items[idx];
   end else begin
-    `uvm_info("OUT_OF_BOUNDS", $sformatf("Idx: %0d is not present in queue: %0s", idx, this.get_name()), UVM_DEBUG);
+    `uvm_info("OUT_OF_BOUNDS", $sformatf("[%s]: Idx: %0d is not present in queue: %0s", this.cfg.get_scb_name(), idx, this.get_name()), UVM_DEBUG);
     return null;
   end
 endfunction: get_item
@@ -188,7 +192,7 @@ function bit cl_syoscb_queue_std::insert_item(string producer, uvm_sequence_item
     this.items.push_back(new_item);
     return 1;
   end else begin
-    `uvm_info("OUT_OF_BOUNDS", $sformatf("Idx: %0d too large for queue %0s", idx, this.get_name()), UVM_DEBUG);
+    `uvm_info("OUT_OF_BOUNDS", $sformatf("[%s]: Idx: %0d too large for queue %0s", this.cfg.get_scb_name(), idx, this.get_name()), UVM_DEBUG);
     return 0;
   end
 endfunction: insert_item
@@ -219,8 +223,8 @@ endfunction: create_iterator
 /// <b>Queue API:</b> See cl_syoscb_queue for more details
 function bit cl_syoscb_queue_std::delete_iterator(cl_syoscb_queue_iterator_base iterator);
   if(iterator == null) begin
-    `uvm_info("NULL", $sformatf("Asked to delete null iterator from list of iterators in %s",
-                                this.get_name()), UVM_DEBUG);
+    `uvm_info("NULL", $sformatf("[%s]: Asked to delete null iterator from list of iterators in %s",
+                                this.cfg.get_scb_name(), this.get_name()), UVM_DEBUG);
     return 0;
   end else begin 	
     // Wait to get exclusive access to the queue

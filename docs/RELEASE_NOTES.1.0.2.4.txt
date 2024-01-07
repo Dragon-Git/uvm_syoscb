@@ -1,0 +1,85 @@
+#######################################################################
+#   Copyright 2014-2015 SyoSil ApS
+#   All Rights Reserved Worldwide
+#
+#   Licensed under the Apache License, Version 2.0 (the
+#   "License"); you may not use this file except in
+#   compliance with the License.  You may obtain a copy of
+#   the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in
+#   writing, software distributed under the License is
+#   distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+#   CONDITIONS OF ANY KIND, either express or implied.  See
+#   the License for the specific language governing
+#   permissions and limitations under the License.
+#######################################################################
+#######################################################################
+# RELASE NOTES for UVM scoreboard version 1.0 RC build 5
+#
+# October 26 2015
+#
+#######################################################################
+This file contains miscellanous information about this particular
+relase of the UVM scoreboard.
+
+The index:
+
+  * [1]: General Information
+  * [2]: Bug Fixes 
+  * [3]: New Features
+  * [4]: Know Limitations
+  * [5]: Compatibility List
+
+#######################################################################
+# [1]: General Information
+#######################################################################
+This version of the UVM scoreboard is the fifth RC for version 1.0 of the
+UVM scoreboard architecture presented at DVCon 2015 in the paper:
+Versatile UVM Scoreboarding. Never versions will be made accesible via:
+
+  www.syosil.com
+
+#######################################################################
+# [2]: Bug Fixes
+#######################################################################
+
+  * Fixed a bug in the In-Order compare
+  * Added error check in cl_syoscb::get_subscriber()
+
+#######################################################################
+# [3]: New Features
+#######################################################################
+
+  * Now implemented and tested using UVM 1.2 instead of UVM 1.1d
+  * Added support fro switching UVM version
+  * Added In-Order by producer compare algorithm
+  * Added tests for In-Order compare algorithm
+  * Added tests for In-Order by producer compare algorithm
+
+#######################################################################
+# [4]: Known Limitations
+#######################################################################
+The current known limitations for this relase are:
+
+  1. uvm_sequence_item_vmm not implemented 
+  2. item_time_out_queue and item_time_out_producer knobs not implemented
+  3. Locater API and queue specific versions not implemented
+  4. Only a standard SystemVerilog queue is supported
+  5. The subscribers are not working properly with parameterized sequence
+     items
+
+#######################################################################
+# [5]: Compatibility List
+#######################################################################
+The UVM scoreboard has been developed and tested with the following
+tools:
+
+  * Centos Linux release 6.6
+  * Make version 3.81
+  * UVM version 1.2
+  * Synopsys VCS® version J-2014.12-SP1-1
+  * Mentor Questa® Advanced Simulator version 10.4a
+  * Cadence® Incisive® version 14.20.006

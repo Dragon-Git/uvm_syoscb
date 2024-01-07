@@ -100,70 +100,76 @@ window.onload = initDynSections;
 <a name="l00011"></a>00011   <span class="comment">//-------------------------------------</span>
 <a name="l00012"></a>00012   <span class="comment">// UVM Macros</span>
 <a name="l00013"></a>00013   <span class="comment">//-------------------------------------</span>
-<a name="l00014"></a>00014   `uvm_component_utils(cl_syoscb_subscriber)
-<a name="l00015"></a>00015 
-<a name="l00016"></a>00016   <span class="comment">//-------------------------------------</span>
-<a name="l00017"></a>00017   <span class="comment">// Constructor</span>
-<a name="l00018"></a>00018   <span class="comment">//-------------------------------------</span>
-<a name="l00019"></a>00019   extern function new(string name = &quot;cl_syoscb_subscriber&quot;, uvm_component parent = null);
-<a name="l00020"></a>00020 
+<a name="l00014"></a>00014   `uvm_component_utils_begin(cl_syoscb_subscriber)
+<a name="l00015"></a>00015     `uvm_field_string(queue_name, UVM_DEFAULT);
+<a name="l00016"></a>00016     `uvm_field_string(producer,   UVM_DEFAULT);
+<a name="l00017"></a>00017   `uvm_component_utils_end
+<a name="l00018"></a>00018 
+<a name="l00019"></a>00019   <span class="comment">//-------------------------------------</span>
+<a name="l00020"></a>00020   <span class="comment">// Constructor</span>
 <a name="l00021"></a>00021   <span class="comment">//-------------------------------------</span>
-<a name="l00022"></a>00022   <span class="comment">// UVM overwrites/extensions</span>
-<a name="l00023"></a>00023   <span class="comment">//-------------------------------------</span>
-<a name="l00024"></a>00024   extern function void <a class="code" href="classcl__syoscb__subscriber.html#a5c82d3099a20e85b0eedd78728b8d967" title="The write method which must be implemented when extending uvm_subscriber.">write</a>(uvm_sequence_item t);
-<a name="l00025"></a>00025 
+<a name="l00022"></a>00022   extern function new(string name = &quot;cl_syoscb_subscriber&quot;, uvm_component parent = null);
+<a name="l00023"></a>00023 
+<a name="l00024"></a>00024   <span class="comment">//-------------------------------------</span>
+<a name="l00025"></a>00025   <span class="comment">// UVM overwrites/extensions</span>
 <a name="l00026"></a>00026   <span class="comment">//-------------------------------------</span>
-<a name="l00027"></a>00027   <span class="comment">// Subscriber API</span>
-<a name="l00028"></a>00028   <span class="comment">//-------------------------------------</span>
-<a name="l00029"></a>00029   extern function string <a class="code" href="classcl__syoscb__subscriber.html#a3959afbf927ba3a3d9dfb360b0c0ad0a" title="Subscriber API: Returns the name of the queue which this subscriber is connected...">get_queue_name</a>();
-<a name="l00030"></a>00030   extern function void <a class="code" href="classcl__syoscb__subscriber.html#a4dd8f85506dddbd1b230bc90e1330e0b" title="Subscriber API: Sets the name of the queue which this subscriber is connected to...">set_queue_name</a>(string qn);
-<a name="l00031"></a>00031   extern function string <a class="code" href="classcl__syoscb__subscriber.html#a3f4a62ce19c8fc036a131e72a4ebb9fe" title="Subscriber API: Returns the name of the produer which this subscriber is connected...">get_producer</a>();
-<a name="l00032"></a>00032   extern function void <a class="code" href="classcl__syoscb__subscriber.html#a9f43d87f01bd0e829e683def3f98afc7" title="Subscriber API: Sets the name of the producer which this subscriber is connected...">set_producer</a>(string p);
-<a name="l00033"></a>00033 endclass: <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>
-<a name="l00034"></a>00034 
-<a name="l00035"></a>00035 function <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::new(string name = &quot;cl_syoscb_subscriber&quot;, uvm_component parent = null);
-<a name="l00036"></a>00036   super.new(name, parent);
-<a name="l00037"></a>00037 endfunction: new
-<a name="l00038"></a>00038 <span class="comment"></span>
-<a name="l00039"></a>00039 <span class="comment">/// The write method which must be implemented when extending uvm_subscriber.</span>
-<a name="l00040"></a><a class="code" href="classcl__syoscb__subscriber.html#a5c82d3099a20e85b0eedd78728b8d967">00040</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::<a class="code" href="classcl__syoscb__subscriber.html#a5c82d3099a20e85b0eedd78728b8d967" title="The write method which must be implemented when extending uvm_subscriber.">write</a>(uvm_sequence_item t);
-<a name="l00041"></a>00041   <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a> parent;
-<a name="l00042"></a>00042 
-<a name="l00043"></a>00043   <span class="comment">// Get the parent which is the SCB top</span>
-<a name="l00044"></a>00044   <span class="comment">// This is needed for access to the function based API</span>
-<a name="l00045"></a>00045   begin
-<a name="l00046"></a>00046     uvm_component tmp_parent;
-<a name="l00047"></a>00047 
-<a name="l00048"></a>00048     tmp_parent = this.get_parent();
-<a name="l00049"></a>00049 
-<a name="l00050"></a>00050     if(!$cast(parent, tmp_parent)) begin
-<a name="l00051"></a>00051       `uvm_fatal(&quot;IMPL_ERROR&quot;, &quot;Unable to cast parent of subscriber&quot;);
-<a name="l00052"></a>00052     end
-<a name="l00053"></a>00053   end
-<a name="l00054"></a>00054 
-<a name="l00055"></a>00055   <span class="comment">// Add the </span>
-<a name="l00056"></a>00056   parent.add_item(this.queue_name, this.producer, t);
-<a name="l00057"></a>00057 endfunction
-<a name="l00058"></a>00058 <span class="comment"></span>
-<a name="l00059"></a>00059 <span class="comment">/// &lt;b&gt;Subscriber API&lt;/b&gt;: Returns the name of the queue which this subscriber is connected to.</span>
-<a name="l00060"></a><a class="code" href="classcl__syoscb__subscriber.html#a3959afbf927ba3a3d9dfb360b0c0ad0a">00060</a> <span class="comment"></span>function string <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::<a class="code" href="classcl__syoscb__subscriber.html#a3959afbf927ba3a3d9dfb360b0c0ad0a" title="Subscriber API: Returns the name of the queue which this subscriber is connected...">get_queue_name</a>();
-<a name="l00061"></a>00061   return(this.queue_name);
-<a name="l00062"></a>00062 endfunction: <a class="code" href="classcl__syoscb__subscriber.html#a3959afbf927ba3a3d9dfb360b0c0ad0a" title="Subscriber API: Returns the name of the queue which this subscriber is connected...">get_queue_name</a>
-<a name="l00063"></a>00063 <span class="comment"></span>
-<a name="l00064"></a>00064 <span class="comment">/// &lt;b&gt;Subscriber API&lt;/b&gt;: Sets the name of the queue which this subscriber is connected to.</span>
-<a name="l00065"></a><a class="code" href="classcl__syoscb__subscriber.html#a4dd8f85506dddbd1b230bc90e1330e0b">00065</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::<a class="code" href="classcl__syoscb__subscriber.html#a4dd8f85506dddbd1b230bc90e1330e0b" title="Subscriber API: Sets the name of the queue which this subscriber is connected to...">set_queue_name</a>(string qn);
-<a name="l00066"></a>00066   this.queue_name = qn;
-<a name="l00067"></a>00067 endfunction: <a class="code" href="classcl__syoscb__subscriber.html#a4dd8f85506dddbd1b230bc90e1330e0b" title="Subscriber API: Sets the name of the queue which this subscriber is connected to...">set_queue_name</a>
-<a name="l00068"></a>00068 <span class="comment"></span>
-<a name="l00069"></a>00069 <span class="comment">/// &lt;b&gt;Subscriber API&lt;/b&gt;: Returns the name of the produer which this subscriber is connected to.</span>
-<a name="l00070"></a><a class="code" href="classcl__syoscb__subscriber.html#a3f4a62ce19c8fc036a131e72a4ebb9fe">00070</a> <span class="comment"></span>function string <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::<a class="code" href="classcl__syoscb__subscriber.html#a3f4a62ce19c8fc036a131e72a4ebb9fe" title="Subscriber API: Returns the name of the produer which this subscriber is connected...">get_producer</a>();
-<a name="l00071"></a>00071   return(this.producer);
-<a name="l00072"></a>00072 endfunction: <a class="code" href="classcl__syoscb__subscriber.html#a3f4a62ce19c8fc036a131e72a4ebb9fe" title="Subscriber API: Returns the name of the produer which this subscriber is connected...">get_producer</a>
-<a name="l00073"></a>00073 <span class="comment"></span>
-<a name="l00074"></a>00074 <span class="comment">/// &lt;b&gt;Subscriber API&lt;/b&gt;: Sets the name of the producer which this subscriber is connected to.</span>
-<a name="l00075"></a><a class="code" href="classcl__syoscb__subscriber.html#a9f43d87f01bd0e829e683def3f98afc7">00075</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::<a class="code" href="classcl__syoscb__subscriber.html#a9f43d87f01bd0e829e683def3f98afc7" title="Subscriber API: Sets the name of the producer which this subscriber is connected...">set_producer</a>(string p);
-<a name="l00076"></a>00076   this.producer = p;
-<a name="l00077"></a>00077 endfunction: <a class="code" href="classcl__syoscb__subscriber.html#a9f43d87f01bd0e829e683def3f98afc7" title="Subscriber API: Sets the name of the producer which this subscriber is connected...">set_producer</a>
+<a name="l00027"></a>00027   extern function void <a class="code" href="classcl__syoscb__subscriber.html#a5c82d3099a20e85b0eedd78728b8d967" title="The write method which must be implemented when extending uvm_subscriber.">write</a>(uvm_sequence_item t);
+<a name="l00028"></a>00028 
+<a name="l00029"></a>00029   <span class="comment">//-------------------------------------</span>
+<a name="l00030"></a>00030   <span class="comment">// Subscriber API</span>
+<a name="l00031"></a>00031   <span class="comment">//-------------------------------------</span>
+<a name="l00032"></a>00032   extern function string <a class="code" href="classcl__syoscb__subscriber.html#a3959afbf927ba3a3d9dfb360b0c0ad0a" title="Subscriber API: Returns the name of the queue which this subscriber is connected...">get_queue_name</a>();
+<a name="l00033"></a>00033   extern function void <a class="code" href="classcl__syoscb__subscriber.html#a4dd8f85506dddbd1b230bc90e1330e0b" title="Subscriber API: Sets the name of the queue which this subscriber is connected to...">set_queue_name</a>(string qn);
+<a name="l00034"></a>00034   extern function string <a class="code" href="classcl__syoscb__subscriber.html#a3f4a62ce19c8fc036a131e72a4ebb9fe" title="Subscriber API: Returns the name of the produer which this subscriber is connected...">get_producer</a>();
+<a name="l00035"></a>00035   extern function void <a class="code" href="classcl__syoscb__subscriber.html#a9f43d87f01bd0e829e683def3f98afc7" title="Subscriber API: Sets the name of the producer which this subscriber is connected...">set_producer</a>(string p);
+<a name="l00036"></a>00036 endclass: <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>
+<a name="l00037"></a>00037 
+<a name="l00038"></a>00038 function <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::new(string name = &quot;cl_syoscb_subscriber&quot;, uvm_component parent = null);
+<a name="l00039"></a>00039   super.new(name, parent);
+<a name="l00040"></a>00040 endfunction: new
+<a name="l00041"></a>00041 <span class="comment"></span>
+<a name="l00042"></a>00042 <span class="comment">/// The write method which must be implemented when extending uvm_subscriber.</span>
+<a name="l00043"></a><a class="code" href="classcl__syoscb__subscriber.html#a5c82d3099a20e85b0eedd78728b8d967">00043</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::<a class="code" href="classcl__syoscb__subscriber.html#a5c82d3099a20e85b0eedd78728b8d967" title="The write method which must be implemented when extending uvm_subscriber.">write</a>(uvm_sequence_item t);
+<a name="l00044"></a>00044   <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a> parent;
+<a name="l00045"></a>00045 
+<a name="l00046"></a>00046   <span class="comment">// Get the parent which is the SCB top</span>
+<a name="l00047"></a>00047   <span class="comment">// This is needed for access to the function based API</span>
+<a name="l00048"></a>00048   begin
+<a name="l00049"></a>00049     uvm_component tmp_parent;
+<a name="l00050"></a>00050 
+<a name="l00051"></a>00051     tmp_parent = this.get_parent();
+<a name="l00052"></a>00052 
+<a name="l00053"></a>00053     if(!$cast(parent, tmp_parent)) begin
+<a name="l00054"></a>00054       <span class="comment">// *NOTE*: Here the parent cannot be cast. Thus, the print cannot contain the SCB name</span>
+<a name="l00055"></a>00055       `uvm_fatal(&quot;IMPL_ERROR&quot;, &quot;Unable to cast parent of subscriber&quot;);
+<a name="l00056"></a>00056     end
+<a name="l00057"></a>00057   end
+<a name="l00058"></a>00058 
+<a name="l00059"></a>00059   `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;Trigger add_item by subscriber: %s (Queue: %s, Producer: %s)&quot;, this.get_name(), this.queue_name, this.producer), UVM_FULL);
+<a name="l00060"></a>00060   
+<a name="l00061"></a>00061   <span class="comment">// Add the item to the queue</span>
+<a name="l00062"></a>00062   parent.add_item(this.queue_name, this.producer, t);
+<a name="l00063"></a>00063 endfunction
+<a name="l00064"></a>00064 <span class="comment"></span>
+<a name="l00065"></a>00065 <span class="comment">/// &lt;b&gt;Subscriber API&lt;/b&gt;: Returns the name of the queue which this subscriber is connected to.</span>
+<a name="l00066"></a><a class="code" href="classcl__syoscb__subscriber.html#a3959afbf927ba3a3d9dfb360b0c0ad0a">00066</a> <span class="comment"></span>function string <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::<a class="code" href="classcl__syoscb__subscriber.html#a3959afbf927ba3a3d9dfb360b0c0ad0a" title="Subscriber API: Returns the name of the queue which this subscriber is connected...">get_queue_name</a>();
+<a name="l00067"></a>00067   return(this.queue_name);
+<a name="l00068"></a>00068 endfunction: <a class="code" href="classcl__syoscb__subscriber.html#a3959afbf927ba3a3d9dfb360b0c0ad0a" title="Subscriber API: Returns the name of the queue which this subscriber is connected...">get_queue_name</a>
+<a name="l00069"></a>00069 <span class="comment"></span>
+<a name="l00070"></a>00070 <span class="comment">/// &lt;b&gt;Subscriber API&lt;/b&gt;: Sets the name of the queue which this subscriber is connected to.</span>
+<a name="l00071"></a><a class="code" href="classcl__syoscb__subscriber.html#a4dd8f85506dddbd1b230bc90e1330e0b">00071</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::<a class="code" href="classcl__syoscb__subscriber.html#a4dd8f85506dddbd1b230bc90e1330e0b" title="Subscriber API: Sets the name of the queue which this subscriber is connected to...">set_queue_name</a>(string qn);
+<a name="l00072"></a>00072   this.queue_name = qn;
+<a name="l00073"></a>00073 endfunction: <a class="code" href="classcl__syoscb__subscriber.html#a4dd8f85506dddbd1b230bc90e1330e0b" title="Subscriber API: Sets the name of the queue which this subscriber is connected to...">set_queue_name</a>
+<a name="l00074"></a>00074 <span class="comment"></span>
+<a name="l00075"></a>00075 <span class="comment">/// &lt;b&gt;Subscriber API&lt;/b&gt;: Returns the name of the produer which this subscriber is connected to.</span>
+<a name="l00076"></a><a class="code" href="classcl__syoscb__subscriber.html#a3f4a62ce19c8fc036a131e72a4ebb9fe">00076</a> <span class="comment"></span>function string <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::<a class="code" href="classcl__syoscb__subscriber.html#a3f4a62ce19c8fc036a131e72a4ebb9fe" title="Subscriber API: Returns the name of the produer which this subscriber is connected...">get_producer</a>();
+<a name="l00077"></a>00077   return(this.producer);
+<a name="l00078"></a>00078 endfunction: <a class="code" href="classcl__syoscb__subscriber.html#a3f4a62ce19c8fc036a131e72a4ebb9fe" title="Subscriber API: Returns the name of the produer which this subscriber is connected...">get_producer</a>
+<a name="l00079"></a>00079 <span class="comment"></span>
+<a name="l00080"></a>00080 <span class="comment">/// &lt;b&gt;Subscriber API&lt;/b&gt;: Sets the name of the producer which this subscriber is connected to.</span>
+<a name="l00081"></a><a class="code" href="classcl__syoscb__subscriber.html#a9f43d87f01bd0e829e683def3f98afc7">00081</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::<a class="code" href="classcl__syoscb__subscriber.html#a9f43d87f01bd0e829e683def3f98afc7" title="Subscriber API: Sets the name of the producer which this subscriber is connected...">set_producer</a>(string p);
+<a name="l00082"></a>00082   this.producer = p;
+<a name="l00083"></a>00083 endfunction: <a class="code" href="classcl__syoscb__subscriber.html#a9f43d87f01bd0e829e683def3f98afc7" title="Subscriber API: Sets the name of the producer which this subscriber is connected...">set_producer</a>
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -226,7 +232,7 @@ window.onload = initDynSections;
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.4<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.5<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -248,7 +254,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Oct 26 03:49:53 2015</small></address>
+      Sat Nov 28 05:41:54 2015</small></address>
    </td>
   </tr>
 </table>

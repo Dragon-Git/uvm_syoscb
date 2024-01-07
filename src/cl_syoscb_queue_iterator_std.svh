@@ -49,8 +49,8 @@ function bit cl_syoscb_queue_iterator_std::next();
     return 1;
   end else begin
     // Debug print when unable to advance to the next element (When at the end of the queue)
-    `uvm_info("OUT_OF_BOUNDS", $sformatf("Not possible to increment position of queue %s: at end of queue",
-                                         qh.get_name()), UVM_DEBUG);
+    `uvm_info("OUT_OF_BOUNDS", $sformatf("[%s]: Not possible to increment position of queue %s: at end of queue",
+                                         this.cfg.get_scb_name(), qh.get_name()), UVM_DEBUG);
     return 0;
   end
 endfunction: next
@@ -64,8 +64,8 @@ function bit cl_syoscb_queue_iterator_std::previous();
     cl_syoscb_queue qh = this.get_queue();
 
     // Debug print when unable to advance to the previous element (When at the beginning of the queue)
-    `uvm_info("OUT_OF_BOUNDS", $sformatf("Not possible to decrement position of queue %s: at end of queue",
-                                         qh.get_name()), UVM_DEBUG);
+    `uvm_info("OUT_OF_BOUNDS", $sformatf("[%s]: Not possible to decrement position of queue %s: at end of queue",
+                                         this.cfg.get_scb_name(), qh.get_name()), UVM_DEBUG);
     return 0;
   end
 endfunction: previous
@@ -115,6 +115,7 @@ function bit cl_syoscb_queue_iterator_std::set_queue(cl_syoscb_queue owner);
     return 0;
   end else begin
     this.owner = owner;
+    this.cfg = owner.get_cfg();
     return 1;
   end
 endfunction: set_queue

@@ -108,162 +108,172 @@ window.onload = initDynSections;
 <a name="l00019"></a>00019   <span class="comment">// UVM Macros</span>
 <a name="l00020"></a>00020   <span class="comment">//-------------------------------------</span>
 <a name="l00021"></a>00021   `uvm_component_utils_begin(cl_syoscb)
-<a name="l00022"></a>00022     `uvm_field_object(cfg, UVM_ALL_ON)
-<a name="l00023"></a>00023     `uvm_field_array_object(queues, UVM_ALL_ON)
-<a name="l00024"></a>00024     `uvm_field_object(compare_strategy, UVM_ALL_ON)
-<a name="l00025"></a>00025   `uvm_component_utils_end
-<a name="l00026"></a>00026 
-<a name="l00027"></a>00027   <span class="comment">//-------------------------------------</span>
-<a name="l00028"></a>00028   <span class="comment">// Constructor</span>
-<a name="l00029"></a>00029   <span class="comment">//-------------------------------------</span>
-<a name="l00030"></a>00030   extern function new(string name = &quot;cl_syoscb&quot;, uvm_component parent = null);
-<a name="l00031"></a>00031 
-<a name="l00032"></a>00032   <span class="comment">//-------------------------------------</span>
-<a name="l00033"></a>00033   <span class="comment">// UVM Phase methods</span>
-<a name="l00034"></a>00034   <span class="comment">//-------------------------------------</span>
-<a name="l00035"></a>00035   extern function void <a class="code" href="classcl__syoscb.html#aff5b55683b8bb74b5b75f607ac043602" title="The build_phase gets the scoreboard configuration and forwards it to the child components...">build_phase</a>(uvm_phase phase);
-<a name="l00036"></a>00036 
-<a name="l00037"></a>00037   <span class="comment">//-------------------------------------</span>
-<a name="l00038"></a>00038   <span class="comment">// Function based API</span>
-<a name="l00039"></a>00039   <span class="comment">//-------------------------------------</span>
-<a name="l00040"></a>00040   extern function void <a class="code" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f" title="Method for adding a uvm_sequence_item to a given queue for a given producer.">add_item</a>(string queue_name, string producer, uvm_sequence_item item);
-<a name="l00041"></a>00041   extern function void <a class="code" href="classcl__syoscb.html#aca64b749ca30f964068a817ad4c152b7" title="Invokes the compare strategy.">compare</a>();
-<a name="l00042"></a>00042 
-<a name="l00043"></a>00043   <span class="comment">//-------------------------------------</span>
-<a name="l00044"></a>00044   <span class="comment">// Transaction based API</span>
-<a name="l00045"></a>00045   <span class="comment">//-------------------------------------</span>
-<a name="l00046"></a>00046   extern function <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a> <a class="code" href="classcl__syoscb.html#a1d3983a0946cc4e38f74b249b5bb0e16" title="Returns a UVM subscriber for a given combination of queue and producer The returned...">get_subscriber</a>(string queue_name, string producer);
-<a name="l00047"></a>00047 endclass: <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a>
-<a name="l00048"></a>00048 
-<a name="l00049"></a>00049 function <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a>::new(string name = &quot;cl_syoscb&quot;, uvm_component parent = null);
-<a name="l00050"></a>00050    super.new(name, parent);
-<a name="l00051"></a>00051 endfunction : new
-<a name="l00052"></a>00052 <span class="comment"></span>
-<a name="l00053"></a>00053 <span class="comment">/// The build_phase gets the scoreboard configuration and forwards it to the child components (cl_syoscb_queue</span>
-<a name="l00054"></a>00054 <span class="comment">/// and cl_syoscb_compare). Additionally, it creates all of the queues defined in the configuration object. Finally,</span>
-<a name="l00055"></a>00055 <span class="comment">/// it also creates the compare strategy via a factory create call.</span>
-<a name="l00056"></a><a class="code" href="classcl__syoscb.html#aff5b55683b8bb74b5b75f607ac043602">00056</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a>::<a class="code" href="classcl__syoscb.html#aff5b55683b8bb74b5b75f607ac043602" title="The build_phase gets the scoreboard configuration and forwards it to the child components...">build_phase</a>(uvm_phase phase);
-<a name="l00057"></a>00057   if (!uvm_config_db #(cl_syoscb_cfg)::get(this, &quot;&quot;, &quot;cfg&quot;, this.cfg)) begin
-<a name="l00058"></a>00058     `uvm_fatal(&quot;CFG_ERROR&quot;, &quot;Configuration object not passed.&quot;)
-<a name="l00059"></a>00059   end
-<a name="l00060"></a>00060 
-<a name="l00061"></a>00061   <span class="comment">// Create list of queues</span>
-<a name="l00062"></a>00062   this.queues = new[this.cfg.size_queues()];
+<a name="l00022"></a>00022     `uvm_field_object(cfg,                   UVM_DEFAULT)
+<a name="l00023"></a>00023     `uvm_field_array_object(queues,          UVM_DEFAULT)
+<a name="l00024"></a>00024     `uvm_field_object(compare_strategy,      UVM_DEFAULT)
+<a name="l00025"></a>00025     `uvm_field_aa_object_string(subscribers, UVM_DEFAULT)
+<a name="l00026"></a>00026   `uvm_component_utils_end
+<a name="l00027"></a>00027 
+<a name="l00028"></a>00028   <span class="comment">//-------------------------------------</span>
+<a name="l00029"></a>00029   <span class="comment">// Constructor</span>
+<a name="l00030"></a>00030   <span class="comment">//-------------------------------------</span>
+<a name="l00031"></a>00031   extern function new(string name = &quot;cl_syoscb&quot;, uvm_component parent = null);
+<a name="l00032"></a>00032 
+<a name="l00033"></a>00033   <span class="comment">//-------------------------------------</span>
+<a name="l00034"></a>00034   <span class="comment">// UVM Phase methods</span>
+<a name="l00035"></a>00035   <span class="comment">//-------------------------------------</span>
+<a name="l00036"></a>00036   extern function void <a class="code" href="classcl__syoscb.html#aff5b55683b8bb74b5b75f607ac043602" title="The build_phase gets the scoreboard configuration and forwards it to the child components...">build_phase</a>(uvm_phase phase);
+<a name="l00037"></a>00037 
+<a name="l00038"></a>00038   <span class="comment">//-------------------------------------</span>
+<a name="l00039"></a>00039   <span class="comment">// Function based API</span>
+<a name="l00040"></a>00040   <span class="comment">//-------------------------------------</span>
+<a name="l00041"></a>00041   extern function void <a class="code" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f" title="Method for adding a uvm_sequence_item to a given queue for a given producer.">add_item</a>(string queue_name, string producer, uvm_sequence_item item);
+<a name="l00042"></a>00042   extern function void <a class="code" href="classcl__syoscb.html#aca64b749ca30f964068a817ad4c152b7" title="Invokes the compare strategy.">compare</a>();
+<a name="l00043"></a>00043 
+<a name="l00044"></a>00044   <span class="comment">//-------------------------------------</span>
+<a name="l00045"></a>00045   <span class="comment">// Transaction based API</span>
+<a name="l00046"></a>00046   <span class="comment">//-------------------------------------</span>
+<a name="l00047"></a>00047   extern function <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a> <a class="code" href="classcl__syoscb.html#a1d3983a0946cc4e38f74b249b5bb0e16" title="Returns a UVM subscriber for a given combination of queue and producer The returned...">get_subscriber</a>(string queue_name, string producer);
+<a name="l00048"></a>00048 endclass: <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a>
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050 function <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a>::new(string name = &quot;cl_syoscb&quot;, uvm_component parent = null);
+<a name="l00051"></a>00051    super.new(name, parent);
+<a name="l00052"></a>00052 endfunction : new
+<a name="l00053"></a>00053 <span class="comment"></span>
+<a name="l00054"></a>00054 <span class="comment">/// The build_phase gets the scoreboard configuration and forwards it to the child components (cl_syoscb_queue</span>
+<a name="l00055"></a>00055 <span class="comment">/// and cl_syoscb_compare). Additionally, it creates all of the queues defined in the configuration object. Finally,</span>
+<a name="l00056"></a>00056 <span class="comment">/// it also creates the compare strategy via a factory create call.</span>
+<a name="l00057"></a><a class="code" href="classcl__syoscb.html#aff5b55683b8bb74b5b75f607ac043602">00057</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a>::<a class="code" href="classcl__syoscb.html#aff5b55683b8bb74b5b75f607ac043602" title="The build_phase gets the scoreboard configuration and forwards it to the child components...">build_phase</a>(uvm_phase phase);
+<a name="l00058"></a>00058   if (!uvm_config_db #(cl_syoscb_cfg)::get(this, &quot;&quot;, &quot;cfg&quot;, this.cfg)) begin
+<a name="l00059"></a>00059     <span class="comment">// *NOTE*: If no cfg object is given then no scb name is available</span>
+<a name="l00060"></a>00060     <span class="comment">//         Thus, no scb name is printed here</span>
+<a name="l00061"></a>00061     `uvm_fatal(&quot;CFG_ERROR&quot;, &quot;Configuration object not passed.&quot;)
+<a name="l00062"></a>00062   end
 <a name="l00063"></a>00063 
-<a name="l00064"></a>00064   <span class="comment">// Create the queues as defined in the configuration</span>
-<a name="l00065"></a>00065   begin
-<a name="l00066"></a>00066     string queue_names[];
-<a name="l00067"></a>00067 
-<a name="l00068"></a>00068     <span class="comment">// Get teh list of queue names</span>
-<a name="l00069"></a>00069     this.cfg.get_queues(queue_names);
-<a name="l00070"></a>00070 
-<a name="l00071"></a>00071     foreach(queue_names[i]) begin
-<a name="l00072"></a>00072       this.queues[i] = <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::type_id::create(queue_names[i], this);
-<a name="l00073"></a>00073       this.cfg.set_queue(queue_names[i], this.queues[i]);
-<a name="l00074"></a>00074 
-<a name="l00075"></a>00075       <span class="comment">// Forward the configuration to the queue</span>
-<a name="l00076"></a>00076       uvm_config_db #(cl_syoscb_cfg)::set(this, queue_names[i], &quot;cfg&quot;, this.cfg); 
-<a name="l00077"></a>00077     end
-<a name="l00078"></a>00078   end
-<a name="l00079"></a>00079 
-<a name="l00080"></a>00080   <span class="comment">// Forward the configuration to the compare_strategy</span>
-<a name="l00081"></a>00081   uvm_config_db #(cl_syoscb_cfg)::set(this, &quot;compare_strategy&quot;, &quot;cfg&quot;, this.cfg); 
+<a name="l00064"></a>00064   <span class="comment">// Set the default SCB name if not specified explicitly</span>
+<a name="l00065"></a>00065   if(this.cfg.get_scb_name() == &quot;&quot;) begin
+<a name="l00066"></a>00066     this.cfg.set_scb_name(this.get_name());
+<a name="l00067"></a>00067   end
+<a name="l00068"></a>00068   
+<a name="l00069"></a>00069   <span class="comment">// Create list of queues</span>
+<a name="l00070"></a>00070   this.queues = new[this.cfg.size_queues()];
+<a name="l00071"></a>00071 
+<a name="l00072"></a>00072   <span class="comment">// Create the queues as defined in the configuration</span>
+<a name="l00073"></a>00073   begin
+<a name="l00074"></a>00074     string queue_names[];
+<a name="l00075"></a>00075 
+<a name="l00076"></a>00076     <span class="comment">// Get teh list of queue names</span>
+<a name="l00077"></a>00077     this.cfg.get_queues(queue_names);
+<a name="l00078"></a>00078 
+<a name="l00079"></a>00079     foreach(queue_names[i]) begin
+<a name="l00080"></a>00080       this.queues[i] = <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::type_id::create(queue_names[i], this);
+<a name="l00081"></a>00081       this.cfg.set_queue(queue_names[i], this.queues[i]);
 <a name="l00082"></a>00082 
-<a name="l00083"></a>00083   <span class="comment">// Create the compare strategy</span>
-<a name="l00084"></a>00084   this.compare_strategy = <a class="code" href="classcl__syoscb__compare.html" title="Class which act as the root of the compare algorithm.">cl_syoscb_compare</a>::type_id::create(.name(&quot;compare_strategy&quot;), .parent(this));
-<a name="l00085"></a>00085 
-<a name="l00086"></a>00086   begin
-<a name="l00087"></a>00087     cl_syoscb_report_catcher catcher = new();
-<a name="l00088"></a>00088     uvm_report_cb::add(null, catcher);
-<a name="l00089"></a>00089   end
+<a name="l00083"></a>00083       <span class="comment">// Forward the configuration to the queue</span>
+<a name="l00084"></a>00084       uvm_config_db #(cl_syoscb_cfg)::set(this, queue_names[i], &quot;cfg&quot;, this.cfg); 
+<a name="l00085"></a>00085     end
+<a name="l00086"></a>00086   end
+<a name="l00087"></a>00087 
+<a name="l00088"></a>00088   <span class="comment">// Forward the configuration to the compare_strategy</span>
+<a name="l00089"></a>00089   uvm_config_db #(cl_syoscb_cfg)::set(this, &quot;compare_strategy&quot;, &quot;cfg&quot;, this.cfg); 
 <a name="l00090"></a>00090 
-<a name="l00091"></a>00091   begin
-<a name="l00092"></a>00092     string producers[];
+<a name="l00091"></a>00091   <span class="comment">// Create the compare strategy</span>
+<a name="l00092"></a>00092   this.compare_strategy = <a class="code" href="classcl__syoscb__compare.html" title="Class which act as the root of the compare algorithm.">cl_syoscb_compare</a>::type_id::create(.name(&quot;compare_strategy&quot;), .parent(this));
 <a name="l00093"></a>00093 
-<a name="l00094"></a>00094     this.cfg.get_producers(producers);
-<a name="l00095"></a>00095 
-<a name="l00096"></a>00096     foreach(producers[i]) begin
-<a name="l00097"></a>00097       cl_syoscb_cfg_pl pl = this.cfg.get_producer(producers[i]);
+<a name="l00094"></a>00094   begin
+<a name="l00095"></a>00095     cl_syoscb_report_catcher catcher = new();
+<a name="l00096"></a>00096     uvm_report_cb::add(null, catcher);
+<a name="l00097"></a>00097   end
 <a name="l00098"></a>00098 
-<a name="l00099"></a>00099       foreach(pl.list[j]) begin
-<a name="l00100"></a>00100         <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a> subscriber;
+<a name="l00099"></a>00099   begin
+<a name="l00100"></a>00100     string producers[];
 <a name="l00101"></a>00101 
-<a name="l00102"></a>00102         subscriber = <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::type_id::create({producers[i], &quot;_&quot;, pl.list[j], &quot;_subscr&quot;}, this);
-<a name="l00103"></a>00103         subscriber.set_queue_name(pl.list[j]);
-<a name="l00104"></a>00104         subscriber.set_producer(producers[i]);
-<a name="l00105"></a>00105         this.subscribers[{pl.list[j], producers[i]}] = subscriber;
-<a name="l00106"></a>00106       end
-<a name="l00107"></a>00107     end
-<a name="l00108"></a>00108   end
-<a name="l00109"></a>00109 endfunction: build_phase
-<a name="l00110"></a>00110 <span class="comment"></span>
-<a name="l00111"></a>00111 <span class="comment">/// Method for adding a uvm_sequence_item to a given queue for a given producer.</span>
-<a name="l00112"></a>00112 <span class="comment">/// The method will check if the queue and producer exists before adding it to the queue.</span>
-<a name="l00113"></a>00113 <span class="comment">/// </span>
-<a name="l00114"></a>00114 <span class="comment">/// The uvm_sequence_item will be wrapped by a cl_syoscb_item along with some META data</span>
-<a name="l00115"></a>00115 <span class="comment">/// Thus, it is the cl_syoscb_item which will be added to the queue and not the uvm_sequence_item</span>
-<a name="l00116"></a>00116 <span class="comment">/// directly.</span>
-<a name="l00117"></a>00117 <span class="comment">///</span>
-<a name="l00118"></a>00118 <span class="comment">/// This ensures that the scoreboard can easily be added to an existing testbench with already defined</span>
-<a name="l00119"></a>00119 <span class="comment">/// sequence items etc.</span>
-<a name="l00120"></a><a class="code" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f">00120</a> <span class="comment"></span>function <span class="keywordtype">void</span> <a class="code" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f" title="Method for adding a uvm_sequence_item to a given queue for a given producer.">cl_syoscb::add_item</a>(<span class="keywordtype">string</span> queue_name, <span class="keywordtype">string</span> producer, uvm_sequence_item item);
-<a name="l00121"></a>00121   uvm_sequence_item item_clone;
-<a name="l00122"></a>00122 
-<a name="l00123"></a>00123   <span class="comment">// Check queue</span>
-<a name="l00124"></a>00124   <span class="keywordflow">if</span>(!this.cfg.exist_queue(queue_name)) begin
-<a name="l00125"></a>00125     `uvm_fatal(<span class="stringliteral">&quot;CFG_ERROR&quot;</span>, $sformatf(<span class="stringliteral">&quot;Queue: %0s is not found&quot;</span>, queue_name));
-<a name="l00126"></a>00126   end
-<a name="l00127"></a>00127 
-<a name="l00128"></a>00128   <span class="comment">// Check producer</span>
-<a name="l00129"></a>00129   <span class="keywordflow">if</span>(!this.cfg.exist_producer(producer)) begin
-<a name="l00130"></a>00130     `uvm_fatal(<span class="stringliteral">&quot;CFG_ERROR&quot;</span>, $sformatf(<span class="stringliteral">&quot;Producer: %0s is not found&quot;</span>, producer));
-<a name="l00131"></a>00131   end
-<a name="l00132"></a>00132 
-<a name="l00133"></a>00133   <span class="comment">// Clone the item if not disabled</span>
-<a name="l00134"></a>00134   <span class="comment">// Clone the item in order to isolate the UVM scb from the rest of the TB</span>
-<a name="l00135"></a>00135   <span class="keywordflow">if</span>(this.cfg.get_disable_clone() == 1<span class="stringliteral">&apos;b0) begin</span>
-<a name="l00136"></a>00136 <span class="stringliteral">    if(!$cast(item_clone, item.clone())) begin</span>
-<a name="l00137"></a>00137 <span class="stringliteral">      `uvm_fatal(&quot;QUEUE_ERROR&quot;, &quot;Unable to cast cloned item to uvm_sequence_item&quot;);</span>
-<a name="l00138"></a>00138 <span class="stringliteral">    end</span>
-<a name="l00139"></a>00139 <span class="stringliteral">  end else begin</span>
-<a name="l00140"></a>00140 <span class="stringliteral">    item_clone = item;</span>
-<a name="l00141"></a>00141 <span class="stringliteral">  end</span>
-<a name="l00142"></a>00142 <span class="stringliteral"></span>
-<a name="l00143"></a>00143 <span class="stringliteral">  // Add the uvm_sequence_item to the queue for the given producer</span>
-<a name="l00144"></a>00144 <span class="stringliteral">  begin</span>
-<a name="l00145"></a>00145 <span class="stringliteral">    cl_syoscb_queue queue;</span>
-<a name="l00146"></a>00146 <span class="stringliteral"></span>
-<a name="l00147"></a>00147 <span class="stringliteral">    queue = this.cfg.get_queue(queue_name);</span>
-<a name="l00148"></a>00148 <span class="stringliteral">   </span>
-<a name="l00149"></a>00149 <span class="stringliteral">    if(queue == null) begin</span>
-<a name="l00150"></a>00150 <span class="stringliteral">      `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Queue: %s not found by add_item method&quot;, queue_name));</span>
-<a name="l00151"></a>00151 <span class="stringliteral">    end</span>
-<a name="l00152"></a>00152 <span class="stringliteral"></span>
-<a name="l00153"></a>00153 <span class="stringliteral">    if(!queue.add_item(producer, item_clone)) begin</span>
-<a name="l00154"></a>00154 <span class="stringliteral">      `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to add item to queue: %s&quot;, queue_name));</span>
-<a name="l00155"></a>00155 <span class="stringliteral">    end</span>
-<a name="l00156"></a>00156 <span class="stringliteral">  end</span>
-<a name="l00157"></a>00157 <span class="stringliteral"></span>
-<a name="l00158"></a>00158 <span class="stringliteral">  // Invoke the compare algorithm</span>
-<a name="l00159"></a>00159 <span class="stringliteral">  void&apos;</span>(this.compare());
-<a name="l00160"></a>00160 endfunction: add_item
-<a name="l00161"></a>00161 <span class="comment"></span>
-<a name="l00162"></a>00162 <span class="comment">/// Invokes the compare strategy</span>
-<a name="l00163"></a><a class="code" href="classcl__syoscb.html#aca64b749ca30f964068a817ad4c152b7">00163</a> <span class="comment"></span>function <span class="keywordtype">void</span> <a class="code" href="classcl__syoscb.html#aca64b749ca30f964068a817ad4c152b7" title="Invokes the compare strategy.">cl_syoscb::compare</a>();
-<a name="l00164"></a>00164   this.compare_strategy.compare();
-<a name="l00165"></a>00165 endfunction: compare
-<a name="l00166"></a>00166 <span class="comment"></span>
-<a name="l00167"></a>00167 <span class="comment">/// Returns a UVM subscriber for a given combination of queue and producer</span>
-<a name="l00168"></a>00168 <span class="comment">/// The returned UVM subscriber can then be connected to a UVM monitor or similar</span>
-<a name="l00169"></a>00169 <span class="comment">/// which produces transactions which should be scoreboarded.</span>
-<a name="l00170"></a><a class="code" href="classcl__syoscb.html#a1d3983a0946cc4e38f74b249b5bb0e16">00170</a> <span class="comment"></span>function <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a> <a class="code" href="classcl__syoscb.html#a1d3983a0946cc4e38f74b249b5bb0e16" title="Returns a UVM subscriber for a given combination of queue and producer The returned...">cl_syoscb::get_subscriber</a>(<span class="keywordtype">string</span> queue_name, <span class="keywordtype">string</span> producer);
-<a name="l00171"></a>00171   <span class="keywordflow">if</span>(this.subscribers.exists({queue_name, producer})) begin
-<a name="l00172"></a>00172     <span class="keywordflow">return</span>(this.subscribers[{queue_name, producer}]);
-<a name="l00173"></a>00173   end <span class="keywordflow">else</span> begin
-<a name="l00174"></a>00174    `uvm_fatal(<span class="stringliteral">&quot;SUBSCRIBER_ERROR&quot;</span>, $sformatf(<span class="stringliteral">&quot;Unable to get subscriber for queue: %s and producer: %s&quot;</span>, queue_name, producer));
-<a name="l00175"></a>00175    <span class="keywordflow">return</span>(null);
-<a name="l00176"></a>00176   end
-<a name="l00177"></a>00177 endfunction: get_subscriber
+<a name="l00102"></a>00102     this.cfg.get_producers(producers);
+<a name="l00103"></a>00103 
+<a name="l00104"></a>00104     foreach(producers[i]) begin
+<a name="l00105"></a>00105       cl_syoscb_cfg_pl pl = this.cfg.get_producer(producers[i]);
+<a name="l00106"></a>00106 
+<a name="l00107"></a>00107       foreach(pl.list[j]) begin
+<a name="l00108"></a>00108         <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a> subscriber;
+<a name="l00109"></a>00109 
+<a name="l00110"></a>00110         subscriber = <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::type_id::create({producers[i], &quot;_&quot;, pl.list[j], &quot;_subscr&quot;}, this);
+<a name="l00111"></a>00111         subscriber.set_queue_name(pl.list[j]);
+<a name="l00112"></a>00112         subscriber.set_producer(producers[i]);
+<a name="l00113"></a>00113         this.subscribers[{pl.list[j], producers[i]}] = subscriber;
+<a name="l00114"></a>00114       end
+<a name="l00115"></a>00115     end
+<a name="l00116"></a>00116   end
+<a name="l00117"></a>00117 endfunction: build_phase
+<a name="l00118"></a>00118 <span class="comment"></span>
+<a name="l00119"></a>00119 <span class="comment">/// Method for adding a uvm_sequence_item to a given queue for a given producer.</span>
+<a name="l00120"></a>00120 <span class="comment">/// The method will check if the queue and producer exists before adding it to the queue.</span>
+<a name="l00121"></a>00121 <span class="comment">/// </span>
+<a name="l00122"></a>00122 <span class="comment">/// The uvm_sequence_item will be wrapped by a cl_syoscb_item along with some META data</span>
+<a name="l00123"></a>00123 <span class="comment">/// Thus, it is the cl_syoscb_item which will be added to the queue and not the uvm_sequence_item</span>
+<a name="l00124"></a>00124 <span class="comment">/// directly.</span>
+<a name="l00125"></a>00125 <span class="comment">///</span>
+<a name="l00126"></a>00126 <span class="comment">/// This ensures that the scoreboard can easily be added to an existing testbench with already defined</span>
+<a name="l00127"></a>00127 <span class="comment">/// sequence items etc.</span>
+<a name="l00128"></a><a class="code" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f">00128</a> <span class="comment"></span>function <span class="keywordtype">void</span> <a class="code" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f" title="Method for adding a uvm_sequence_item to a given queue for a given producer.">cl_syoscb::add_item</a>(<span class="keywordtype">string</span> queue_name, <span class="keywordtype">string</span> producer, uvm_sequence_item item);
+<a name="l00129"></a>00129   uvm_sequence_item item_clone;
+<a name="l00130"></a>00130 
+<a name="l00131"></a>00131   <span class="comment">// Check queue</span>
+<a name="l00132"></a>00132   <span class="keywordflow">if</span>(!this.cfg.exist_queue(queue_name)) begin
+<a name="l00133"></a>00133     `uvm_fatal(<span class="stringliteral">&quot;CFG_ERROR&quot;</span>, $sformatf(<span class="stringliteral">&quot;[%s]: Queue: %0s is not found&quot;</span>, this.cfg.get_scb_name(), queue_name));
+<a name="l00134"></a>00134   end
+<a name="l00135"></a>00135 
+<a name="l00136"></a>00136   <span class="comment">// Check producer</span>
+<a name="l00137"></a>00137   <span class="keywordflow">if</span>(!this.cfg.exist_producer(producer)) begin
+<a name="l00138"></a>00138     `uvm_fatal(<span class="stringliteral">&quot;CFG_ERROR&quot;</span>, $sformatf(<span class="stringliteral">&quot;[%s]: Producer: %0s is not found&quot;</span>, this.cfg.get_scb_name(), producer));
+<a name="l00139"></a>00139   end
+<a name="l00140"></a>00140 
+<a name="l00141"></a>00141   <span class="comment">// Clone the item if not disabled</span>
+<a name="l00142"></a>00142   <span class="comment">// Clone the item in order to isolate the UVM scb from the rest of the TB</span>
+<a name="l00143"></a>00143   <span class="keywordflow">if</span>(this.cfg.get_disable_clone() == 1<span class="stringliteral">&apos;b0) begin</span>
+<a name="l00144"></a>00144 <span class="stringliteral">    if(!$cast(item_clone, item.clone())) begin</span>
+<a name="l00145"></a>00145 <span class="stringliteral">      `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;[%s]: Unable to cast cloned item to uvm_sequence_item&quot;, this.cfg.get_scb_name()));</span>
+<a name="l00146"></a>00146 <span class="stringliteral">    end</span>
+<a name="l00147"></a>00147 <span class="stringliteral">  end else begin</span>
+<a name="l00148"></a>00148 <span class="stringliteral">    item_clone = item;</span>
+<a name="l00149"></a>00149 <span class="stringliteral">  end</span>
+<a name="l00150"></a>00150 <span class="stringliteral"></span>
+<a name="l00151"></a>00151 <span class="stringliteral">  // Add the uvm_sequence_item to the queue for the given producer</span>
+<a name="l00152"></a>00152 <span class="stringliteral">  begin</span>
+<a name="l00153"></a>00153 <span class="stringliteral">    cl_syoscb_queue queue;</span>
+<a name="l00154"></a>00154 <span class="stringliteral"></span>
+<a name="l00155"></a>00155 <span class="stringliteral">    queue = this.cfg.get_queue(queue_name);</span>
+<a name="l00156"></a>00156 <span class="stringliteral">   </span>
+<a name="l00157"></a>00157 <span class="stringliteral">    if(queue == null) begin</span>
+<a name="l00158"></a>00158 <span class="stringliteral">      `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;[%s]: Queue: %s not found by add_item method&quot;, this.cfg.get_scb_name(), queue_name));</span>
+<a name="l00159"></a>00159 <span class="stringliteral">    end</span>
+<a name="l00160"></a>00160 <span class="stringliteral"></span>
+<a name="l00161"></a>00161 <span class="stringliteral">    if(!queue.add_item(producer, item_clone)) begin</span>
+<a name="l00162"></a>00162 <span class="stringliteral">      `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;[%s]: Unable to add item to queue: %s&quot;, this.cfg.get_scb_name(), queue_name));</span>
+<a name="l00163"></a>00163 <span class="stringliteral">    end</span>
+<a name="l00164"></a>00164 <span class="stringliteral">  end</span>
+<a name="l00165"></a>00165 <span class="stringliteral"></span>
+<a name="l00166"></a>00166 <span class="stringliteral">  `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;[%s]: Trigger compare by queue: %s, producer: %s&quot;, this.cfg.get_scb_name(), queue_name, producer), UVM_FULL);</span>
+<a name="l00167"></a>00167 <span class="stringliteral"></span>
+<a name="l00168"></a>00168 <span class="stringliteral">  // Invoke the compare algorithm</span>
+<a name="l00169"></a>00169 <span class="stringliteral">  void&apos;</span>(this.compare());
+<a name="l00170"></a>00170 endfunction: add_item
+<a name="l00171"></a>00171 <span class="comment"></span>
+<a name="l00172"></a>00172 <span class="comment">/// Invokes the compare strategy</span>
+<a name="l00173"></a><a class="code" href="classcl__syoscb.html#aca64b749ca30f964068a817ad4c152b7">00173</a> <span class="comment"></span>function <span class="keywordtype">void</span> <a class="code" href="classcl__syoscb.html#aca64b749ca30f964068a817ad4c152b7" title="Invokes the compare strategy.">cl_syoscb::compare</a>();
+<a name="l00174"></a>00174   this.compare_strategy.compare();
+<a name="l00175"></a>00175 endfunction: compare
+<a name="l00176"></a>00176 <span class="comment"></span>
+<a name="l00177"></a>00177 <span class="comment">/// Returns a UVM subscriber for a given combination of queue and producer</span>
+<a name="l00178"></a>00178 <span class="comment">/// The returned UVM subscriber can then be connected to a UVM monitor or similar</span>
+<a name="l00179"></a>00179 <span class="comment">/// which produces transactions which should be scoreboarded.</span>
+<a name="l00180"></a><a class="code" href="classcl__syoscb.html#a1d3983a0946cc4e38f74b249b5bb0e16">00180</a> <span class="comment"></span>function <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a> <a class="code" href="classcl__syoscb.html#a1d3983a0946cc4e38f74b249b5bb0e16" title="Returns a UVM subscriber for a given combination of queue and producer The returned...">cl_syoscb::get_subscriber</a>(<span class="keywordtype">string</span> queue_name, <span class="keywordtype">string</span> producer);
+<a name="l00181"></a>00181   <span class="keywordflow">if</span>(this.subscribers.exists({queue_name, producer})) begin
+<a name="l00182"></a>00182     <span class="keywordflow">return</span>(this.subscribers[{queue_name, producer}]);
+<a name="l00183"></a>00183   end <span class="keywordflow">else</span> begin
+<a name="l00184"></a>00184    `uvm_fatal(<span class="stringliteral">&quot;SUBSCRIBER_ERROR&quot;</span>, $sformatf(<span class="stringliteral">&quot;[%s]: Unable to get subscriber for queue: %s and producer: %s&quot;</span>, this.cfg.get_scb_name(), queue_name, producer));
+<a name="l00185"></a>00185    <span class="keywordflow">return</span>(null);
+<a name="l00186"></a>00186   end
+<a name="l00187"></a>00187 endfunction: get_subscriber
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -326,7 +336,7 @@ window.onload = initDynSections;
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.4<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.5<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -348,7 +358,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Oct 26 03:49:53 2015</small></address>
+      Sat Nov 28 05:41:54 2015</small></address>
    </td>
   </tr>
 </table>

@@ -71,70 +71,80 @@ function void cl_syoscb_compare_iop::compare_do();
 
   primary_queue = this.cfg.get_queue(primary_queue_name);
   if(primary_queue == null) begin
-    `uvm_fatal("QUEUE_ERROR", "Unable to retrieve primary queue handle");
+    `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: cmp-iop: Unable to retrieve primary queue handle", this.cfg.get_scb_name()));
   end
 
   primary_queue_iter = primary_queue.create_iterator();
 
-  `uvm_info("DEBUG", $sformatf("cmp-iop: primary queue: %s", primary_queue_name), UVM_FULL);
-  `uvm_info("DEBUG", $sformatf("cmp-iop: number of queues: %0d", queue_names.size()), UVM_FULL);
+  `uvm_info("DEBUG", $sformatf("[%s]: cmp-iop: primary queue: %s", this.cfg.get_scb_name(), primary_queue_name), UVM_FULL);
+  `uvm_info("DEBUG", $sformatf("[%s]: cmp-iop: number of queues: %0d", this.cfg.get_scb_name(), queue_names.size()), UVM_FULL);
 
   // Outer loop loops through all
   while (!primary_queue_iter.is_done()) begin
     primary_item = primary_queue_iter.get_item();
 
-    `uvm_info("DEBUG", $sformatf("Now comparing primary transaction:\n%s", primary_item.sprint()), UVM_FULL); 
+    `uvm_info("DEBUG", $sformatf("[%s]: cmp-iop: Now comparing primary transaction:\n%s", this.cfg.get_scb_name(), primary_item.sprint()), UVM_FULL); 
 
     // Clear list of found slave items before starting new inner loop
     secondary_item_found.delete();
 
     // Inner loop through all queues
     foreach(queue_names[i]) begin
-      `uvm_info("DEBUG", $sformatf("Looking at queue: %s", queue_names[i]), UVM_FULL);
+      `uvm_info("DEBUG", $sformatf("[%s]: cmp-iop: Looking at queue: %s", this.cfg.get_scb_name(), queue_names[i]), UVM_FULL);
 
       if(queue_names[i] != primary_queue_name) begin
         cl_syoscb_queue secondary_queue;
         cl_syoscb_queue_iterator_base secondary_queue_iter;
 
-        `uvm_info("DEBUG", $sformatf("%s is a secondary queue - now comparing", queue_names[i]), UVM_FULL);
+        `uvm_info("DEBUG", $sformatf("[%s]: cmp-iop: %s is a secondary queue - now comparing", this.cfg.get_scb_name(), queue_names[i]), UVM_FULL);
 
         // Get the secondary queue
         secondary_queue = this.cfg.get_queue(queue_names[i]);
 
         if(secondary_queue == null) begin
-          `uvm_fatal("QUEUE_ERROR", "Unable to retrieve secondary queue handle");
+          `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: cmp-iop: Unable to retrieve secondary queue handle", this.cfg.get_scb_name()));
         end
 
-        `uvm_info("DEBUG", $sformatf("%0d items in queue: %s", secondary_queue.get_size(), queue_names[i]), UVM_FULL);
+        `uvm_info("DEBUG", $sformatf("[%s]: cmp-iop: %0d items in queue: %s", this.cfg.get_scb_name(), secondary_queue.get_size(), queue_names[i]), UVM_FULL);
 
-        // Get an iterator for the secondary queue
-        secondary_queue_iter = secondary_queue.create_iterator();
+        // Only trigger the compare if there are elements in the queue
+        if(secondary_queue.get_size()>0) begin
+          // Get an iterator for the secondary queue
+          secondary_queue_iter = secondary_queue.create_iterator();
 
-        // Only the first match is removed
-        while(!secondary_queue_iter.is_done()) begin
-          // Get the item from the secondary queue
-          cl_syoscb_item sih = secondary_queue_iter.get_item();
+          // Only the first match is removed
+          while(!secondary_queue_iter.is_done()) begin
+            // Get the item from the secondary queue
+            cl_syoscb_item sih = secondary_queue_iter.get_item();
 
-          // Only do the compare if the producers match
-          if(primary_item.get_producer == sih.get_producer()) begin
-            if(sih.compare(primary_item) == 1'b1) begin
-              secondary_item_found[queue_names[i]] = secondary_queue_iter.get_idx();
-              `uvm_info("DEBUG", $sformatf("Secondary item found at index: %0d:\n%s", secondary_queue_iter.get_idx(), sih.sprint()), UVM_FULL);
-              break;
-            end else begin
-              `uvm_error("COMPARE_ERROR", $sformatf("Item:\n%s\nfrom primary queue: %s not found in secondary queue: %s. Found this item in %s instead:\n%s", primary_item.sprint(), primary_queue_name, queue_names[i], queue_names[i], sih.sprint()))
+            // Only do the compare if the producers match
+            if(primary_item.get_producer == sih.get_producer()) begin
+              if(sih.compare(primary_item) == 1'b1) begin
+                secondary_item_found[queue_names[i]] = secondary_queue_iter.get_idx();
+                `uvm_info("DEBUG", $sformatf("[%s]: cmp-iop: Secondary item found at index: %0d:\n%s", this.cfg.get_scb_name(), secondary_queue_iter.get_idx(), sih.sprint()), UVM_FULL);
+                break;
+               end else begin
+                `uvm_error("COMPARE_ERROR", $sformatf("[%s]: cmp-iop: Item:\n%s\nfrom primary queue: %s not found in secondary queue: %s. Found this item in %s instead:\n%s",
+                                                      this.cfg.get_scb_name(), primary_item.sprint(), primary_queue_name, queue_names[i], queue_names[i], sih.sprint()))
+
+                // The first element was not a match => break since this is an in order compare on the producer  
+                break;
+              end
             end
+
+            if(!secondary_queue_iter.next()) begin
+              `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: cmp-iop: Unable to get next element from iterator on secondary queue: %s", this.cfg.get_scb_name(), queue_names[i]));
+            end	  
           end
 
-          if(!secondary_queue_iter.next()) begin
-            `uvm_fatal("QUEUE_ERROR", $sformatf("Unable to get next element from iterator on secondary queue: %s", queue_names[i]));
-          end	  
-        end
-        if(!secondary_queue.delete_iterator(secondary_queue_iter)) begin
-          `uvm_fatal("QUEUE_ERROR", $sformatf("Unable to delete iterator from secondaery queue: %s", queue_names[i]));
+          if(!secondary_queue.delete_iterator(secondary_queue_iter)) begin
+            `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: cmp-iop: Unable to delete iterator from secondaery queue: %s", this.cfg.get_scb_name(), queue_names[i]));
+          end
+        end else begin
+          `uvm_info("DEBUG", $sformatf("[%s]: cmp-iop: %s is empty - skipping", this.cfg.get_scb_name(), queue_names[i]), UVM_FULL);
         end
       end else begin
-        `uvm_info("DEBUG", $sformatf("%s is the primary queue - skipping", queue_names[i]), UVM_FULL);
+        `uvm_info("DEBUG", $sformatf("[%s]: cmp-iop: %s is the primary queue - skipping", this.cfg.get_scb_name(), queue_names[i]), UVM_FULL);
       end
     end
 
@@ -146,13 +156,12 @@ function void cl_syoscb_compare_iop::compare_do();
       // Get the item from the primary queue
       pih = primary_queue_iter.get_item();
 
-      `uvm_info("DEBUG", $sformatf("Found match for primary queue item :\n%s",
-                                   pih.sprint()), UVM_FULL);
+      `uvm_info("DEBUG", $sformatf("[%s]: cmp-iop: Found match for primary queue item :\n%s", this.cfg.get_scb_name(), pih.sprint()), UVM_FULL);
 
       // Remove from primary
       if(!primary_queue.delete_item(primary_queue_iter.get_idx())) begin
-        `uvm_error("QUEUE_ERROR", $sformatf("Unable to delete item idx %0d from queue %s",
-                                            primary_queue_iter.get_idx(), primary_queue.get_name()));
+        `uvm_error("QUEUE_ERROR", $sformatf("[%s]: cmp-iop: Unable to delete item idx %0d from queue %s",
+                                            this.cfg.get_scb_name(), primary_queue_iter.get_idx(), primary_queue.get_name()));
       end
 
       // Remove from all secondaries
@@ -163,12 +172,12 @@ function void cl_syoscb_compare_iop::compare_do();
         secondary_queue = this.cfg.get_queue(queue_name);
 
         if(secondary_queue == null) begin
-          `uvm_fatal("QUEUE_ERROR", "Unable to retrieve secondary queue handle");
+          `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: cmp-iop: Unable to retrieve secondary queue handle", this.cfg.get_scb_name()));
         end
 
         if(!secondary_queue.delete_item(secondary_item_found[queue_name])) begin
-          `uvm_error("QUEUE_ERROR", $sformatf("Unable to delete item idx %0d from queue %s",
-                                              secondary_item_found[queue_name], secondary_queue.get_name()));
+          `uvm_error("QUEUE_ERROR", $sformatf("[%s]: cmp-iop: Unable to delete item idx %0d from queue %s",
+                                              this.cfg.get_scb_name(), secondary_item_found[queue_name], secondary_queue.get_name()));
         end
       end
     end
@@ -180,6 +189,6 @@ function void cl_syoscb_compare_iop::compare_do();
   end
 
   if(!primary_queue.delete_iterator(primary_queue_iter)) begin
-    `uvm_fatal("QUEUE_ERROR", $sformatf("Unable to delete iterator from primary queue: %s", primary_queue_name));
+    `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: cmp-iop: Unable to delete iterator from primary queue: %s", this.cfg.get_scb_name(), primary_queue_name));
   end
 endfunction: compare_do

@@ -136,174 +136,178 @@ window.onload = initDynSections;
 <a name="l00047"></a>00047   <span class="comment">// Check that the max_queue_size for this queue is not reached</span>
 <a name="l00048"></a>00048   if(this.cfg.get_max_queue_size(this.get_name())&gt;0 &amp;&amp;
 <a name="l00049"></a>00049      this.<a class="code" href="classcl__syoscb__queue__std.html#ac91a26574353c8c24789a993d3ffc12d" title="Queue API: See cl_syoscb_queue for more details">get_size</a>()==this.<a class="code" href="classcl__syoscb__queue.html#ab92efb1fb67ec7cc8dfe928a474a3e2b" title="Handle to the configuration.">cfg</a>.get_max_queue_size(this.get_name())) begin
-<a name="l00050"></a>00050     `uvm_error(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Maximum number of items (%0d) for queue: %s reached&quot;,
-<a name="l00051"></a>00051                                        this.cfg.get_max_queue_size(this.get_name()),
-<a name="l00052"></a>00052                                        this.get_name()))
-<a name="l00053"></a>00053     return(1&apos;b0);
-<a name="l00054"></a>00054   end
-<a name="l00055"></a>00055 
-<a name="l00056"></a>00056   <span class="comment">// Create the new scoreboard item with META data which wraps the</span>
-<a name="l00057"></a>00057   <span class="comment">// uvm_sequence_item</span>
-<a name="l00058"></a>00058   <span class="comment">//</span>
-<a name="l00059"></a>00059   <span class="comment">// *NOTE*: No need for using create.</span>
-<a name="l00060"></a>00060   <span class="comment">//         New is okay since no customization is needed here</span>
-<a name="l00061"></a>00061   <span class="comment">//</span>
-<a name="l00062"></a>00062   <span class="comment">// *NOTE*: Create it once with a default name to be able to retrieve the unique</span>
-<a name="l00063"></a>00063   <span class="comment">//         instance id and then rename the object with a uniqueue name</span>
-<a name="l00064"></a>00064   new_item = new(.name(&quot;default-item&quot;));
-<a name="l00065"></a>00065   new_item.set_name({producer,&quot;-item-&quot;, $psprintf(&quot;%0d&quot;, new_item.get_inst_id())});
-<a name="l00066"></a>00066 
-<a name="l00067"></a>00067   <span class="comment">// Transfer the producer to the item</span>
-<a name="l00068"></a>00068   <span class="comment">// *NOTE*: No need to check the producer since this is checked by the parent component</span>
-<a name="l00069"></a>00069   new_item.set_producer(.producer(producer));
-<a name="l00070"></a>00070 
-<a name="l00071"></a>00071   <span class="comment">// Transfer the UVM sequence item to the item</span>
-<a name="l00072"></a>00072   <span class="comment">// *NOTE*: No need to copy it since it has been copied by the parent</span>
-<a name="l00073"></a>00073   new_item.set_item(.item(item));
-<a name="l00074"></a>00074 
-<a name="l00075"></a>00075   <span class="comment">// Insert the item in the queue</span>
-<a name="l00076"></a>00076   this.items.push_back(new_item);
-<a name="l00077"></a>00077 
-<a name="l00078"></a>00078   <span class="comment">// Signal that it worked</span>
-<a name="l00079"></a>00079   return 1;
-<a name="l00080"></a>00080 endfunction: <a class="code" href="classcl__syoscb__queue__std.html#a68f61e7f53901acb3cc50a9001193c0f" title="Queue API: See cl_syoscb_queue for more details">add_item</a>
-<a name="l00081"></a>00081 <span class="comment"></span>
-<a name="l00082"></a>00082 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
-<a name="l00083"></a><a class="code" href="classcl__syoscb__queue__std.html#a9cae04fa7b9a40a5554ef24bfaac851b">00083</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__queue__std.html" title="Standard implementation of a queue.">cl_syoscb_queue_std</a>::<a class="code" href="classcl__syoscb__queue__std.html#a9cae04fa7b9a40a5554ef24bfaac851b" title="Queue API: See cl_syoscb_queue for more details">delete_item</a>(int unsigned idx);
-<a name="l00084"></a>00084   if(idx &lt; this.items.size()) begin
-<a name="l00085"></a>00085     cl_syoscb_queue_iterator_base iter[$];
-<a name="l00086"></a>00086 
-<a name="l00087"></a>00087     <span class="comment">// Wait to get exclusive access to the queue</span>
-<a name="l00088"></a>00088     <span class="comment">// if there are multiple iterators</span>
-<a name="l00089"></a>00089     while(!this.iter_sem.try_get());
-<a name="l00090"></a>00090     items.delete(idx);
-<a name="l00091"></a>00091 
-<a name="l00092"></a>00092     <span class="comment">// Update iterators</span>
-<a name="l00093"></a>00093     iter = this.iterators.find(x) with (x.get_idx() &lt; idx);
-<a name="l00094"></a>00094     for(int i = 0; i &lt; iter.size(); i++) begin
-<a name="l00095"></a>00095       void&apos;(iter[i].previous());
-<a name="l00096"></a>00096     end
-<a name="l00097"></a>00097 
-<a name="l00098"></a>00098     this.iter_sem.put();
-<a name="l00099"></a>00099     return 1;
-<a name="l00100"></a>00100   end else begin
-<a name="l00101"></a>00101     `uvm_info(&quot;OUT_OF_BOUNDS&quot;, $sformatf(&quot;Idx: %0d is not present in queue: %0s&quot;, idx, this.get_name()), UVM_DEBUG);
-<a name="l00102"></a>00102     return 0;
-<a name="l00103"></a>00103   end
-<a name="l00104"></a>00104 endfunction: delete_item
-<a name="l00105"></a>00105 <span class="comment"></span>
-<a name="l00106"></a>00106 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
-<a name="l00107"></a><a class="code" href="classcl__syoscb__queue__std.html#a42efb916d933e56e9865919504054499">00107</a> <span class="comment"></span>function cl_syoscb_item cl_syoscb_queue_std::get_item(int unsigned idx);
-<a name="l00108"></a>00108   if(idx &lt; this.items.size()) begin
-<a name="l00109"></a>00109     return items[idx];
-<a name="l00110"></a>00110   end else begin
-<a name="l00111"></a>00111     `uvm_info(&quot;OUT_OF_BOUNDS&quot;, $sformatf(&quot;Idx: %0d is not present in queue: %0s&quot;, idx, this.get_name()), UVM_DEBUG);
-<a name="l00112"></a>00112     return null;
-<a name="l00113"></a>00113   end
-<a name="l00114"></a>00114 endfunction: get_item
-<a name="l00115"></a>00115 <span class="comment"></span>
-<a name="l00116"></a>00116 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
-<a name="l00117"></a><a class="code" href="classcl__syoscb__queue__std.html#ac91a26574353c8c24789a993d3ffc12d">00117</a> <span class="comment"></span>function int unsigned cl_syoscb_queue_std::get_size();
-<a name="l00118"></a>00118   return this.items.size();
-<a name="l00119"></a>00119 endfunction: get_size
-<a name="l00120"></a>00120 <span class="comment"></span>
-<a name="l00121"></a>00121 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
-<a name="l00122"></a><a class="code" href="classcl__syoscb__queue__std.html#a812d7f4d7143c9bef1f3181e24347d5c">00122</a> <span class="comment"></span>function bit cl_syoscb_queue_std::empty();
-<a name="l00123"></a>00123   return(this.get_size()!=0 ? 0 : 1);
-<a name="l00124"></a>00124 endfunction
-<a name="l00125"></a>00125 <span class="comment"></span>
-<a name="l00126"></a>00126 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
-<a name="l00127"></a><a class="code" href="classcl__syoscb__queue__std.html#ad293b78071120f596e3884980e36a9fa">00127</a> <span class="comment"></span>function bit cl_syoscb_queue_std::insert_item(string producer, uvm_sequence_item item, int unsigned idx);
-<a name="l00128"></a>00128   cl_syoscb_item new_item;
-<a name="l00129"></a>00129 
-<a name="l00130"></a>00130   <span class="comment">// Create the new scoreboard item with META data which wraps the</span>
-<a name="l00131"></a>00131   <span class="comment">// uvm_sequence_item</span>
-<a name="l00132"></a>00132   <span class="comment">//</span>
-<a name="l00133"></a>00133   <span class="comment">// *NOTE*: No need for using create.</span>
-<a name="l00134"></a>00134   <span class="comment">//         New is okay since no customization is needed here</span>
-<a name="l00135"></a>00135   <span class="comment">//</span>
-<a name="l00136"></a>00136   <span class="comment">// *NOTE*: Create it once with a default name to be able to retrieve the unique</span>
-<a name="l00137"></a>00137   <span class="comment">//         instance id and then rename the object with a uniqueue name</span>
-<a name="l00138"></a>00138   new_item = new(.name(&quot;default-item&quot;));
-<a name="l00139"></a>00139   new_item.set_name({producer,&quot;-item-&quot;, $psprintf(&quot;%0d&quot;, new_item.get_inst_id())});
-<a name="l00140"></a>00140 
-<a name="l00141"></a>00141   <span class="comment">// Transfer the producer to the item</span>
-<a name="l00142"></a>00142   <span class="comment">// *NOTE*: No need to check the producer since this is checked by the parent component</span>
-<a name="l00143"></a>00143   new_item.set_producer(.producer(producer));
+<a name="l00050"></a>00050     `uvm_error(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;[%s]: Maximum number of items (%0d) for queue: %s reached&quot;,
+<a name="l00051"></a>00051                                        this.cfg.get_scb_name(), 
+<a name="l00052"></a>00052                                        this.cfg.get_max_queue_size(this.get_name()),
+<a name="l00053"></a>00053                                        this.get_name()))
+<a name="l00054"></a>00054     return(1&apos;b0);
+<a name="l00055"></a>00055   end
+<a name="l00056"></a>00056 
+<a name="l00057"></a>00057   <span class="comment">// Create the new scoreboard item with META data which wraps the</span>
+<a name="l00058"></a>00058   <span class="comment">// uvm_sequence_item</span>
+<a name="l00059"></a>00059   <span class="comment">//</span>
+<a name="l00060"></a>00060   <span class="comment">// *NOTE*: No need for using create.</span>
+<a name="l00061"></a>00061   <span class="comment">//         New is okay since no customization is needed here</span>
+<a name="l00062"></a>00062   <span class="comment">//</span>
+<a name="l00063"></a>00063   <span class="comment">// *NOTE*: Create it once with a default name to be able to retrieve the unique</span>
+<a name="l00064"></a>00064   <span class="comment">//         instance id and then rename the object with a uniqueue name</span>
+<a name="l00065"></a>00065   new_item = new(.name(&quot;default-item&quot;));
+<a name="l00066"></a>00066   new_item.set_name({producer,&quot;-item-&quot;, $psprintf(&quot;%0d&quot;, new_item.get_inst_id())});
+<a name="l00067"></a>00067 
+<a name="l00068"></a>00068   <span class="comment">// Transfer the producer to the item</span>
+<a name="l00069"></a>00069   <span class="comment">// *NOTE*: No need to check the producer since this is checked by the parent component</span>
+<a name="l00070"></a>00070   new_item.set_producer(.producer(producer));
+<a name="l00071"></a>00071 
+<a name="l00072"></a>00072   <span class="comment">// Transfer the UVM sequence item to the item</span>
+<a name="l00073"></a>00073   <span class="comment">// *NOTE*: No need to copy it since it has been copied by the parent</span>
+<a name="l00074"></a>00074   new_item.set_item(.item(item));
+<a name="l00075"></a>00075 
+<a name="l00076"></a>00076   <span class="comment">// Insert the item in the queue</span>
+<a name="l00077"></a>00077   this.items.push_back(new_item);
+<a name="l00078"></a>00078 
+<a name="l00079"></a>00079   <span class="comment">// Count the number of inserts</span>
+<a name="l00080"></a>00080   this.cnt_add_item++;
+<a name="l00081"></a>00081   
+<a name="l00082"></a>00082   <span class="comment">// Signal that it worked</span>
+<a name="l00083"></a>00083   return 1;
+<a name="l00084"></a>00084 endfunction: <a class="code" href="classcl__syoscb__queue__std.html#a68f61e7f53901acb3cc50a9001193c0f" title="Queue API: See cl_syoscb_queue for more details">add_item</a>
+<a name="l00085"></a>00085 <span class="comment"></span>
+<a name="l00086"></a>00086 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
+<a name="l00087"></a><a class="code" href="classcl__syoscb__queue__std.html#a9cae04fa7b9a40a5554ef24bfaac851b">00087</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__queue__std.html" title="Standard implementation of a queue.">cl_syoscb_queue_std</a>::<a class="code" href="classcl__syoscb__queue__std.html#a9cae04fa7b9a40a5554ef24bfaac851b" title="Queue API: See cl_syoscb_queue for more details">delete_item</a>(int unsigned idx);
+<a name="l00088"></a>00088   if(idx &lt; this.items.size()) begin
+<a name="l00089"></a>00089     cl_syoscb_queue_iterator_base iter[$];
+<a name="l00090"></a>00090 
+<a name="l00091"></a>00091     <span class="comment">// Wait to get exclusive access to the queue</span>
+<a name="l00092"></a>00092     <span class="comment">// if there are multiple iterators</span>
+<a name="l00093"></a>00093     while(!this.iter_sem.try_get());
+<a name="l00094"></a>00094     items.delete(idx);
+<a name="l00095"></a>00095 
+<a name="l00096"></a>00096     <span class="comment">// Update iterators</span>
+<a name="l00097"></a>00097     iter = this.iterators.find(x) with (x.get_idx() &lt; idx);
+<a name="l00098"></a>00098     for(int i = 0; i &lt; iter.size(); i++) begin
+<a name="l00099"></a>00099       void&apos;(iter[i].previous());
+<a name="l00100"></a>00100     end
+<a name="l00101"></a>00101 
+<a name="l00102"></a>00102     this.iter_sem.put();
+<a name="l00103"></a>00103     return 1;
+<a name="l00104"></a>00104   end else begin
+<a name="l00105"></a>00105     `uvm_info(&quot;OUT_OF_BOUNDS&quot;, $sformatf(&quot;[%s]: Idx: %0d is not present in queue: %0s&quot;, this.cfg.get_scb_name(), idx, this.get_name()), UVM_DEBUG);
+<a name="l00106"></a>00106     return 0;
+<a name="l00107"></a>00107   end
+<a name="l00108"></a>00108 endfunction: delete_item
+<a name="l00109"></a>00109 <span class="comment"></span>
+<a name="l00110"></a>00110 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
+<a name="l00111"></a><a class="code" href="classcl__syoscb__queue__std.html#a42efb916d933e56e9865919504054499">00111</a> <span class="comment"></span>function cl_syoscb_item cl_syoscb_queue_std::get_item(int unsigned idx);
+<a name="l00112"></a>00112   if(idx &lt; this.items.size()) begin
+<a name="l00113"></a>00113     return items[idx];
+<a name="l00114"></a>00114   end else begin
+<a name="l00115"></a>00115     `uvm_info(&quot;OUT_OF_BOUNDS&quot;, $sformatf(&quot;[%s]: Idx: %0d is not present in queue: %0s&quot;, this.cfg.get_scb_name(), idx, this.get_name()), UVM_DEBUG);
+<a name="l00116"></a>00116     return null;
+<a name="l00117"></a>00117   end
+<a name="l00118"></a>00118 endfunction: get_item
+<a name="l00119"></a>00119 <span class="comment"></span>
+<a name="l00120"></a>00120 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
+<a name="l00121"></a><a class="code" href="classcl__syoscb__queue__std.html#ac91a26574353c8c24789a993d3ffc12d">00121</a> <span class="comment"></span>function int unsigned cl_syoscb_queue_std::get_size();
+<a name="l00122"></a>00122   return this.items.size();
+<a name="l00123"></a>00123 endfunction: get_size
+<a name="l00124"></a>00124 <span class="comment"></span>
+<a name="l00125"></a>00125 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
+<a name="l00126"></a><a class="code" href="classcl__syoscb__queue__std.html#a812d7f4d7143c9bef1f3181e24347d5c">00126</a> <span class="comment"></span>function bit cl_syoscb_queue_std::empty();
+<a name="l00127"></a>00127   return(this.get_size()!=0 ? 0 : 1);
+<a name="l00128"></a>00128 endfunction
+<a name="l00129"></a>00129 <span class="comment"></span>
+<a name="l00130"></a>00130 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
+<a name="l00131"></a><a class="code" href="classcl__syoscb__queue__std.html#ad293b78071120f596e3884980e36a9fa">00131</a> <span class="comment"></span>function bit cl_syoscb_queue_std::insert_item(string producer, uvm_sequence_item item, int unsigned idx);
+<a name="l00132"></a>00132   cl_syoscb_item new_item;
+<a name="l00133"></a>00133 
+<a name="l00134"></a>00134   <span class="comment">// Create the new scoreboard item with META data which wraps the</span>
+<a name="l00135"></a>00135   <span class="comment">// uvm_sequence_item</span>
+<a name="l00136"></a>00136   <span class="comment">//</span>
+<a name="l00137"></a>00137   <span class="comment">// *NOTE*: No need for using create.</span>
+<a name="l00138"></a>00138   <span class="comment">//         New is okay since no customization is needed here</span>
+<a name="l00139"></a>00139   <span class="comment">//</span>
+<a name="l00140"></a>00140   <span class="comment">// *NOTE*: Create it once with a default name to be able to retrieve the unique</span>
+<a name="l00141"></a>00141   <span class="comment">//         instance id and then rename the object with a uniqueue name</span>
+<a name="l00142"></a>00142   new_item = new(.name(&quot;default-item&quot;));
+<a name="l00143"></a>00143   new_item.set_name({producer,&quot;-item-&quot;, $psprintf(&quot;%0d&quot;, new_item.get_inst_id())});
 <a name="l00144"></a>00144 
-<a name="l00145"></a>00145   <span class="comment">// Transfer the UVM sequence item to the item</span>
-<a name="l00146"></a>00146   <span class="comment">// *NOTE*: No need to copy it since it has been copied by the parent</span>
-<a name="l00147"></a>00147   new_item.set_item(.item(item));
+<a name="l00145"></a>00145   <span class="comment">// Transfer the producer to the item</span>
+<a name="l00146"></a>00146   <span class="comment">// *NOTE*: No need to check the producer since this is checked by the parent component</span>
+<a name="l00147"></a>00147   new_item.set_producer(.producer(producer));
 <a name="l00148"></a>00148 
-<a name="l00149"></a>00149   if(idx &lt; this.items.size()) begin
-<a name="l00150"></a>00150     cl_syoscb_queue_iterator_base iter[$];
-<a name="l00151"></a>00151 
-<a name="l00152"></a>00152     <span class="comment">// Wait to get exclusive access to the queue</span>
-<a name="l00153"></a>00153     <span class="comment">// if there are multiple iterators</span>
-<a name="l00154"></a>00154     while(!this.iter_sem.try_get());
-<a name="l00155"></a>00155     this.items.insert(idx, new_item);
-<a name="l00156"></a>00156 
-<a name="l00157"></a>00157     <span class="comment">// Update iterators</span>
-<a name="l00158"></a>00158     iter = this.iterators.find(x) with (x.get_idx() &gt;= idx);
-<a name="l00159"></a>00159     for(int i = 0; i &lt; iter.size(); i++) begin
-<a name="l00160"></a>00160       <span class="comment">// Call .next() blindly. This can never fail by design, since</span>
-<a name="l00161"></a>00161       <span class="comment">// if it was point at the last element then it points to the second last</span>
-<a name="l00162"></a>00162       <span class="comment">// element prior to the .next(). The .next() call will then just</span>
-<a name="l00163"></a>00163       <span class="comment">// set the iterator to the correct index again after the insertion</span>
-<a name="l00164"></a>00164       void&apos;(iter[i].next());
-<a name="l00165"></a>00165     end
-<a name="l00166"></a>00166 
-<a name="l00167"></a>00167     this.iter_sem.put();
-<a name="l00168"></a>00168     return 1;
-<a name="l00169"></a>00169   end else if(idx == this.items.size()) begin
-<a name="l00170"></a>00170     this.items.push_back(new_item);
-<a name="l00171"></a>00171     return 1;
-<a name="l00172"></a>00172   end else begin
-<a name="l00173"></a>00173     `uvm_info(&quot;OUT_OF_BOUNDS&quot;, $sformatf(&quot;Idx: %0d too large for queue %0s&quot;, idx, this.get_name()), UVM_DEBUG);
-<a name="l00174"></a>00174     return 0;
-<a name="l00175"></a>00175   end
-<a name="l00176"></a>00176 endfunction: insert_item
-<a name="l00177"></a>00177 
-<a name="l00178"></a>00178 <span class="comment"></span>
-<a name="l00179"></a>00179 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
-<a name="l00180"></a><a class="code" href="classcl__syoscb__queue__std.html#a84149180e88153757ac3df08fe6dd3ce">00180</a> <span class="comment"></span>function cl_syoscb_queue_iterator_base cl_syoscb_queue_std::create_iterator();
-<a name="l00181"></a>00181   cl_syoscb_queue_iterator_std result;
-<a name="l00182"></a>00182 
-<a name="l00183"></a>00183   <span class="comment">// Wait to get exclusive access to the queue</span>
-<a name="l00184"></a>00184   <span class="comment">// if there are multiple iterators</span>
-<a name="l00185"></a>00185   while(this.iter_sem.try_get() == 0);
+<a name="l00149"></a>00149   <span class="comment">// Transfer the UVM sequence item to the item</span>
+<a name="l00150"></a>00150   <span class="comment">// *NOTE*: No need to copy it since it has been copied by the parent</span>
+<a name="l00151"></a>00151   new_item.set_item(.item(item));
+<a name="l00152"></a>00152 
+<a name="l00153"></a>00153   if(idx &lt; this.items.size()) begin
+<a name="l00154"></a>00154     cl_syoscb_queue_iterator_base iter[$];
+<a name="l00155"></a>00155 
+<a name="l00156"></a>00156     <span class="comment">// Wait to get exclusive access to the queue</span>
+<a name="l00157"></a>00157     <span class="comment">// if there are multiple iterators</span>
+<a name="l00158"></a>00158     while(!this.iter_sem.try_get());
+<a name="l00159"></a>00159     this.items.insert(idx, new_item);
+<a name="l00160"></a>00160 
+<a name="l00161"></a>00161     <span class="comment">// Update iterators</span>
+<a name="l00162"></a>00162     iter = this.iterators.find(x) with (x.get_idx() &gt;= idx);
+<a name="l00163"></a>00163     for(int i = 0; i &lt; iter.size(); i++) begin
+<a name="l00164"></a>00164       <span class="comment">// Call .next() blindly. This can never fail by design, since</span>
+<a name="l00165"></a>00165       <span class="comment">// if it was point at the last element then it points to the second last</span>
+<a name="l00166"></a>00166       <span class="comment">// element prior to the .next(). The .next() call will then just</span>
+<a name="l00167"></a>00167       <span class="comment">// set the iterator to the correct index again after the insertion</span>
+<a name="l00168"></a>00168       void&apos;(iter[i].next());
+<a name="l00169"></a>00169     end
+<a name="l00170"></a>00170 
+<a name="l00171"></a>00171     this.iter_sem.put();
+<a name="l00172"></a>00172     return 1;
+<a name="l00173"></a>00173   end else if(idx == this.items.size()) begin
+<a name="l00174"></a>00174     this.items.push_back(new_item);
+<a name="l00175"></a>00175     return 1;
+<a name="l00176"></a>00176   end else begin
+<a name="l00177"></a>00177     `uvm_info(&quot;OUT_OF_BOUNDS&quot;, $sformatf(&quot;[%s]: Idx: %0d too large for queue %0s&quot;, this.cfg.get_scb_name(), idx, this.get_name()), UVM_DEBUG);
+<a name="l00178"></a>00178     return 0;
+<a name="l00179"></a>00179   end
+<a name="l00180"></a>00180 endfunction: insert_item
+<a name="l00181"></a>00181 
+<a name="l00182"></a>00182 <span class="comment"></span>
+<a name="l00183"></a>00183 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
+<a name="l00184"></a><a class="code" href="classcl__syoscb__queue__std.html#a84149180e88153757ac3df08fe6dd3ce">00184</a> <span class="comment"></span>function cl_syoscb_queue_iterator_base cl_syoscb_queue_std::create_iterator();
+<a name="l00185"></a>00185   cl_syoscb_queue_iterator_std result;
 <a name="l00186"></a>00186 
-<a name="l00187"></a>00187   result = cl_syoscb_queue_iterator_std::type_id::create(
-<a name="l00188"></a>00188       $sformatf(&quot;%s_iter%0d&quot;, this.get_name(), this.iter_idx));
-<a name="l00189"></a>00189 
-<a name="l00190"></a>00190   <span class="comment">// No need to check return value since set_queue will issue</span>
-<a name="l00191"></a>00191   <span class="comment">// and `uvm_error of something goes wrong</span>
-<a name="l00192"></a>00192   void&apos;(result.set_queue(this));
+<a name="l00187"></a>00187   <span class="comment">// Wait to get exclusive access to the queue</span>
+<a name="l00188"></a>00188   <span class="comment">// if there are multiple iterators</span>
+<a name="l00189"></a>00189   while(this.iter_sem.try_get() == 0);
+<a name="l00190"></a>00190 
+<a name="l00191"></a>00191   result = cl_syoscb_queue_iterator_std::type_id::create(
+<a name="l00192"></a>00192       $sformatf(&quot;%s_iter%0d&quot;, this.get_name(), this.iter_idx));
 <a name="l00193"></a>00193 
-<a name="l00194"></a>00194   this.iterators[result] = result;
-<a name="l00195"></a>00195   this.iter_idx++;
-<a name="l00196"></a>00196   this.iter_sem.put();
+<a name="l00194"></a>00194   <span class="comment">// No need to check return value since set_queue will issue</span>
+<a name="l00195"></a>00195   <span class="comment">// and `uvm_error of something goes wrong</span>
+<a name="l00196"></a>00196   void&apos;(result.set_queue(this));
 <a name="l00197"></a>00197 
-<a name="l00198"></a>00198   return result;
-<a name="l00199"></a>00199 endfunction: create_iterator
-<a name="l00200"></a>00200 <span class="comment"></span>
-<a name="l00201"></a>00201 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
-<a name="l00202"></a><a class="code" href="classcl__syoscb__queue__std.html#ada80798fcd391e309e0e85f68cda98e1">00202</a> <span class="comment"></span>function bit cl_syoscb_queue_std::delete_iterator(cl_syoscb_queue_iterator_base iterator);
-<a name="l00203"></a>00203   if(iterator == null) begin
-<a name="l00204"></a>00204     `uvm_info(&quot;NULL&quot;, $sformatf(&quot;Asked to delete null iterator from list of iterators in %s&quot;,
-<a name="l00205"></a>00205                                 this.get_name()), UVM_DEBUG);
-<a name="l00206"></a>00206     return 0;
-<a name="l00207"></a>00207   end else begin  
-<a name="l00208"></a>00208     <span class="comment">// Wait to get exclusive access to the queue</span>
-<a name="l00209"></a>00209     <span class="comment">// if there are multiple iterators</span>
-<a name="l00210"></a>00210     while(!this.iter_sem.try_get());
-<a name="l00211"></a>00211 
-<a name="l00212"></a>00212     this.iterators.delete(iterator);
-<a name="l00213"></a>00213     this.iter_idx--;
-<a name="l00214"></a>00214     this.iter_sem.put();
-<a name="l00215"></a>00215     return 1;
-<a name="l00216"></a>00216   end
-<a name="l00217"></a>00217 endfunction: delete_iterator
+<a name="l00198"></a>00198   this.iterators[result] = result;
+<a name="l00199"></a>00199   this.iter_idx++;
+<a name="l00200"></a>00200   this.iter_sem.put();
+<a name="l00201"></a>00201 
+<a name="l00202"></a>00202   return result;
+<a name="l00203"></a>00203 endfunction: create_iterator
+<a name="l00204"></a>00204 <span class="comment"></span>
+<a name="l00205"></a>00205 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; See cl_syoscb_queue for more details</span>
+<a name="l00206"></a><a class="code" href="classcl__syoscb__queue__std.html#ada80798fcd391e309e0e85f68cda98e1">00206</a> <span class="comment"></span>function bit cl_syoscb_queue_std::delete_iterator(cl_syoscb_queue_iterator_base iterator);
+<a name="l00207"></a>00207   if(iterator == null) begin
+<a name="l00208"></a>00208     `uvm_info(&quot;NULL&quot;, $sformatf(&quot;[%s]: Asked to delete null iterator from list of iterators in %s&quot;,
+<a name="l00209"></a>00209                                 this.cfg.get_scb_name(), this.get_name()), UVM_DEBUG);
+<a name="l00210"></a>00210     return 0;
+<a name="l00211"></a>00211   end else begin  
+<a name="l00212"></a>00212     <span class="comment">// Wait to get exclusive access to the queue</span>
+<a name="l00213"></a>00213     <span class="comment">// if there are multiple iterators</span>
+<a name="l00214"></a>00214     while(!this.iter_sem.try_get());
+<a name="l00215"></a>00215 
+<a name="l00216"></a>00216     this.iterators.delete(iterator);
+<a name="l00217"></a>00217     this.iter_idx--;
+<a name="l00218"></a>00218     this.iter_sem.put();
+<a name="l00219"></a>00219     return 1;
+<a name="l00220"></a>00220   end
+<a name="l00221"></a>00221 endfunction: delete_iterator
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -366,7 +370,7 @@ window.onload = initDynSections;
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.4<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.5<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -388,7 +392,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Oct 26 03:49:53 2015</small></address>
+      Sat Nov 28 05:41:54 2015</small></address>
    </td>
   </tr>
 </table>

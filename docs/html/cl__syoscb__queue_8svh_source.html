@@ -106,118 +106,143 @@ window.onload = initDynSections;
 <a name="l00017"></a>00017 <span class="comment">  /// multiple iterators are in play</span>
 <a name="l00018"></a><a class="code" href="classcl__syoscb__queue.html#a7ce6c5e6c1b4fcd09f90ec2699cc594c">00018</a> <span class="comment"></span>  <span class="keyword">protected</span> semaphore <a class="code" href="classcl__syoscb__queue.html#a7ce6c5e6c1b4fcd09f90ec2699cc594c" title="Semaphore guarding exclusive access to the queue when multiple iterators are in play...">iter_sem</a>;
 <a name="l00019"></a>00019 
-<a name="l00020"></a>00020   <span class="comment">//-------------------------------------</span>
-<a name="l00021"></a>00021   <span class="comment">// UVM Macros</span>
-<a name="l00022"></a>00022   <span class="comment">//-------------------------------------</span>
-<a name="l00023"></a>00023   `uvm_component_utils_begin(cl_syoscb_queue)
-<a name="l00024"></a>00024     `uvm_field_object(cfg,           UVM_DEFAULT)
-<a name="l00025"></a>00025     <span class="comment">// TBD::JSA: Lacks a user defined implementation of field macro</span>
-<a name="l00026"></a>00026     <span class="comment">//           for completeness since: `uvm_field_aa_object-object does not exist</span>
-<a name="l00027"></a>00027     `uvm_field_int(iter_idx,         UVM_DEFAULT)
-<a name="l00028"></a>00028   `uvm_component_utils_end
-<a name="l00029"></a>00029 
-<a name="l00030"></a>00030   <span class="comment">//-------------------------------------</span>
-<a name="l00031"></a>00031   <span class="comment">// Constructor</span>
-<a name="l00032"></a>00032   <span class="comment">//-------------------------------------</span>
-<a name="l00033"></a>00033   extern function new(string name, uvm_component parent);
-<a name="l00034"></a>00034 
-<a name="l00035"></a>00035   <span class="comment">//-------------------------------------</span>
-<a name="l00036"></a>00036   <span class="comment">// UVM Phase methods</span>
-<a name="l00037"></a>00037   <span class="comment">//-------------------------------------</span>
-<a name="l00038"></a>00038   extern function void <a class="code" href="classcl__syoscb__queue.html#a14e4b7b0e2931b2b1e7f54e7cde32152" title="Gets the global scoreboard configuration.">build_phase</a>(uvm_phase phase);
-<a name="l00039"></a>00039   extern function void <a class="code" href="classcl__syoscb__queue.html#a28b1b880efb1f93eeb48890914685e43" title="Checks if the queue is empty. If not then a UVM error is issued.">check_phase</a>(uvm_phase phase);
-<a name="l00040"></a>00040 
+<a name="l00020"></a>00020   <span class="comment">// Counter for counting the number of inserts</span>
+<a name="l00021"></a>00021   <span class="keyword">protected</span> int unsigned cnt_add_item = 0;
+<a name="l00022"></a>00022   
+<a name="l00023"></a>00023   <span class="comment">//-------------------------------------</span>
+<a name="l00024"></a>00024   <span class="comment">// UVM Macros</span>
+<a name="l00025"></a>00025   <span class="comment">//-------------------------------------</span>
+<a name="l00026"></a>00026   `uvm_component_utils_begin(cl_syoscb_queue)
+<a name="l00027"></a>00027     `uvm_field_object(cfg,           UVM_DEFAULT)
+<a name="l00028"></a>00028     <span class="comment">// TBD::JSA: Lacks a user defined implementation of field macro</span>
+<a name="l00029"></a>00029     <span class="comment">//           for completeness since: `uvm_field_aa_object-object does not exist</span>
+<a name="l00030"></a>00030     `uvm_field_int(iter_idx,         UVM_DEFAULT)
+<a name="l00031"></a>00031     `uvm_field_int(cnt_add_item,     UVM_DEFAULT)
+<a name="l00032"></a>00032   `uvm_component_utils_end
+<a name="l00033"></a>00033 
+<a name="l00034"></a>00034   <span class="comment">//-------------------------------------</span>
+<a name="l00035"></a>00035   <span class="comment">// Constructor</span>
+<a name="l00036"></a>00036   <span class="comment">//-------------------------------------</span>
+<a name="l00037"></a>00037   extern function new(string name, uvm_component parent);
+<a name="l00038"></a>00038 
+<a name="l00039"></a>00039   <span class="comment">//-------------------------------------</span>
+<a name="l00040"></a>00040   <span class="comment">// UVM Phase methods</span>
 <a name="l00041"></a>00041   <span class="comment">//-------------------------------------</span>
-<a name="l00042"></a>00042   <span class="comment">// Queue API</span>
-<a name="l00043"></a>00043   <span class="comment">//-------------------------------------</span>
-<a name="l00044"></a>00044   <span class="comment">// Basic queue functions</span>
-<a name="l00045"></a>00045   extern <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#ada66fbc0eb1ef86b417fcdeaa5e9b9e0" title="Queue API: Adds an uvm_sequence_item.">add_item</a>(string producer, uvm_sequence_item item);
-<a name="l00046"></a>00046   extern <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#a0ff5e60a18767a97056e02baf47b26b8" title="Queue API: Deletes the item at index idx from the queue">delete_item</a>(int unsigned idx);
-<a name="l00047"></a>00047   extern <span class="keyword">virtual</span> function <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> <a class="code" href="classcl__syoscb__queue.html#a5610529db04d89e3ad4173e9960b04fa" title="Queue API: Gets the item at index idx from the queue">get_item</a>(int unsigned idx);
-<a name="l00048"></a>00048   extern <span class="keyword">virtual</span> function int unsigned <a class="code" href="classcl__syoscb__queue.html#aa5f825cc085c487e603257e10bcc3f86" title="Queue API: Returns the current size of the queue">get_size</a>();
-<a name="l00049"></a>00049   extern <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#a5b02ba85e905f5119ee18239f0e471d3" title="Queue API: Returns whether or not the queue is empty.">empty</a>();
-<a name="l00050"></a>00050   extern <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#adbb41d1162a0f3dbb84c657d2274c0cb" title="Queue API: Inserts a uvm_sequence_item at index idx.">insert_item</a>(string producer, uvm_sequence_item item, int unsigned idx);
-<a name="l00051"></a>00051 
-<a name="l00052"></a>00052   <span class="comment">// Iterator support functions</span>
-<a name="l00053"></a>00053   extern <span class="keyword">virtual</span> function <a class="code" href="classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues.">cl_syoscb_queue_iterator_base</a> <a class="code" href="classcl__syoscb__queue.html#a443750e1bf6c4a231438e821466f1d7e" title="Queue API: Creates an iterator for this queue.">create_iterator</a>();
-<a name="l00054"></a>00054   extern <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#a21e2463b97abce478edd3aa94d17372e" title="Queue API: Deletes a given iterator for this queue.">delete_iterator</a>(cl_syoscb_queue_iterator_base iterator);
-<a name="l00055"></a>00055 
-<a name="l00056"></a>00056   <span class="comment">// Locator support functions</span>
-<a name="l00057"></a>00057   <span class="comment">// TBD::JSA: Locator not implemented yet</span>
-<a name="l00058"></a>00058 endclass: <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>
-<a name="l00059"></a>00059 
-<a name="l00060"></a>00060 function <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::new(string name, uvm_component parent);
-<a name="l00061"></a>00061   super.new(name, parent);
-<a name="l00062"></a>00062 
-<a name="l00063"></a>00063   this.<a class="code" href="classcl__syoscb__queue.html#a7ce6c5e6c1b4fcd09f90ec2699cc594c" title="Semaphore guarding exclusive access to the queue when multiple iterators are in play...">iter_sem</a> = new(1);
-<a name="l00064"></a>00064   this.<a class="code" href="classcl__syoscb__queue.html#a3b9f8500d7d93d01eda717aac6ef4c28" title="Current number of iterators.">iter_idx</a> = 0;
-<a name="l00065"></a>00065 endfunction: new
-<a name="l00066"></a>00066 <span class="comment"></span>
-<a name="l00067"></a>00067 <span class="comment">/// Gets the global scoreboard configuration</span>
-<a name="l00068"></a><a class="code" href="classcl__syoscb__queue.html#a14e4b7b0e2931b2b1e7f54e7cde32152">00068</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a14e4b7b0e2931b2b1e7f54e7cde32152" title="Gets the global scoreboard configuration.">build_phase</a>(uvm_phase phase);
-<a name="l00069"></a>00069   if (!uvm_config_db #(cl_syoscb_cfg)::get(this, &quot;&quot;, &quot;cfg&quot;, this.cfg)) begin
-<a name="l00070"></a>00070     `uvm_fatal(&quot;CFG_ERROR&quot;, &quot;Configuration object not passed.&quot;)
-<a name="l00071"></a>00071   end
-<a name="l00072"></a>00072 endfunction
-<a name="l00073"></a>00073 <span class="comment"></span>
-<a name="l00074"></a>00074 <span class="comment">/// Checks if the queue is empty. If not then a UVM error is issued.</span>
-<a name="l00075"></a><a class="code" href="classcl__syoscb__queue.html#a28b1b880efb1f93eeb48890914685e43">00075</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a28b1b880efb1f93eeb48890914685e43" title="Checks if the queue is empty. If not then a UVM error is issued.">check_phase</a>(uvm_phase phase);
-<a name="l00076"></a>00076   <span class="comment">// Check that this queue is empty. If not then issue an error</span>
-<a name="l00077"></a>00077   if(!this.empty()) begin
-<a name="l00078"></a>00078     `uvm_error(&quot;QUEUE_ERROR&quot;, $psprintf(&quot;Queue %s not empty, entries: %0d&quot;, this.get_name(), this.get_size()));
+<a name="l00042"></a>00042   extern function void <a class="code" href="classcl__syoscb__queue.html#a14e4b7b0e2931b2b1e7f54e7cde32152" title="Gets the global scoreboard configuration.">build_phase</a>(uvm_phase phase);
+<a name="l00043"></a>00043   extern function void <a class="code" href="classcl__syoscb__queue.html#a28b1b880efb1f93eeb48890914685e43" title="Checks if the queue is empty. If not then a UVM error is issued.">check_phase</a>(uvm_phase phase);
+<a name="l00044"></a>00044   extern function void <a class="code" href="classcl__syoscb__queue.html#aac9a0b845a8b1947365fcddc7f37206a" title="Prints queue stats.">report_phase</a>(uvm_phase phase);
+<a name="l00045"></a>00045 
+<a name="l00046"></a>00046   <span class="comment">//-------------------------------------</span>
+<a name="l00047"></a>00047   <span class="comment">// Queue API</span>
+<a name="l00048"></a>00048   <span class="comment">//-------------------------------------</span>
+<a name="l00049"></a>00049   <span class="comment">// Basic queue functions</span>
+<a name="l00050"></a>00050   extern <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#ada66fbc0eb1ef86b417fcdeaa5e9b9e0" title="Queue API: Adds an uvm_sequence_item.">add_item</a>(string producer, uvm_sequence_item item);
+<a name="l00051"></a>00051   extern <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#a0ff5e60a18767a97056e02baf47b26b8" title="Queue API: Deletes the item at index idx from the queue">delete_item</a>(int unsigned idx);
+<a name="l00052"></a>00052   extern <span class="keyword">virtual</span> function <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> <a class="code" href="classcl__syoscb__queue.html#a5610529db04d89e3ad4173e9960b04fa" title="Queue API: Gets the item at index idx from the queue">get_item</a>(int unsigned idx);
+<a name="l00053"></a>00053   extern <span class="keyword">virtual</span> function int unsigned <a class="code" href="classcl__syoscb__queue.html#aa5f825cc085c487e603257e10bcc3f86" title="Queue API: Returns the current size of the queue">get_size</a>();
+<a name="l00054"></a>00054   extern <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#a5b02ba85e905f5119ee18239f0e471d3" title="Queue API: Returns whether or not the queue is empty.">empty</a>();
+<a name="l00055"></a>00055   extern <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#adbb41d1162a0f3dbb84c657d2274c0cb" title="Queue API: Inserts a uvm_sequence_item at index idx.">insert_item</a>(string producer, uvm_sequence_item item, int unsigned idx);
+<a name="l00056"></a>00056 
+<a name="l00057"></a>00057   <span class="comment">// Iterator support functions</span>
+<a name="l00058"></a>00058   extern <span class="keyword">virtual</span> function <a class="code" href="classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues.">cl_syoscb_queue_iterator_base</a> <a class="code" href="classcl__syoscb__queue.html#a443750e1bf6c4a231438e821466f1d7e" title="Queue API: Creates an iterator for this queue.">create_iterator</a>();
+<a name="l00059"></a>00059   extern <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#a21e2463b97abce478edd3aa94d17372e" title="Queue API: Deletes a given iterator for this queue.">delete_iterator</a>(cl_syoscb_queue_iterator_base iterator);
+<a name="l00060"></a>00060   
+<a name="l00061"></a>00061   <span class="comment">// Locator support functions</span>
+<a name="l00062"></a>00062   <span class="comment">// TBD::JSA: Locator not implemented yet</span>
+<a name="l00063"></a>00063 
+<a name="l00064"></a>00064   <span class="comment">// Misc support functions  </span>
+<a name="l00065"></a>00065   extern function <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a> get_cfg();
+<a name="l00066"></a>00066 endclass: <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>
+<a name="l00067"></a>00067 
+<a name="l00068"></a>00068 function <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::new(string name, uvm_component parent);
+<a name="l00069"></a>00069   super.new(name, parent);
+<a name="l00070"></a>00070 
+<a name="l00071"></a>00071   this.<a class="code" href="classcl__syoscb__queue.html#a7ce6c5e6c1b4fcd09f90ec2699cc594c" title="Semaphore guarding exclusive access to the queue when multiple iterators are in play...">iter_sem</a> = new(1);
+<a name="l00072"></a>00072   this.<a class="code" href="classcl__syoscb__queue.html#a3b9f8500d7d93d01eda717aac6ef4c28" title="Current number of iterators.">iter_idx</a> = 0;
+<a name="l00073"></a>00073 endfunction: new
+<a name="l00074"></a>00074 <span class="comment"></span>
+<a name="l00075"></a>00075 <span class="comment">/// Gets the global scoreboard configuration</span>
+<a name="l00076"></a><a class="code" href="classcl__syoscb__queue.html#a14e4b7b0e2931b2b1e7f54e7cde32152">00076</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a14e4b7b0e2931b2b1e7f54e7cde32152" title="Gets the global scoreboard configuration.">build_phase</a>(uvm_phase phase);
+<a name="l00077"></a>00077   if (!uvm_config_db #(cl_syoscb_cfg)::get(this, &quot;&quot;, &quot;cfg&quot;, this.cfg)) begin
+<a name="l00078"></a>00078     `uvm_fatal(&quot;CFG_ERROR&quot;, $sformatf(&quot;[%s]: Configuration object not passed.&quot;, this.cfg.get_scb_name()))
 <a name="l00079"></a>00079   end
 <a name="l00080"></a>00080 endfunction
 <a name="l00081"></a>00081 <span class="comment"></span>
-<a name="l00082"></a>00082 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Adds an uvm_sequence_item. The implementation must wrap this in a</span>
-<a name="l00083"></a>00083 <span class="comment">/// cl_syoscb_item object before the item is inserted</span>
-<a name="l00084"></a><a class="code" href="classcl__syoscb__queue.html#ada66fbc0eb1ef86b417fcdeaa5e9b9e0">00084</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#ada66fbc0eb1ef86b417fcdeaa5e9b9e0" title="Queue API: Adds an uvm_sequence_item.">add_item</a>(string producer, uvm_sequence_item item);
-<a name="l00085"></a>00085   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::add_item() *MUST* be overwritten&quot;));
-<a name="l00086"></a>00086   return(1&apos;b0);
-<a name="l00087"></a>00087 endfunction
-<a name="l00088"></a>00088 <span class="comment"></span>
-<a name="l00089"></a>00089 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Deletes the item at index idx from the queue</span>
-<a name="l00090"></a><a class="code" href="classcl__syoscb__queue.html#a0ff5e60a18767a97056e02baf47b26b8">00090</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a0ff5e60a18767a97056e02baf47b26b8" title="Queue API: Deletes the item at index idx from the queue">delete_item</a>(int unsigned idx);
-<a name="l00091"></a>00091   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::delete_item() *MUST* be overwritten&quot;));
-<a name="l00092"></a>00092   return(1&apos;b0);
-<a name="l00093"></a>00093 endfunction
-<a name="l00094"></a>00094 <span class="comment"></span>
-<a name="l00095"></a>00095 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Gets the item at index idx from the queue</span>
-<a name="l00096"></a><a class="code" href="classcl__syoscb__queue.html#a5610529db04d89e3ad4173e9960b04fa">00096</a> <span class="comment"></span>function <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a5610529db04d89e3ad4173e9960b04fa" title="Queue API: Gets the item at index idx from the queue">get_item</a>(int unsigned idx);
-<a name="l00097"></a>00097   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::get_item() *MUST* be overwritten&quot;));
-<a name="l00098"></a>00098   return(null);
-<a name="l00099"></a>00099 endfunction
-<a name="l00100"></a>00100 <span class="comment"></span>
-<a name="l00101"></a>00101 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Returns the current size of the queue</span>
-<a name="l00102"></a><a class="code" href="classcl__syoscb__queue.html#aa5f825cc085c487e603257e10bcc3f86">00102</a> <span class="comment"></span>function int unsigned <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#aa5f825cc085c487e603257e10bcc3f86" title="Queue API: Returns the current size of the queue">get_size</a>();
-<a name="l00103"></a>00103   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::get_size() *MUST* be overwritten&quot;));
-<a name="l00104"></a>00104   return(0);
-<a name="l00105"></a>00105 endfunction
-<a name="l00106"></a>00106 <span class="comment"></span>
-<a name="l00107"></a>00107 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Returns whether or not the queue is empty. 1&apos;b0 means thet te queue</span>
-<a name="l00108"></a>00108 <span class="comment">/// is not empty. 1&apos;b1 means that the queue is empty</span>
-<a name="l00109"></a><a class="code" href="classcl__syoscb__queue.html#a5b02ba85e905f5119ee18239f0e471d3">00109</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a5b02ba85e905f5119ee18239f0e471d3" title="Queue API: Returns whether or not the queue is empty.">empty</a>();
-<a name="l00110"></a>00110   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::empty() *MUST* be overwritten&quot;));
-<a name="l00111"></a>00111   return(0);
-<a name="l00112"></a>00112 endfunction
-<a name="l00113"></a>00113 <span class="comment"></span>
-<a name="l00114"></a>00114 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Inserts a uvm_sequence_item at index idx. The implementation must wrap</span>
-<a name="l00115"></a>00115 <span class="comment">/// the uvm_sequence_item in a cl_syoscb_item before it is inserted.</span>
-<a name="l00116"></a><a class="code" href="classcl__syoscb__queue.html#adbb41d1162a0f3dbb84c657d2274c0cb">00116</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#adbb41d1162a0f3dbb84c657d2274c0cb" title="Queue API: Inserts a uvm_sequence_item at index idx.">insert_item</a>(string producer, uvm_sequence_item item, int unsigned idx);
-<a name="l00117"></a>00117   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::insert_item() *MUST* be overwritten&quot;));
-<a name="l00118"></a>00118   return(1&apos;b0);
-<a name="l00119"></a>00119 endfunction
-<a name="l00120"></a>00120 <span class="comment"></span>
-<a name="l00121"></a>00121 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Creates an iterator for this queue.</span>
-<a name="l00122"></a><a class="code" href="classcl__syoscb__queue.html#a443750e1bf6c4a231438e821466f1d7e">00122</a> <span class="comment"></span>function <a class="code" href="classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues.">cl_syoscb_queue_iterator_base</a> <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a443750e1bf6c4a231438e821466f1d7e" title="Queue API: Creates an iterator for this queue.">create_iterator</a>();
-<a name="l00123"></a>00123   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::create_iterator() *MUST* be overwritten&quot;));
-<a name="l00124"></a>00124   return(null);
-<a name="l00125"></a>00125 endfunction
-<a name="l00126"></a>00126 <span class="comment"></span>
-<a name="l00127"></a>00127 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Deletes a given iterator for this queue.</span>
-<a name="l00128"></a><a class="code" href="classcl__syoscb__queue.html#a21e2463b97abce478edd3aa94d17372e">00128</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a21e2463b97abce478edd3aa94d17372e" title="Queue API: Deletes a given iterator for this queue.">delete_iterator</a>(cl_syoscb_queue_iterator_base iterator);
-<a name="l00129"></a>00129   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::delete_item() *MUST* be overwritten&quot;));
-<a name="l00130"></a>00130   return(1&apos;b0);
-<a name="l00131"></a>00131 endfunction
+<a name="l00082"></a>00082 <span class="comment">/// Checks if the queue is empty. If not then a UVM error is issued.</span>
+<a name="l00083"></a><a class="code" href="classcl__syoscb__queue.html#a28b1b880efb1f93eeb48890914685e43">00083</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a28b1b880efb1f93eeb48890914685e43" title="Checks if the queue is empty. If not then a UVM error is issued.">check_phase</a>(uvm_phase phase);
+<a name="l00084"></a>00084   <span class="comment">// Check that this queue is empty. If not then issue an error</span>
+<a name="l00085"></a>00085   if(!this.empty()) begin
+<a name="l00086"></a>00086     <span class="comment">// *NOTE*: Using this.get_name() is sufficient since the component</span>
+<a name="l00087"></a>00087     <span class="comment">//         instance name is the queue name by definition</span>
+<a name="l00088"></a>00088     `uvm_error(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;[%s]: Queue %s not empty, entries: %0d&quot;, this.cfg.get_scb_name(), this.get_name(), this.get_size()));
+<a name="l00089"></a>00089   end
+<a name="l00090"></a>00090 endfunction
+<a name="l00091"></a>00091 <span class="comment"></span>
+<a name="l00092"></a>00092 <span class="comment">/// Prints queue stats</span>
+<a name="l00093"></a><a class="code" href="classcl__syoscb__queue.html#aac9a0b845a8b1947365fcddc7f37206a">00093</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#aac9a0b845a8b1947365fcddc7f37206a" title="Prints queue stats.">report_phase</a>(uvm_phase phase);
+<a name="l00094"></a>00094   string stats;
+<a name="l00095"></a>00095   
+<a name="l00096"></a>00096   stats = $sformatf(&quot;Inserts: %0d, Macthed: %0d, Orphans: %0d&quot;, this.cnt_add_item, this.cnt_add_item-this.get_size(), this.get_size());
+<a name="l00097"></a>00097   
+<a name="l00098"></a>00098   <span class="comment">// *NOTE*: Using this.get_name() is sufficient since the component</span>
+<a name="l00099"></a>00099   <span class="comment">//         instance name is the queue name by definition</span>
+<a name="l00100"></a>00100   `uvm_info(&quot;QUEUE&quot;, $sformatf(&quot;[%s]: Statistics for queue: %s:\n%s&quot;, this.cfg.get_scb_name(), this.get_name(), stats), UVM_NONE)
+<a name="l00101"></a>00101 endfunction
+<a name="l00102"></a>00102 <span class="comment"></span>
+<a name="l00103"></a>00103 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Adds an uvm_sequence_item. The implementation must wrap this in a</span>
+<a name="l00104"></a>00104 <span class="comment">/// cl_syoscb_item object before the item is inserted</span>
+<a name="l00105"></a><a class="code" href="classcl__syoscb__queue.html#ada66fbc0eb1ef86b417fcdeaa5e9b9e0">00105</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#ada66fbc0eb1ef86b417fcdeaa5e9b9e0" title="Queue API: Adds an uvm_sequence_item.">add_item</a>(string producer, uvm_sequence_item item);
+<a name="l00106"></a>00106   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;[%s]: cl_syoscb_queue::add_item() *MUST* be overwritten&quot;, this.cfg.get_scb_name()));
+<a name="l00107"></a>00107   return(1&apos;b0);
+<a name="l00108"></a>00108 endfunction
+<a name="l00109"></a>00109 <span class="comment"></span>
+<a name="l00110"></a>00110 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Deletes the item at index idx from the queue</span>
+<a name="l00111"></a><a class="code" href="classcl__syoscb__queue.html#a0ff5e60a18767a97056e02baf47b26b8">00111</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a0ff5e60a18767a97056e02baf47b26b8" title="Queue API: Deletes the item at index idx from the queue">delete_item</a>(int unsigned idx);
+<a name="l00112"></a>00112   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;[%s]: cl_syoscb_queue::delete_item() *MUST* be overwritten&quot;, this.cfg.get_scb_name()));
+<a name="l00113"></a>00113   return(1&apos;b0);
+<a name="l00114"></a>00114 endfunction
+<a name="l00115"></a>00115 <span class="comment"></span>
+<a name="l00116"></a>00116 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Gets the item at index idx from the queue</span>
+<a name="l00117"></a><a class="code" href="classcl__syoscb__queue.html#a5610529db04d89e3ad4173e9960b04fa">00117</a> <span class="comment"></span>function <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a5610529db04d89e3ad4173e9960b04fa" title="Queue API: Gets the item at index idx from the queue">get_item</a>(int unsigned idx);
+<a name="l00118"></a>00118   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;[%s]: cl_syoscb_queue::get_item() *MUST* be overwritten&quot;, this.cfg.get_scb_name()));
+<a name="l00119"></a>00119   return(null);
+<a name="l00120"></a>00120 endfunction
+<a name="l00121"></a>00121 <span class="comment"></span>
+<a name="l00122"></a>00122 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Returns the current size of the queue</span>
+<a name="l00123"></a><a class="code" href="classcl__syoscb__queue.html#aa5f825cc085c487e603257e10bcc3f86">00123</a> <span class="comment"></span>function int unsigned <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#aa5f825cc085c487e603257e10bcc3f86" title="Queue API: Returns the current size of the queue">get_size</a>();
+<a name="l00124"></a>00124   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;[%s]: cl_syoscb_queue::get_size() *MUST* be overwritten&quot;, this.cfg.get_scb_name()));
+<a name="l00125"></a>00125   return(0);
+<a name="l00126"></a>00126 endfunction
+<a name="l00127"></a>00127 <span class="comment"></span>
+<a name="l00128"></a>00128 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Returns whether or not the queue is empty. 1&apos;b0 means thet te queue</span>
+<a name="l00129"></a>00129 <span class="comment">/// is not empty. 1&apos;b1 means that the queue is empty</span>
+<a name="l00130"></a><a class="code" href="classcl__syoscb__queue.html#a5b02ba85e905f5119ee18239f0e471d3">00130</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a5b02ba85e905f5119ee18239f0e471d3" title="Queue API: Returns whether or not the queue is empty.">empty</a>();
+<a name="l00131"></a>00131   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;[%s]: cl_syoscb_queue::empty() *MUST* be overwritten&quot;, this.cfg.get_scb_name()));
+<a name="l00132"></a>00132   return(0);
+<a name="l00133"></a>00133 endfunction
+<a name="l00134"></a>00134 <span class="comment"></span>
+<a name="l00135"></a>00135 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Inserts a uvm_sequence_item at index idx. The implementation must wrap</span>
+<a name="l00136"></a>00136 <span class="comment">/// the uvm_sequence_item in a cl_syoscb_item before it is inserted.</span>
+<a name="l00137"></a><a class="code" href="classcl__syoscb__queue.html#adbb41d1162a0f3dbb84c657d2274c0cb">00137</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#adbb41d1162a0f3dbb84c657d2274c0cb" title="Queue API: Inserts a uvm_sequence_item at index idx.">insert_item</a>(string producer, uvm_sequence_item item, int unsigned idx);
+<a name="l00138"></a>00138   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;[%s]: cl_syoscb_queue::insert_item() *MUST* be overwritten&quot;, this.cfg.get_scb_name()));
+<a name="l00139"></a>00139   return(1&apos;b0);
+<a name="l00140"></a>00140 endfunction
+<a name="l00141"></a>00141 <span class="comment"></span>
+<a name="l00142"></a>00142 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Creates an iterator for this queue.</span>
+<a name="l00143"></a><a class="code" href="classcl__syoscb__queue.html#a443750e1bf6c4a231438e821466f1d7e">00143</a> <span class="comment"></span>function <a class="code" href="classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues.">cl_syoscb_queue_iterator_base</a> <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a443750e1bf6c4a231438e821466f1d7e" title="Queue API: Creates an iterator for this queue.">create_iterator</a>();
+<a name="l00144"></a>00144   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;[%s]: cl_syoscb_queue::create_iterator() *MUST* be overwritten&quot;, this.cfg.get_scb_name()));
+<a name="l00145"></a>00145   return(null);
+<a name="l00146"></a>00146 endfunction
+<a name="l00147"></a>00147 <span class="comment"></span>
+<a name="l00148"></a>00148 <span class="comment">/// &lt;b&gt;Queue API:&lt;/b&gt; Deletes a given iterator for this queue.</span>
+<a name="l00149"></a><a class="code" href="classcl__syoscb__queue.html#a21e2463b97abce478edd3aa94d17372e">00149</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#a21e2463b97abce478edd3aa94d17372e" title="Queue API: Deletes a given iterator for this queue.">delete_iterator</a>(cl_syoscb_queue_iterator_base iterator);
+<a name="l00150"></a>00150   `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;[%s]: cl_syoscb_queue::delete_item() *MUST* be overwritten&quot;, this.cfg.get_scb_name()));
+<a name="l00151"></a>00151   return(1&apos;b0);
+<a name="l00152"></a>00152 endfunction
+<a name="l00153"></a>00153 
+<a name="l00154"></a>00154 function <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a> <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>::get_cfg();
+<a name="l00155"></a>00155   return(this.cfg);
+<a name="l00156"></a>00156 endfunction
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -280,7 +305,7 @@ window.onload = initDynSections;
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.4<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.5<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -302,7 +327,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Oct 26 03:49:53 2015</small></address>
+      Sat Nov 28 05:41:54 2015</small></address>
    </td>
   </tr>
 </table>

@@ -51,17 +51,17 @@ function cl_syoscb_compare_base::new(string name = "cl_syoscb_compare_base");
 endfunction: new
 
 /// <b>Compare API</b>: This method is the compare algorithms public compare method. It is called when the
-/// compare algorithm is asked to do a compare. Typically, this method is used to check state variables etc. to compte if the compare shall be done or not. If so then do_compare() is called.
+/// compare algorithm is asked to do a compare. Typically, this method is used to check state variables etc. to compute if the compare shall be done or not. If so then do_compare() is called.
 ///
-/// <b>NOTE:</b> This method must be implemted.
+/// <b>NOTE:</b> This method must be implemented.
 function void cl_syoscb_compare_base::compare();
-  `uvm_fatal("IMPL_ERROR", $sformatf("cl_syoscb_compare_base::compare() *MUST* be overwritten"));
+  `uvm_fatal("IMPL_ERROR", $sformatf("[%s]: cl_syoscb_compare_base::compare() *MUST* be overwritten", this.cfg.get_scb_name()));
 endfunction
 
 /// <b>Compare API</b>: Does the actual compare.
 /// <b>NOTE:</b> This method must be implemted.
 function void cl_syoscb_compare_base::compare_do();
-  `uvm_fatal("IMPL_ERROR", $sformatf("cl_syoscb_compare_base::compare_do() *MUST* be overwritten"));
+  `uvm_fatal("IMPL_ERROR", $sformatf("[%s]: cl_syoscb_compare_base::compare_do() *MUST* be overwritten", this.cfg.get_scb_name()));
 endfunction
 
 /// <b>Compare API</b>: Passes the configuration object on to the compare algorithm for faster access.

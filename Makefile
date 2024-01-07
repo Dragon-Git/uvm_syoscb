@@ -100,6 +100,7 @@ regression:
 	make UVM_TESTNAME=cl_scbtest_test_io_simple sim
 	make UVM_TESTNAME=cl_scbtest_test_iop_simple sim
 	make UVM_TESTNAME=cl_scbtest_test_ooo_tlm sim
+	make UVM_TESTNAME=cl_scbtest_test_ooo_io_simple sim
 
 #############################################################################
 # Mentor targets
@@ -233,13 +234,14 @@ help_top:
 	@echo "  VENDOR=MENTOR | CADENCE | SYNOPSYS"
 	@echo "  Current value: $(VENDOR)"
 	@echo ""
-	@echo "  UVM_TESTNAME = cl_scbtest_test_base       |"
-	@echo "                 cl_scbtest_test_ooo_simple |"
-	@echo "                 cl_scbtest_test_ooo_tlm    |"
-	@echo "                 cl_scbtest_test_ooo_heavy  |"
-	@echo "                 cl_scbtest_test_io_simple  |"
-	@echo "                 cl_scbtest_test_iop_simple |"
-	@echo "                 cl_scbtest_test_gp         "
+	@echo "  UVM_TESTNAME = cl_scbtest_test_base          |"
+	@echo "                 cl_scbtest_test_ooo_simple    |"
+	@echo "                 cl_scbtest_test_ooo_tlm       |"
+	@echo "                 cl_scbtest_test_ooo_heavy     |"
+	@echo "                 cl_scbtest_test_io_simple     |"
+	@echo "                 cl_scbtest_test_iop_simple    |"
+	@echo "                 cl_scbtest_test_ooo_io_simple |"
+	@echo "                 cl_scbtest_test_gp             "
 	@echo "  Current value: $(UVM_TESTNAME)"
 	@echo ""
 	@echo "  UVM_VERBOSITY = UVM_FULL   |"

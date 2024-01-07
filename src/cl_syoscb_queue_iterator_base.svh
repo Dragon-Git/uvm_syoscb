@@ -23,16 +23,20 @@ class cl_syoscb_queue_iterator_base extends uvm_object;
   //-------------------------------------
   /// The owner of this iterator
   protected cl_syoscb_queue owner;
-
+  
   /// Current position in the queue
   protected int unsigned position = 0;
 
+  // Local handle to the SCB sfg 
+  protected cl_syoscb_cfg cfg;
+  
   //-------------------------------------
   // UVM Macros
   //-------------------------------------
   `uvm_object_utils_begin(cl_syoscb_queue_iterator_base)
     `uvm_field_object(owner, UVM_DEFAULT)
     `uvm_field_int(position, UVM_DEFAULT)
+    `uvm_field_object(cfg,   UVM_DEFAULT)
   `uvm_object_utils_end
 
     function new(string name = "cl_syoscb_queue_iterator_base");

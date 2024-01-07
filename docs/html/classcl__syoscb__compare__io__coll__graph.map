@@ -1,6 +1,6 @@
 <map id="G" name="G">
 <area shape="rect" id="node2" href="$classcl__syoscb__compare__base.html" title="Base class for all comapre algorithms." alt="" coords="5,101,195,131"/>
-<area shape="rect" id="node4" href="$classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard." alt="" coords="176,5,291,35"/>
-<area shape="rect" id="node6" href="$classcl__syoscb__queue.html" title="Class which base concet of a queue." alt="" coords="219,101,352,131"/>
-<area shape="rect" id="node9" href="$classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues." alt="" coords="217,197,449,227"/>
+<area shape="rect" id="node4" href="$classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard." alt="" coords="228,5,343,35"/>
+<area shape="rect" id="node6" href="$classcl__syoscb__queue.html" title="Class which base concet of a queue." alt="" coords="221,101,355,131"/>
+<area shape="rect" id="node9" href="$classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues." alt="" coords="209,197,441,227"/>
 </map>
