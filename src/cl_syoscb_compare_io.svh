@@ -81,6 +81,8 @@ function void cl_syoscb_compare_io::compare_do();
   while(!primary_queue_iter.is_done()) begin
     primary_item = primary_queue_iter.get_item();
 
+    `uvm_info("DEBUG", $sformatf("Now comparing primary transaction:\n%s", primary_item.sprint()), UVM_FULL); 
+
     // Inner loop through all queues
     foreach(queue_names[i]) begin
       `uvm_info("DEBUG", $sformatf("Looking at queue: %s", queue_names[i]), UVM_FULL);
@@ -99,6 +101,8 @@ function void cl_syoscb_compare_io::compare_do();
           `uvm_fatal("QUEUE_ERROR", "Unable to retrieve secondary queue handle");
         end
 
+        `uvm_info("DEBUG", $sformatf("%0d items in queue: %s", secondary_queue.get_size(), queue_names[i]), UVM_FULL);
+
 	// Get an iterator for the secondary queue
         secondary_queue_iter = secondary_queue.create_iterator();
 
@@ -109,10 +113,12 @@ function void cl_syoscb_compare_io::compare_do();
 
           if(sih.compare(primary_item) == 1'b1) begin
             secondary_item_found[queue_names[i]] = secondary_queue_iter.get_idx();
-            `uvm_info("DEBUG", $sformatf("Secondary item found at index: %0d", secondary_queue_iter.get_idx()), UVM_FULL);
+            `uvm_info("DEBUG", $sformatf("Secondary item found at index: %0d:\n%s", secondary_queue_iter.get_idx(), sih.sprint()), UVM_FULL);
           end else begin
             `uvm_error("COMPARE_ERROR", $sformatf("Item:\n%s\nfrom primary queue: %s not found in secondary queue: %s. Found this item in %s instead:\n%s", primary_item.sprint(), primary_queue_name, queue_names[i], queue_names[i], sih.sprint()))
           end
+        end else begin
+          `uvm_info("DEBUG", "End of queue reached", UVM_FULL);
         end
 
         if(!secondary_queue.delete_iterator(secondary_queue_iter)) begin
@@ -131,7 +137,7 @@ function void cl_syoscb_compare_io::compare_do();
       // Get the item from the primary queue
       pih = primary_queue_iter.get_item();
 
-      `uvm_info("DEBUG", $sformatf("Found match for primary queue item : %s",
+      `uvm_info("DEBUG", $sformatf("Found match for primary queue item :\n%s",
                                    pih.sprint()), UVM_FULL);
 
       // Remove from primary

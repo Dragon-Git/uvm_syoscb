@@ -83,6 +83,8 @@ function void cl_syoscb_compare_ooo::compare_do();
   while (!primary_queue_iter.is_done()) begin
     primary_item = primary_queue_iter.get_item();
 
+    `uvm_info("DEBUG", $sformatf("Now comparing primary transaction:\n%s", primary_item.sprint()), UVM_FULL); 
+
     // Clear list of found slave items before starting new inner loop
     secondary_item_found.delete();
 
@@ -103,6 +105,8 @@ function void cl_syoscb_compare_ooo::compare_do();
           `uvm_fatal("QUEUE_ERROR", "Unable to retrieve secondary queue handle");
         end
 
+        `uvm_info("DEBUG", $sformatf("%0d items in queue: %s", secondary_queue.get_size(), queue_names[i]), UVM_FULL);
+
         // Get an iterator for the secondary queue
         secondary_queue_iter = secondary_queue.create_iterator();
 
@@ -113,7 +117,7 @@ function void cl_syoscb_compare_ooo::compare_do();
 
           if(sih.compare(primary_item) == 1'b1) begin
             secondary_item_found[queue_names[i]] = secondary_queue_iter.get_idx();
-            `uvm_info("DEBUG", $sformatf("Secondary item found at index: %0d", secondary_queue_iter.get_idx()), UVM_FULL);
+            `uvm_info("DEBUG", $sformatf("Secondary item found at index: %0d:\n%s", secondary_queue_iter.get_idx(), sih.sprint()), UVM_FULL);
             break;
           end
           if(!secondary_queue_iter.next()) begin

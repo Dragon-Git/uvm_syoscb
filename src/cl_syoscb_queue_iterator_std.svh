@@ -23,6 +23,10 @@ class cl_syoscb_queue_iterator_std extends cl_syoscb_queue_iterator_base;
   //-------------------------------------
   `uvm_object_utils(cl_syoscb_queue_iterator_std)
 
+  function new(string name = "cl_syoscb_queue_iterator_std");
+    super.new(name);
+  endfunction: new
+
   //-------------------------------------
   // Iterator API
   //-------------------------------------

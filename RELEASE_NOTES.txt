@@ -48,20 +48,14 @@ Versatile UVM Scoreboarding. Never versions will be made accesible via:
 # [2]: Bug Fixes
 #######################################################################
 
-  * Fixed bug in OOO compare
-  * Fixed bug in set_producer method. The queue list was not checked
-    for duplicates
+  * Fixed bug in cl_syoscb_queue_iterator_base.svh and
+    cl_syoscb_queue_iterator_std.svh. They lacked a constructor
 
 #######################################################################
 # [3]: New Features
 #######################################################################
 
-  * Added support for controlling the +UVM_VERBOSITY option from the
-    makefiles
-  * Implemented the TLM API
-  * Added more strict OOO scoping by adding local/protected to member
-    variables
-  * Updated documentation
+  * No new features added
 
 #######################################################################
 # [4]: Known Limitations

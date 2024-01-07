@@ -35,6 +35,10 @@ class cl_syoscb_queue_iterator_base extends uvm_object;
     `uvm_field_int(position, UVM_DEFAULT)
   `uvm_object_utils_end
 
+    function new(string name = "cl_syoscb_queue_iterator_base");
+      super.new(name);
+    endfunction: new
+
   //-------------------------------------
   // Iterator API
   //-------------------------------------

@@ -152,93 +152,99 @@ window.onload = initDynSections;
 <a name="l00063"></a>00063   while(!primary_queue_iter.is_done()) begin
 <a name="l00064"></a>00064     primary_item = primary_queue_iter.get_item();
 <a name="l00065"></a>00065 
-<a name="l00066"></a>00066     <span class="comment">// Inner loop through all queues</span>
-<a name="l00067"></a>00067     foreach(queue_names[i]) begin
-<a name="l00068"></a>00068       `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;Looking at queue: %s&quot;, queue_names[i]), UVM_FULL);
-<a name="l00069"></a>00069 
-<a name="l00070"></a>00070       if(queue_names[i] != primary_queue_name) begin
-<a name="l00071"></a>00071         <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a> secondary_queue;
-<a name="l00072"></a>00072         <a class="code" href="classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues.">cl_syoscb_queue_iterator_base</a> secondary_queue_iter;
-<a name="l00073"></a>00073         <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> sih;
-<a name="l00074"></a>00074 
-<a name="l00075"></a>00075         `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;%s is a secondary queue - now comparing&quot;, queue_names[i]), UVM_FULL);
+<a name="l00066"></a>00066     `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;Now comparing primary transaction:\n%s&quot;, primary_item.sprint()), UVM_FULL); 
+<a name="l00067"></a>00067 
+<a name="l00068"></a>00068     <span class="comment">// Inner loop through all queues</span>
+<a name="l00069"></a>00069     foreach(queue_names[i]) begin
+<a name="l00070"></a>00070       `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;Looking at queue: %s&quot;, queue_names[i]), UVM_FULL);
+<a name="l00071"></a>00071 
+<a name="l00072"></a>00072       if(queue_names[i] != primary_queue_name) begin
+<a name="l00073"></a>00073         <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a> secondary_queue;
+<a name="l00074"></a>00074         <a class="code" href="classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues.">cl_syoscb_queue_iterator_base</a> secondary_queue_iter;
+<a name="l00075"></a>00075         <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> sih;
 <a name="l00076"></a>00076 
-<a name="l00077"></a>00077    <span class="comment">// Get the secondary queue</span>
-<a name="l00078"></a>00078         secondary_queue = this.<a class="code" href="classcl__syoscb__compare__base.html#a50220bf3939fd5d2c17f1e1ae7a794ba" title="Handle to the configuration.">cfg</a>.get_queue(queue_names[i]);
-<a name="l00079"></a>00079 
-<a name="l00080"></a>00080         if(secondary_queue == null) begin
-<a name="l00081"></a>00081           `uvm_fatal(&quot;QUEUE_ERROR&quot;, &quot;Unable to retrieve secondary queue handle&quot;);
-<a name="l00082"></a>00082         end
-<a name="l00083"></a>00083 
-<a name="l00084"></a>00084    <span class="comment">// Get an iterator for the secondary queue</span>
-<a name="l00085"></a>00085         secondary_queue_iter = secondary_queue.create_iterator();
-<a name="l00086"></a>00086 
-<a name="l00087"></a>00087         <span class="comment">// Only do the compare if there are actually an item in the secondary queue</span>
-<a name="l00088"></a>00088         if(!secondary_queue_iter.is_done()) begin
-<a name="l00089"></a>00089           <span class="comment">// Get the first item from the secondary queue       </span>
-<a name="l00090"></a>00090           sih = secondary_queue_iter.get_item();
-<a name="l00091"></a>00091 
-<a name="l00092"></a>00092           if(sih.compare(primary_item) == 1&apos;b1) begin
-<a name="l00093"></a>00093             secondary_item_found[queue_names[i]] = secondary_queue_iter.get_idx();
-<a name="l00094"></a>00094             `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;Secondary item found at index: %0d&quot;, secondary_queue_iter.get_idx()), UVM_FULL);
-<a name="l00095"></a>00095           end else begin
-<a name="l00096"></a>00096             `uvm_error(&quot;COMPARE_ERROR&quot;, $sformatf(&quot;Item:\n%s\nfrom primary queue: %s not found in secondary queue: %s. Found this item in %s instead:\n%s&quot;, primary_item.sprint(), primary_queue_name, queue_names[i], queue_names[i], sih.sprint()))
-<a name="l00097"></a>00097           end
-<a name="l00098"></a>00098         end
-<a name="l00099"></a>00099 
-<a name="l00100"></a>00100         if(!secondary_queue.delete_iterator(secondary_queue_iter)) begin
-<a name="l00101"></a>00101           `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete iterator from secondaery queue: %s&quot;, queue_names[i]));
-<a name="l00102"></a>00102         end
-<a name="l00103"></a>00103       end else begin
-<a name="l00104"></a>00104         `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;%s is the primary queue - skipping&quot;, queue_names[i]), UVM_FULL);
-<a name="l00105"></a>00105       end
-<a name="l00106"></a>00106     end
-<a name="l00107"></a>00107 
-<a name="l00108"></a>00108     <span class="comment">// Only start to remove items if all slave items are found (One from each slave queue)</span>
-<a name="l00109"></a>00109     if(secondary_item_found.size() == queue_names.size()-1) begin
-<a name="l00110"></a>00110       string queue_name;
-<a name="l00111"></a>00111       <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> pih;
-<a name="l00112"></a>00112 
-<a name="l00113"></a>00113       <span class="comment">// Get the item from the primary queue</span>
-<a name="l00114"></a>00114       pih = primary_queue_iter.get_item();
-<a name="l00115"></a>00115 
-<a name="l00116"></a>00116       `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;Found match for primary queue item : %s&quot;,
-<a name="l00117"></a>00117                                    pih.sprint()), UVM_FULL);
+<a name="l00077"></a>00077         `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;%s is a secondary queue - now comparing&quot;, queue_names[i]), UVM_FULL);
+<a name="l00078"></a>00078 
+<a name="l00079"></a>00079    <span class="comment">// Get the secondary queue</span>
+<a name="l00080"></a>00080         secondary_queue = this.<a class="code" href="classcl__syoscb__compare__base.html#a50220bf3939fd5d2c17f1e1ae7a794ba" title="Handle to the configuration.">cfg</a>.get_queue(queue_names[i]);
+<a name="l00081"></a>00081 
+<a name="l00082"></a>00082         if(secondary_queue == null) begin
+<a name="l00083"></a>00083           `uvm_fatal(&quot;QUEUE_ERROR&quot;, &quot;Unable to retrieve secondary queue handle&quot;);
+<a name="l00084"></a>00084         end
+<a name="l00085"></a>00085 
+<a name="l00086"></a>00086         `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;%0d items in queue: %s&quot;, secondary_queue.get_size(), queue_names[i]), UVM_FULL);
+<a name="l00087"></a>00087 
+<a name="l00088"></a>00088    <span class="comment">// Get an iterator for the secondary queue</span>
+<a name="l00089"></a>00089         secondary_queue_iter = secondary_queue.create_iterator();
+<a name="l00090"></a>00090 
+<a name="l00091"></a>00091         <span class="comment">// Only do the compare if there are actually an item in the secondary queue</span>
+<a name="l00092"></a>00092         if(!secondary_queue_iter.is_done()) begin
+<a name="l00093"></a>00093           <span class="comment">// Get the first item from the secondary queue       </span>
+<a name="l00094"></a>00094           sih = secondary_queue_iter.get_item();
+<a name="l00095"></a>00095 
+<a name="l00096"></a>00096           if(sih.compare(primary_item) == 1&apos;b1) begin
+<a name="l00097"></a>00097             secondary_item_found[queue_names[i]] = secondary_queue_iter.get_idx();
+<a name="l00098"></a>00098             `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;Secondary item found at index: %0d:\n%s&quot;, secondary_queue_iter.get_idx(), sih.sprint()), UVM_FULL);
+<a name="l00099"></a>00099           end else begin
+<a name="l00100"></a>00100             `uvm_error(&quot;COMPARE_ERROR&quot;, $sformatf(&quot;Item:\n%s\nfrom primary queue: %s not found in secondary queue: %s. Found this item in %s instead:\n%s&quot;, primary_item.sprint(), primary_queue_name, queue_names[i], queue_names[i], sih.sprint()))
+<a name="l00101"></a>00101           end
+<a name="l00102"></a>00102         end else begin
+<a name="l00103"></a>00103           `uvm_info(&quot;DEBUG&quot;, &quot;End of queue reached&quot;, UVM_FULL);
+<a name="l00104"></a>00104         end
+<a name="l00105"></a>00105 
+<a name="l00106"></a>00106         if(!secondary_queue.delete_iterator(secondary_queue_iter)) begin
+<a name="l00107"></a>00107           `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete iterator from secondaery queue: %s&quot;, queue_names[i]));
+<a name="l00108"></a>00108         end
+<a name="l00109"></a>00109       end else begin
+<a name="l00110"></a>00110         `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;%s is the primary queue - skipping&quot;, queue_names[i]), UVM_FULL);
+<a name="l00111"></a>00111       end
+<a name="l00112"></a>00112     end
+<a name="l00113"></a>00113 
+<a name="l00114"></a>00114     <span class="comment">// Only start to remove items if all slave items are found (One from each slave queue)</span>
+<a name="l00115"></a>00115     if(secondary_item_found.size() == queue_names.size()-1) begin
+<a name="l00116"></a>00116       string queue_name;
+<a name="l00117"></a>00117       <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> pih;
 <a name="l00118"></a>00118 
-<a name="l00119"></a>00119       <span class="comment">// Remove from primary</span>
-<a name="l00120"></a>00120       if(!primary_queue.delete_item(primary_queue_iter.get_idx())) begin
-<a name="l00121"></a>00121         `uvm_error(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete item idx %0d from queue %s&quot;,
-<a name="l00122"></a>00122                                             primary_queue_iter.get_idx(), primary_queue.get_name()));
-<a name="l00123"></a>00123       end
+<a name="l00119"></a>00119       <span class="comment">// Get the item from the primary queue</span>
+<a name="l00120"></a>00120       pih = primary_queue_iter.get_item();
+<a name="l00121"></a>00121 
+<a name="l00122"></a>00122       `uvm_info(&quot;DEBUG&quot;, $sformatf(&quot;Found match for primary queue item :\n%s&quot;,
+<a name="l00123"></a>00123                                    pih.sprint()), UVM_FULL);
 <a name="l00124"></a>00124 
-<a name="l00125"></a>00125       <span class="comment">// Remove from all secondaries</span>
-<a name="l00126"></a>00126       while(secondary_item_found.next(queue_name)) begin
-<a name="l00127"></a>00127         <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a> secondary_queue;
-<a name="l00128"></a>00128 
-<a name="l00129"></a>00129    <span class="comment">// Get the secondary queue</span>
-<a name="l00130"></a>00130         secondary_queue = this.<a class="code" href="classcl__syoscb__compare__base.html#a50220bf3939fd5d2c17f1e1ae7a794ba" title="Handle to the configuration.">cfg</a>.get_queue(queue_name);
-<a name="l00131"></a>00131 
-<a name="l00132"></a>00132         if(secondary_queue == null) begin
-<a name="l00133"></a>00133           `uvm_fatal(&quot;QUEUE_ERROR&quot;, &quot;Unable to retrieve secondary queue handle&quot;);
-<a name="l00134"></a>00134         end
-<a name="l00135"></a>00135 
-<a name="l00136"></a>00136         if(!secondary_queue.delete_item(secondary_item_found[queue_name])) begin
-<a name="l00137"></a>00137           `uvm_error(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete item idx %0d from queue %s&quot;,
-<a name="l00138"></a>00138                                               secondary_item_found[queue_name], secondary_queue.get_name()));
-<a name="l00139"></a>00139         end
-<a name="l00140"></a>00140       end
-<a name="l00141"></a>00141     end
-<a name="l00142"></a>00142 
-<a name="l00143"></a>00143     <span class="comment">// Call .next() blindly since we do not care about the</span>
-<a name="l00144"></a>00144     <span class="comment">// return value, since we might be at the end of the queue.</span>
-<a name="l00145"></a>00145     <span class="comment">// Thus, .next() will return 1&apos;b0 at the end of the queue</span>
-<a name="l00146"></a>00146     void&apos;(primary_queue_iter.next());
-<a name="l00147"></a>00147   end
+<a name="l00125"></a>00125       <span class="comment">// Remove from primary</span>
+<a name="l00126"></a>00126       if(!primary_queue.delete_item(primary_queue_iter.get_idx())) begin
+<a name="l00127"></a>00127         `uvm_error(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete item idx %0d from queue %s&quot;,
+<a name="l00128"></a>00128                                             primary_queue_iter.get_idx(), primary_queue.get_name()));
+<a name="l00129"></a>00129       end
+<a name="l00130"></a>00130 
+<a name="l00131"></a>00131       <span class="comment">// Remove from all secondaries</span>
+<a name="l00132"></a>00132       while(secondary_item_found.next(queue_name)) begin
+<a name="l00133"></a>00133         <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a> secondary_queue;
+<a name="l00134"></a>00134 
+<a name="l00135"></a>00135    <span class="comment">// Get the secondary queue</span>
+<a name="l00136"></a>00136         secondary_queue = this.<a class="code" href="classcl__syoscb__compare__base.html#a50220bf3939fd5d2c17f1e1ae7a794ba" title="Handle to the configuration.">cfg</a>.get_queue(queue_name);
+<a name="l00137"></a>00137 
+<a name="l00138"></a>00138         if(secondary_queue == null) begin
+<a name="l00139"></a>00139           `uvm_fatal(&quot;QUEUE_ERROR&quot;, &quot;Unable to retrieve secondary queue handle&quot;);
+<a name="l00140"></a>00140         end
+<a name="l00141"></a>00141 
+<a name="l00142"></a>00142         if(!secondary_queue.delete_item(secondary_item_found[queue_name])) begin
+<a name="l00143"></a>00143           `uvm_error(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete item idx %0d from queue %s&quot;,
+<a name="l00144"></a>00144                                               secondary_item_found[queue_name], secondary_queue.get_name()));
+<a name="l00145"></a>00145         end
+<a name="l00146"></a>00146       end
+<a name="l00147"></a>00147     end
 <a name="l00148"></a>00148 
-<a name="l00149"></a>00149   if(!primary_queue.delete_iterator(primary_queue_iter)) begin
-<a name="l00150"></a>00150     `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete iterator from primary queue: %s&quot;, primary_queue_name));
-<a name="l00151"></a>00151   end
-<a name="l00152"></a>00152 endfunction: <a class="code" href="classcl__syoscb__compare__io.html#a68a58577ea0d6fc8a5d2612ff1b76162" title="Compare API: Mandatory overwriting of the base class&amp;#39; do_compare method.">compare_do</a>
+<a name="l00149"></a>00149     <span class="comment">// Call .next() blindly since we do not care about the</span>
+<a name="l00150"></a>00150     <span class="comment">// return value, since we might be at the end of the queue.</span>
+<a name="l00151"></a>00151     <span class="comment">// Thus, .next() will return 1&apos;b0 at the end of the queue</span>
+<a name="l00152"></a>00152     void&apos;(primary_queue_iter.next());
+<a name="l00153"></a>00153   end
+<a name="l00154"></a>00154 
+<a name="l00155"></a>00155   if(!primary_queue.delete_iterator(primary_queue_iter)) begin
+<a name="l00156"></a>00156     `uvm_fatal(&quot;QUEUE_ERROR&quot;, $sformatf(&quot;Unable to delete iterator from primary queue: %s&quot;, primary_queue_name));
+<a name="l00157"></a>00157   end
+<a name="l00158"></a>00158 endfunction: <a class="code" href="classcl__syoscb__compare__io.html#a68a58577ea0d6fc8a5d2612ff1b76162" title="Compare API: Mandatory overwriting of the base class&amp;#39; do_compare method.">compare_do</a>
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -301,7 +307,7 @@ window.onload = initDynSections;
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.1<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.2<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -323,7 +329,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Thu Jun 4 23:02:22 2015</small></address>
+      Wed Jul 29 14:03:55 2015</small></address>
    </td>
   </tr>
 </table>
