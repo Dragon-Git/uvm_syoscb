@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//   Copyright 2014 SyoSil ApS
+//   Copyright 2014-2015 SyoSil ApS
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -25,16 +25,24 @@
 /// This documentation provides the following additional documentation, besides
 /// the normal source code documentation:
 ///
+///   -# Getting started: \ref pGettingStarted
 ///   -# How to integrate the UVM scoreboard: \ref pIntegration
 ///
 /// It is assumed that the reader is familiar with the UVM scoreboard arcitechture
 /// described in: TBD: Added ref to paper!
-
+///
+/// @page pGettingStarted Getting started
+/// This software package also provides some simple examples beside the source code for the UVM scoreboard. Before starting to integerate the UVM scoreboard into your own code then it might be beneficial to look at the provided examples. An example testbench is placed in the <b>tb</b> directory and the tests are in the <b>tb/test</b> directory.
+///
+/// To run the examples you need to select a Vendor since the examples can be run with all of the threee major SystemVerilog simulator vendors: Mentor Graphics, Cadence and Synopsys. See <b>README.txt</b> for a description of how to select the vendor.
+///
+/// Once the vendor has been selected then the available Make targets for that vendor can be listed by typing: "make". Typically, you run the simulation with: <b>make sim</b>.
+///
 /// @page pIntegration How to integrate the UVM scoreboard
 /// The UVM scorebaord is easily integrated into your existing testbench environment.
 ///
 /// @section sCompile Compiling the UVM scoreboard
-/// To get the UVM scoreboard compiled you need to add src/pk_syoscb.sv to your list of files that are compliled when compiling your testbench. How this is done is highly dependent on the verification environment since some environemnts compile everything into different libraries and some do not etc.
+/// To get the UVM scoreboard compiled you need to add <b>src/pk_syoscb.sv</b> to your list of files that are compliled when compiling your testbench. How this is done is highly dependent on the verification environment since some environemnts compile everything into different libraries and some do not etc.
 ///
 /// @section sAcccess Accessing the UVM scoreboard from your own code
 /// Once the UVM scoreboard is compiled with the veritication environment then it is accessible either by explicit scoping:

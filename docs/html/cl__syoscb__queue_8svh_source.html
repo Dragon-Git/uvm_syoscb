@@ -88,38 +88,64 @@ window.onload = initDynSections;
   </div>
 </div>
 <div class="contents">
-<h1>cl_syoscb_queue.svh</h1><a href="cl__syoscb__queue_8svh.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a><a class="code" href="classcl__syoscb__queue.html">00001</a> <span class="keyword">virtual</span> <span class="keyword">class </span><a class="code" href="classcl__syoscb__queue.html">cl_syoscb_queue</a> <span class="keyword">extends</span> uvm_component;
-<a name="l00002"></a>00002    `<a class="code" href="classcl__syoscb__queue.html#a0aa64468d3c65a9eee08493c4a1c8436">uvm_component_utils</a>(cl_syoscb_queue);
+<h1>cl_syoscb_queue.svh</h1><a href="cl__syoscb__queue_8svh.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a><a class="code" href="classcl__syoscb__queue.html">00001</a> <span class="keyword">class </span><a class="code" href="classcl__syoscb__queue.html">cl_syoscb_queue</a> <span class="keyword">extends</span> uvm_component;
+<a name="l00002"></a>00002    `<a class="code" href="classcl__syoscb__queue.html#a7c607521bf2d7f1e11b925f0d280ea6b">uvm_component_utils</a>(cl_syoscb_queue)
 <a name="l00003"></a>00003 
 <a name="l00004"></a>00004    <span class="comment">// List of iterators registered with queue</span>
-<a name="l00005"></a><a class="code" href="classcl__syoscb__queue.html#a12bfa030b7022eb24a7d0a4f2865013f">00005</a>    <a class="code" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a> <a class="code" href="classcl__syoscb__queue.html#a12bfa030b7022eb24a7d0a4f2865013f">iterators</a>[<a class="code" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a>];
+<a name="l00005"></a>00005    <a class="code" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a> iterators[<a class="code" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a>];
 <a name="l00006"></a><a class="code" href="classcl__syoscb__queue.html#a3b9f8500d7d93d01eda717aac6ef4c28">00006</a>    int  unsigned <a class="code" href="classcl__syoscb__queue.html#a3b9f8500d7d93d01eda717aac6ef4c28">iter_idx</a>;
 <a name="l00007"></a>00007 
 <a name="l00008"></a><a class="code" href="classcl__syoscb__queue.html#a7ce6c5e6c1b4fcd09f90ec2699cc594c">00008</a>    semaphore <a class="code" href="classcl__syoscb__queue.html#a7ce6c5e6c1b4fcd09f90ec2699cc594c">iter_sem</a>;
 <a name="l00009"></a>00009 
 <a name="l00010"></a>00010    <span class="comment">// Basic queue functions</span>
-<a name="l00011"></a>00011    pure <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#a53706af3dee3ffd287819f96729018c5">add_item</a>(string producer, uvm_sequence_item item);
-<a name="l00012"></a>00012    pure <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#a610c24054538e2a1e7b820ddfebda941">delete_item</a>(int unsigned idx);
-<a name="l00013"></a>00013    pure <span class="keyword">virtual</span> function uvm_sequence_item <a class="code" href="classcl__syoscb__queue.html#a67bb024a73bf9ed7cad17288cd9f50fe">get_item</a>(int unsigned idx);
-<a name="l00014"></a>00014    pure <span class="keyword">virtual</span> function int unsigned <a class="code" href="classcl__syoscb__queue.html#afed61e4bbfd2e9f1e3485a65fd04979f">get_size</a>();
-<a name="l00015"></a>00015    pure <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#a6fe3093c86b4de3087906693e5e9c70c">insert_item</a>(string producer, uvm_sequence_item item, int unsigned idx);
-<a name="l00016"></a>00016 
-<a name="l00017"></a>00017    <span class="comment">// Iterator support functions</span>
-<a name="l00018"></a>00018    pure <span class="keyword">virtual</span> function <a class="code" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a> <a class="code" href="classcl__syoscb__queue.html#aa1e1267026cfd0149f44a299b6c9b273">create_iterator</a>();
-<a name="l00019"></a>00019    pure <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#a75657288cae69b5d212c6009b3797c1b">delete_iterator</a>(cl_syoscb_queue_iterator_base iterator);
+<a name="l00011"></a><a class="code" href="classcl__syoscb__queue.html#ad3b2567b0c3a36e96936d2ef0a1cb9d1">00011</a>    <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#ad3b2567b0c3a36e96936d2ef0a1cb9d1">add_item</a>(string producer, uvm_sequence_item item);
+<a name="l00012"></a>00012     `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::add_item() *MUST* be overwritten&quot;));
+<a name="l00013"></a>00013      return(1&apos;b0);
+<a name="l00014"></a>00014    endfunction
+<a name="l00015"></a>00015 
+<a name="l00016"></a><a class="code" href="classcl__syoscb__queue.html#a6a39c6052e61279f73964dd790d5a501">00016</a>    <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#a6a39c6052e61279f73964dd790d5a501">delete_item</a>(int unsigned idx);
+<a name="l00017"></a>00017     `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::delete_item() *MUST* be overwritten&quot;));
+<a name="l00018"></a>00018      return(1&apos;b0);
+<a name="l00019"></a>00019    endfunction
 <a name="l00020"></a>00020 
-<a name="l00021"></a>00021    <span class="comment">// TBD: Locator not implemented yet</span>
-<a name="l00022"></a>00022 
-<a name="l00023"></a>00023    <span class="comment">// TBD: Hmmm... a constructor in a pure virtual class??</span>
-<a name="l00024"></a>00024    extern function <a class="code" href="classcl__syoscb__queue.html#aa5a474a5220840f8fc220cd64aba6270">new</a>(string name, uvm_component parent);
-<a name="l00025"></a>00025 endclass : <a class="code" href="classcl__syoscb__queue.html">cl_syoscb_queue</a>
-<a name="l00026"></a>00026 
-<a name="l00027"></a><a class="code" href="classcl__syoscb__queue.html#aa5a474a5220840f8fc220cd64aba6270">00027</a> function <a class="code" href="classcl__syoscb__queue.html">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#aa5a474a5220840f8fc220cd64aba6270">new</a>(string name, uvm_component parent);
-<a name="l00028"></a>00028    super.<a class="code" href="classcl__syoscb__queue.html#aa5a474a5220840f8fc220cd64aba6270">new</a>(name, parent);
-<a name="l00029"></a>00029 
-<a name="l00030"></a>00030    this.<a class="code" href="classcl__syoscb__queue.html#a7ce6c5e6c1b4fcd09f90ec2699cc594c">iter_sem</a> = <a class="code" href="classcl__syoscb__queue.html#aa5a474a5220840f8fc220cd64aba6270">new</a>(1);
-<a name="l00031"></a>00031    this.<a class="code" href="classcl__syoscb__queue.html#a3b9f8500d7d93d01eda717aac6ef4c28">iter_idx</a> = 0;
-<a name="l00032"></a>00032 endfunction : <a class="code" href="classcl__syoscb__queue.html#aa5a474a5220840f8fc220cd64aba6270">new</a>
+<a name="l00021"></a><a class="code" href="classcl__syoscb__queue.html#a8aeb5aa73238b93a67b0eded170bd2ef">00021</a>    <span class="keyword">virtual</span> function uvm_sequence_item <a class="code" href="classcl__syoscb__queue.html#a8aeb5aa73238b93a67b0eded170bd2ef">get_item</a>(int unsigned idx);
+<a name="l00022"></a>00022     `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::get_item() *MUST* be overwritten&quot;));
+<a name="l00023"></a>00023      return(null);
+<a name="l00024"></a>00024    endfunction
+<a name="l00025"></a>00025 
+<a name="l00026"></a><a class="code" href="classcl__syoscb__queue.html#ae54e6d007b3696f6113c7fc7bfc2ad87">00026</a>    <span class="keyword">virtual</span> function int unsigned <a class="code" href="classcl__syoscb__queue.html#ae54e6d007b3696f6113c7fc7bfc2ad87">get_size</a>();
+<a name="l00027"></a>00027     `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::get_size() *MUST* be overwritten&quot;));
+<a name="l00028"></a>00028     return(0);
+<a name="l00029"></a>00029    endfunction
+<a name="l00030"></a>00030 
+<a name="l00031"></a><a class="code" href="classcl__syoscb__queue.html#add1067adfa733826869458c1a104bcbd">00031</a>    <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#add1067adfa733826869458c1a104bcbd">insert_item</a>(string producer, uvm_sequence_item item, int unsigned idx);
+<a name="l00032"></a>00032     `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::insert_item() *MUST* be overwritten&quot;));
+<a name="l00033"></a>00033      return(1&apos;b0);
+<a name="l00034"></a>00034    endfunction
+<a name="l00035"></a>00035 
+<a name="l00036"></a>00036    <span class="comment">// Iterator support functions</span>
+<a name="l00037"></a><a class="code" href="classcl__syoscb__queue.html#aa49ceabfea9002e5126f9fcd83654936">00037</a>    <span class="keyword">virtual</span> function <a class="code" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a> <a class="code" href="classcl__syoscb__queue.html#aa49ceabfea9002e5126f9fcd83654936">create_iterator</a>();
+<a name="l00038"></a>00038     `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::create_iterator() *MUST* be overwritten&quot;));
+<a name="l00039"></a>00039     return(null);
+<a name="l00040"></a>00040    endfunction
+<a name="l00041"></a>00041 
+<a name="l00042"></a><a class="code" href="classcl__syoscb__queue.html#a6d49c2185a33ce4b3b6805b57ab34d5f">00042</a>    <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__queue.html#a6d49c2185a33ce4b3b6805b57ab34d5f">delete_iterator</a>(cl_syoscb_queue_iterator_base iterator);
+<a name="l00043"></a>00043     `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_queue::delete_item() *MUST* be overwritten&quot;));
+<a name="l00044"></a>00044      return(1&apos;b0);
+<a name="l00045"></a>00045    endfunction
+<a name="l00046"></a>00046 
+<a name="l00047"></a>00047    <span class="comment">// TBD: Locator not implemented yet</span>
+<a name="l00048"></a>00048 
+<a name="l00049"></a>00049    <span class="comment">// Constructor</span>
+<a name="l00050"></a>00050    extern function <a class="code" href="classcl__syoscb__queue.html#aa5a474a5220840f8fc220cd64aba6270">new</a>(string name, uvm_component parent);
+<a name="l00051"></a>00051 endclass : <a class="code" href="classcl__syoscb__queue.html">cl_syoscb_queue</a>
+<a name="l00052"></a>00052 
+<a name="l00053"></a><a class="code" href="classcl__syoscb__queue.html#aa5a474a5220840f8fc220cd64aba6270">00053</a> function <a class="code" href="classcl__syoscb__queue.html">cl_syoscb_queue</a>::<a class="code" href="classcl__syoscb__queue.html#aa5a474a5220840f8fc220cd64aba6270">new</a>(string name, uvm_component parent);
+<a name="l00054"></a>00054    super.<a class="code" href="classcl__syoscb__queue.html#aa5a474a5220840f8fc220cd64aba6270">new</a>(name, parent);
+<a name="l00055"></a>00055 
+<a name="l00056"></a>00056    this.<a class="code" href="classcl__syoscb__queue.html#a7ce6c5e6c1b4fcd09f90ec2699cc594c">iter_sem</a> = <a class="code" href="classcl__syoscb__queue.html#aa5a474a5220840f8fc220cd64aba6270">new</a>(1);
+<a name="l00057"></a>00057    this.<a class="code" href="classcl__syoscb__queue.html#a3b9f8500d7d93d01eda717aac6ef4c28">iter_idx</a> = 0;
+<a name="l00058"></a>00058 endfunction : <a class="code" href="classcl__syoscb__queue.html#aa5a474a5220840f8fc220cd64aba6270">new</a>
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -179,7 +205,7 @@ window.onload = initDynSections;
   <tr>
     <td width = "20%">
        <address style="text-align: left;"><small>
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.1<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.2<br>
        </small></address>
     </td>
     <td width = "60%">
@@ -204,7 +230,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Nov 24 09:24:22 2014</small></address>
+      Wed Feb 25 04:01:40 2015</small></address>
    </td>
   </tr>
 </table>

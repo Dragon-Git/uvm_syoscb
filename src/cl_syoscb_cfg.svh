@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//   Copyright 2014 SyoSil ApS
+//   Copyright 2014-2015 SyoSil ApS
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the

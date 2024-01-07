@@ -1,5 +1,5 @@
 #######################################################################
-#   Copyright 2014 SyoSil ApS
+#   Copyright 2014-2015 SyoSil ApS
 #   All Rights Reserved Worldwide
 #
 #   Licensed under the Apache License, Version 2.0 (the
@@ -19,9 +19,9 @@
 #######################################################################
 # RELASE NOTES for UVM scoreboard
 #
-# Now 24 2014
+# Feb 25 2015
 #
-# Copyright 2014 SyoSil ApS
+# Copyright 2014-2015 SyoSil ApS
 # All Rights Reserved Worldwide 
 #######################################################################
 This file contains miscellanous information about this particular
@@ -33,33 +33,27 @@ The index:
   * [2]: Bug Fixes 
   * [3]: New Features
   * [4]: Know Limitations
+  * [5]: Compatibility List
 
 #######################################################################
 # [1]: General Information
 #######################################################################
-This vesion of the UVM scoreboard is a very preliminary version of the
-UVM scoreboard architecture presented at DVCon 2014 in the paper:
+This vesion of the UVM scoreboard is a preliminary version of the
+UVM scoreboard architecture presented at DVCon 2015 in the paper:
 Versatile UVM Scoreboarding.
 
 #######################################################################
 # [2]: Bug Fixes
 #######################################################################
 
-  * Changed the create of the compare strategy to a factory create
-    instead of a normal constructor invocation
-
-  * Corrected two problems in out-of-order compare:
-    * Incorrect deletion of slave items
-    * Incorrect usage of a queues .next() function. This caused the compare to
-      break immaturely
+  * Minor bug fixes
 
 #######################################################################
 # [3]: New Features
 #######################################################################
 
-  * Slightly improved documentation:
-    * Added note on usage of the uvm_config_db
-    * Added note on when the factory overwrites should occur
+  * Added support for Cadence and Synopsys
+  * Added some simple examples
 
 #######################################################################
 # [4]: Known Limitations
@@ -70,4 +64,17 @@ The current known limitations for this relase are:
      which calls the scoreboards add_item() method
   2. Only Out-of-Order compare is supported
   3. Only a standard SystemVerilog queue is supported
+
+#######################################################################
+# [5]: Compatibility List
+#######################################################################
+The UVM scoreboard has been developed and tested with the following
+tools:
+
+  * Centos Linux release 6.6
+  * Make version 3.81
+  * UVM version 1.1d
+  * Synopsys VCS® version J-2014.12-1
+  * Mentor Questa® Advanced Simulator version 10.2c
+  * Cadence® Incisive® version 14.10.014
 

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//   Copyright 2014 SyoSil ApS
+//   Copyright 2014-2015 SyoSil ApS
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -18,7 +18,7 @@
 //----------------------------------------------------------------------
 class cl_syoscb_queue_iterator_std extends cl_syoscb_queue_iterator_base;
 
-  `uvm_object_utils(cl_syoscb_queue_iterator_std);
+  `uvm_object_utils(cl_syoscb_queue_iterator_std)
 
   extern virtual function bit next();
   extern virtual function bit previous();
@@ -33,13 +33,15 @@ endclass : cl_syoscb_queue_iterator_std
 
 
 function bit cl_syoscb_queue_iterator_std::next();
-  if(this.position < this.get_queue().get_size()) begin
+  cl_syoscb_queue qh = this.get_queue();
+
+  if(this.position < qh.get_size()) begin
     this.position++;
     return 1;
   end else begin
-    // TBD: Discuss if we need this debug statement. It confuses the user
+    // Debug print when unable to advance to the next element (When at the end of the queue)
     `uvm_info("OUT_OF_BOUNDS", $sformatf("Not possible to increment position of queue %s: at end of queue",
-                                         this.get_queue().get_name()), UVM_MEDIUM)
+                                         qh.get_name()), UVM_DEBUG);
     return 0;
   end
 endfunction : next
@@ -50,8 +52,11 @@ function bit cl_syoscb_queue_iterator_std::previous();
     this.position--;
     return 1;
   end else begin
+    cl_syoscb_queue qh = this.get_queue();
+
+    // Debug print when unable to advance to the previous element (When at the beginning of the queue)
     `uvm_info("OUT_OF_BOUNDS", $sformatf("Not possible to decrement position of queue %s: at end of queue",
-                                         this.get_queue().get_name()), UVM_MEDIUM)
+                                         qh.get_name()), UVM_DEBUG);
     return 0;
   end
 endfunction : previous
@@ -65,7 +70,9 @@ endfunction : first
 
 
 function bit cl_syoscb_queue_iterator_std::last();
-  this.position = this.get_queue().get_size()-1;
+  cl_syoscb_queue qh = this.get_queue();
+
+  this.position = qh.get_size()-1;
   return 1;
 endfunction : last
 
@@ -76,19 +83,21 @@ endfunction : get_idx
 
 
 function uvm_sequence_item cl_syoscb_queue_iterator_std::get_item();
-  return this.get_queue().get_item(this.position);
+  cl_syoscb_queue qh = this.get_queue();
+
+  return qh.get_item(this.position);
 endfunction : get_item
 
 
 function bit cl_syoscb_queue_iterator_std::is_done();
-  if(this.position == this.get_queue().get_size()) begin
+  cl_syoscb_queue qh = this.get_queue();
+
+  if(this.position == qh.get_size()) begin
     return 1;
   end else begin
     return 0;
   end
 endfunction : is_done
-
-
 
 function bit cl_syoscb_queue_iterator_std::set_queue(cl_syoscb_queue owner);
   if(owner == null) begin

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//   Copyright 2014 SyoSil ApS
+//   Copyright 2014-2015 SyoSil ApS
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -17,7 +17,6 @@
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
 class cl_syoscb extends uvm_scoreboard;
-
    cl_syoscb_cfg cfg;
    cl_syoscb_queue queues[];
    cl_syoscb_compare compare_strategy;

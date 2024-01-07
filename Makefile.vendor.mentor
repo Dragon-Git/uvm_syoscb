@@ -1,0 +1,3 @@
+# Vendor selection. Legal values are: MENTOR, CADENCE, SYNOPSYS
+# Setting vendor to MENTOR
+VENDOR := MENTOR

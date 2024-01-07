@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//   Copyright 2014 SyoSil ApS
+//   Copyright 2014-2015 SyoSil ApS
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -48,14 +48,14 @@ function bit cl_syoscb_compare_ooo::compare_do();
   uvm_sequence_item primary_item;
 
   primary_queue_name = this.get_primary_queue_name();
-  this.get_cfg.get_queues(queue_names);
+  this.cfg.get_queues(queue_names);
 
   `uvm_info("DEBUG", $sformatf("cmp-ooo: primary queue: %s", primary_queue_name), UVM_FULL);
   `uvm_info("DEBUG", $sformatf("cmp-ooo: number of queues: %0d", queue_names.size()), UVM_FULL);
 
-  if(!$cast(primary_queue, this.get_cfg().queues[primary_queue_name])) begin
+  if(!$cast(primary_queue, this.cfg.queues[primary_queue_name])) begin
     `uvm_fatal("TYPE_ERROR", $sformatf("Unable to cast type %0s to type %0s",
-                                       this.get_cfg().queues[primary_queue_name].get_type_name(),
+                                       this.cfg.queues[primary_queue_name].get_type_name(),
                                        primary_queue.get_type_name()));
   end
 
@@ -75,16 +75,20 @@ function bit cl_syoscb_compare_ooo::compare_do();
 
         `uvm_info("DEBUG", $sformatf("%s is a secondary queue - now comparing", queue_names[i]), UVM_FULL);
 
-        if(!$cast(secondary_queue, this.get_cfg().queues[queue_names[i]])) begin
+        if(!$cast(secondary_queue, this.cfg.queues[queue_names[i]])) begin
           `uvm_fatal("TYPE_ERROR", $sformatf("Unable to cast type %0s to type %0s",
-                                             this.get_cfg().queues[primary_queue_name].get_type_name(),
+                                             this.cfg.queues[primary_queue_name].get_type_name(),
                                              primary_queue.get_type_name()));
         end
         secondary_queue_iter = secondary_queue.create_iterator();
 
         // Only the first match is removed
         while(!secondary_queue_iter.is_done()) begin
-          if(secondary_queue_iter.get_item().compare(primary_item) == 1'b1) begin
+	
+	  // TBD: This is not correct!!! WRONG type ??
+	  uvm_sequence_item sih = secondary_queue_iter.get_item();
+
+          if(sih.compare(primary_item) == 1'b1) begin
             secondary_item_found[queue_names[i]] = secondary_queue_iter.get_idx();
             `uvm_info("DEBUG", $sformatf("Secondary item found at index: %0d", secondary_queue_iter.get_idx()),
                       UVM_FULL);
@@ -105,8 +109,13 @@ function bit cl_syoscb_compare_ooo::compare_do();
     // Only start to remove items if all slave items are found (One from each slave queue)
     if(secondary_item_found.size() == queue_names.size()-1) begin
       string queue_name;
+
+      // TBD: This is not correct!!! WRONG type ??
+      uvm_sequence_item pih = primary_queue_iter.get_item();
+
+
       `uvm_info("DEBUG", $sformatf("Found match for primary queue item : %s",
-                                   primary_queue_iter.get_item().sprint()), UVM_FULL);
+                                   pih.sprint()), UVM_FULL);
 
       // Remove from primary
       if(!primary_queue.delete_item(primary_queue_iter.get_idx())) begin
@@ -118,9 +127,9 @@ function bit cl_syoscb_compare_ooo::compare_do();
       while(secondary_item_found.next(queue_name)) begin
         cl_syoscb_queue secondary_queue;
 
-        if(!$cast(secondary_queue, this.get_cfg().queues[queue_name])) begin
+        if(!$cast(secondary_queue, this.cfg.queues[queue_name])) begin
           `uvm_fatal("TYPE_ERROR", $sformatf("Unable to cast type %0s to type %0s",
-                                             this.get_cfg().queues[primary_queue_name].get_type_name(),
+                                             this.cfg.queues[primary_queue_name].get_type_name(),
                                              primary_queue.get_type_name()));
         end
         if(!secondary_queue.delete_item(secondary_item_found[queue_name])) begin
@@ -130,9 +139,9 @@ function bit cl_syoscb_compare_ooo::compare_do();
       end
     end
 
-    // TBD: Call .next() blindly since we do  ot care about the
-    //      return value, since we might be at the end of the queue.
-    //      Thus, .next() will fail
+    // Call .next() blindly since we do not care about the
+    // return value, since we might be at the end of the queue.
+    // Thus, .next() will return 1'b0 at the end of the queue
     void'(primary_queue_iter.next());
   end
 

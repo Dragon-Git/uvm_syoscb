@@ -1,8 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="node2" href="$classpk__syoscb_1_1cl__syoscb__queue.html" title="pk_syoscb::cl_syoscb_queue" alt="" coords="33,43,247,72"/>
-<area shape="rect" id="node4" href="$classpk__syoscb_1_1cl__syoscb__queue__iterator__base.html" title="pk_syoscb::cl_syoscb_queue_iterator_base" alt="" coords="417,52,727,81"/>
-<area shape="rect" id="node7" href="$classpk__syoscb_1_1cl__syoscb__cfg.html" title="pk_syoscb::cl_syoscb_cfg" alt="" coords="476,127,668,156"/>
-<area shape="rect" id="node10" href="$classpk__syoscb_1_1cl__syoscb__cfg__pl.html" title="pk_syoscb::cl_syoscb_cfg_pl" alt="" coords="35,163,245,192"/>
-<area shape="rect" id="node12" href="$classpk__syoscb_1_1cl__syoscb__compare.html" title="pk_syoscb::cl_syoscb_compare" alt="" coords="457,204,687,233"/>
-<area shape="rect" id="node14" href="$classpk__syoscb_1_1cl__syoscb__compare__base.html" title="pk_syoscb::cl_syoscb_compare_base" alt="" coords="5,216,275,245"/>
+<area shape="rect" id="node2" href="$classpk__syoscb_1_1cl__syoscb__queue.html" title="pk_syoscb::cl_syoscb_queue" alt="" coords="5,5,219,35"/>
+<area shape="rect" id="node4" href="$classpk__syoscb_1_1cl__syoscb__cfg.html" title="pk_syoscb::cl_syoscb_cfg" alt="" coords="235,101,427,131"/>
+<area shape="rect" id="node7" href="$classpk__syoscb_1_1cl__syoscb__cfg__pl.html" title="pk_syoscb::cl_syoscb_cfg_pl" alt="" coords="243,5,453,35"/>
+<area shape="rect" id="node9" href="$classpk__syoscb_1_1cl__syoscb__compare.html" title="pk_syoscb::cl_syoscb_compare" alt="" coords="475,101,704,131"/>
+<area shape="rect" id="node11" href="$classpk__syoscb_1_1cl__syoscb__compare__base.html" title="pk_syoscb::cl_syoscb_compare_base" alt="" coords="477,5,747,35"/>
 </map>

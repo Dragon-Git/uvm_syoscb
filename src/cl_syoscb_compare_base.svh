@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//   Copyright 2014 SyoSil ApS
+//   Copyright 2014-2015 SyoSil ApS
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -16,7 +16,7 @@
 //   the License for the specific language governing
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
-virtual class cl_syoscb_compare_base extends uvm_object;
+class cl_syoscb_compare_base extends uvm_object;
   `uvm_object_utils(cl_syoscb_compare_base)
   
   // TBD: Field macros?
@@ -27,13 +27,19 @@ virtual class cl_syoscb_compare_base extends uvm_object;
   // TBD: Here the abstract compare API must be enforced
   // TBD: The definition of the return bit for both compare and compare_do
   //      must be defined, e.g. status or progress. Currently it is undefined
-  pure virtual function bit compare();
-  pure virtual function bit compare_do();
+  virtual function bit compare();
+    `uvm_fatal("IMPL_ERROR", $sformatf("cl_syoscb_compare_base::compare() *MUST* be overwritten"));
+     return(1'b0);
+  endfunction
 
+  virtual function bit compare_do();
+    `uvm_fatal("IMPL_ERROR", $sformatf("cl_syoscb_compare_base::compare_do() *MUST* be overwritten"));
+     return(1'b0);
+  endfunction
+  
   extern function void set_cfg(cl_syoscb_cfg cfg);
   extern function cl_syoscb_cfg get_cfg();
   extern function string get_primary_queue_name();   
-
 endclass: cl_syoscb_compare_base
 
 function cl_syoscb_compare_base::new(string name = "cl_syoscb_compare_base");
@@ -42,7 +48,7 @@ endfunction : new
 
 // TBD: Replace by UVM cfg DB lookup?
 function void cl_syoscb_compare_base::set_cfg(cl_syoscb_cfg cfg);
-	this.cfg = cfg;
+  this.cfg = cfg;
 endfunction : set_cfg
 
 function cl_syoscb_cfg cl_syoscb_compare_base::get_cfg();
@@ -50,5 +56,7 @@ function cl_syoscb_cfg cl_syoscb_compare_base::get_cfg();
 endfunction : get_cfg
 
 function string cl_syoscb_compare_base::get_primary_queue_name();
-   return(this.get_cfg().primary_queue);
+  cl_syoscb_cfg ch = this.get_cfg();
+
+  return(ch.primary_queue);
 endfunction: get_primary_queue_name

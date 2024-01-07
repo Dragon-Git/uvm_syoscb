@@ -1,8 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="node2" href="$classcl__syoscb__cfg.html" title="cl_syoscb_cfg" alt="" coords="75,101,189,131"/>
+<area shape="rect" id="node2" href="$classcl__syoscb__cfg.html" title="cl_syoscb_cfg" alt="" coords="91,101,205,131"/>
 <area shape="rect" id="node4" href="$classcl__syoscb__cfg__pl.html" title="cl_syoscb_cfg_pl" alt="" coords="5,5,136,35"/>
-<area shape="rect" id="node6" href="$classcl__syoscb__queue.html" title="cl_syoscb_queue" alt="" coords="201,5,335,35"/>
-<area shape="rect" id="node8" href="$classcl__syoscb__queue__iterator__base.html" title="cl_syoscb_queue_iterator_base" alt="" coords="311,101,543,131"/>
-<area shape="rect" id="node12" href="$classcl__syoscb__compare.html" title="cl_syoscb_compare" alt="" coords="567,101,719,131"/>
-<area shape="rect" id="node14" href="$classcl__syoscb__compare__base.html" title="cl_syoscb_compare_base" alt="" coords="548,5,737,35"/>
+<area shape="rect" id="node6" href="$classcl__syoscb__queue.html" title="cl_syoscb_queue" alt="" coords="160,5,293,35"/>
+<area shape="rect" id="node9" href="$classcl__syoscb__compare.html" title="cl_syoscb_compare" alt="" coords="333,101,485,131"/>
+<area shape="rect" id="node11" href="$classcl__syoscb__compare__base.html" title="cl_syoscb_compare_base" alt="" coords="317,5,507,35"/>
 </map>

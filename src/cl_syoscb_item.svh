@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//   Copyright 2014 SyoSil ApS
+//   Copyright 2014-2015 SyoSil ApS
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -31,7 +31,7 @@ class cl_syoscb_item extends uvm_object;
    extern function string get_producer();
    extern function void set_producer(string producer);
    extern function uvm_sequence_item get_item();
-   extern function void set_item(uvm_sequence_item);
+   extern function void set_item(uvm_sequence_item item);
 
 endclass : cl_syoscb_item
 

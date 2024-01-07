@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//   Copyright 2014 SyoSil ApS
+//   Copyright 2014-2015 SyoSil ApS
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -69,7 +69,7 @@ function bit cl_syoscb_queue_std::delete_item(int unsigned idx);
     this.iter_sem.put();
     return 1;
   end else begin
-    `uvm_info("OUT_OF_BOUNDS", $sformatf("Idx: %0d is not present in queue: %0s", idx, this.get_name()), UVM_MEDIUM);
+    `uvm_info("OUT_OF_BOUNDS", $sformatf("Idx: %0d is not present in queue: %0s", idx, this.get_name()), UVM_DEBUG);
     return 0;
   end
 endfunction : delete_item
@@ -78,7 +78,7 @@ function uvm_sequence_item cl_syoscb_queue_std::get_item(int unsigned idx);
   if(idx < this.items.size()) begin
     return items[idx].get_item();
   end else begin
-    `uvm_info("OUT_OF_BOUNDS", $sformatf("Idx: %0d is not present in queue: %0s", idx, this.get_name()), UVM_MEDIUM);
+    `uvm_info("OUT_OF_BOUNDS", $sformatf("Idx: %0d is not present in queue: %0s", idx, this.get_name()), UVM_DEBUG);
     return null;
   end
 endfunction : get_item
@@ -101,6 +101,10 @@ function bit cl_syoscb_queue_std::insert_item(string producer, uvm_sequence_item
     // Update iterators
     iter = this.iterators.find(x) with (x.get_idx() >= idx);
     for(int i = 0; i < iter.size(); i++) begin
+      // Call .next() blindly. This can never fail by design, since
+      // if it was point at the last element then it points to the second last
+      // element prior to the .next(). The .next() call will then just
+      // set the iterator to the correct index again after the insertion
       void'(iter[i].next());
     end
 
@@ -110,7 +114,7 @@ function bit cl_syoscb_queue_std::insert_item(string producer, uvm_sequence_item
     this.items.push_back(new_item);
     return 1;
   end else begin
-    `uvm_info("OUT_OF_BOUNDS", $sformatf("Idx: %0d too large for queue %0s", idx, this.get_name()), UVM_MEDIUM);
+    `uvm_info("OUT_OF_BOUNDS", $sformatf("Idx: %0d too large for queue %0s", idx, this.get_name()), UVM_DEBUG);
     return 0;
   end
 endfunction : insert_item
@@ -138,7 +142,7 @@ endfunction : create_iterator
 function bit cl_syoscb_queue_std::delete_iterator(cl_syoscb_queue_iterator_base iterator);
   if(iterator == null) begin
     `uvm_info("NULL", $sformatf("Asked to delete null iterator from list of iterators in %s",
-                                this.get_name()), UVM_MEDIUM);
+                                this.get_name()), UVM_DEBUG);
     return 0;
   end else begin 	
     // TBD: Hmmm busy wait+function?

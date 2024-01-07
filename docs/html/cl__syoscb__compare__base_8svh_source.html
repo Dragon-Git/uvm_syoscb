@@ -88,7 +88,7 @@ window.onload = initDynSections;
   </div>
 </div>
 <div class="contents">
-<h1>cl_syoscb_compare_base.svh</h1><a href="cl__syoscb__compare__base_8svh.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a><a class="code" href="classcl__syoscb__compare__base.html">00001</a> <span class="keyword">virtual</span> <span class="keyword">class </span><a class="code" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a> <span class="keyword">extends</span> uvm_object;
+<h1>cl_syoscb_compare_base.svh</h1><a href="cl__syoscb__compare__base_8svh.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a><a class="code" href="classcl__syoscb__compare__base.html">00001</a> <span class="keyword">class </span><a class="code" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a> <span class="keyword">extends</span> uvm_object;
 <a name="l00002"></a>00002   `<a class="code" href="classcl__syoscb__compare__base.html#af4e83124be9197ce3f09b0b38a699359">uvm_object_utils</a>(cl_syoscb_compare_base)
 <a name="l00003"></a>00003   
 <a name="l00004"></a>00004   <span class="comment">// TBD: Field macros?</span>
@@ -99,31 +99,39 @@ window.onload = initDynSections;
 <a name="l00009"></a>00009   <span class="comment">// TBD: Here the abstract compare API must be enforced</span>
 <a name="l00010"></a>00010   <span class="comment">// TBD: The definition of the return bit for both compare and compare_do</span>
 <a name="l00011"></a>00011   <span class="comment">//      must be defined, e.g. status or progress. Currently it is undefined</span>
-<a name="l00012"></a>00012   pure <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__compare__base.html#a9853612ed57fe4f664c6c5349d71a69b">compare</a>();
-<a name="l00013"></a>00013   pure <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__compare__base.html#a973758f9aa756bd7184927e8764c0c2c">compare_do</a>();
-<a name="l00014"></a>00014 
-<a name="l00015"></a>00015   extern function void <a class="code" href="classcl__syoscb__compare__base.html#a2f96c175e5bc576cc9fc33b09525e33f">set_cfg</a>(cl_syoscb_cfg cfg);
-<a name="l00016"></a>00016   extern function <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a> <a class="code" href="classcl__syoscb__compare__base.html#aa04cfd45a4bf05066cef409481d097b1">get_cfg</a>();
-<a name="l00017"></a>00017   extern function string <a class="code" href="classcl__syoscb__compare__base.html#a35dfc9824d56bacb7ddf21437afa5b7b">get_primary_queue_name</a>();   
-<a name="l00018"></a>00018 
-<a name="l00019"></a>00019 endclass: <a class="code" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a>
-<a name="l00020"></a>00020 
-<a name="l00021"></a><a class="code" href="classcl__syoscb__compare__base.html#a5a82cea4ab4296f7312cf0f366253685">00021</a> function <a class="code" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a>::<a class="code" href="classcl__syoscb__compare__base.html#a5a82cea4ab4296f7312cf0f366253685">new</a>(string name = &quot;cl_syoscb_compare_base&quot;);
-<a name="l00022"></a>00022    super.<a class="code" href="classcl__syoscb__compare__base.html#a5a82cea4ab4296f7312cf0f366253685">new</a>(name);
-<a name="l00023"></a>00023 endfunction : <a class="code" href="classcl__syoscb__compare__base.html#a5a82cea4ab4296f7312cf0f366253685">new</a>
-<a name="l00024"></a>00024 
-<a name="l00025"></a>00025 <span class="comment">// TBD: Replace by UVM cfg DB lookup?</span>
-<a name="l00026"></a><a class="code" href="classcl__syoscb__compare__base.html#a2f96c175e5bc576cc9fc33b09525e33f">00026</a> function void <a class="code" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a>::<a class="code" href="classcl__syoscb__compare__base.html#a2f96c175e5bc576cc9fc33b09525e33f">set_cfg</a>(cl_syoscb_cfg cfg);
-<a name="l00027"></a>00027    this.cfg = cfg;
-<a name="l00028"></a>00028 endfunction : <a class="code" href="classcl__syoscb__compare__base.html#a2f96c175e5bc576cc9fc33b09525e33f">set_cfg</a>
-<a name="l00029"></a>00029 
-<a name="l00030"></a><a class="code" href="classcl__syoscb__compare__base.html#aa04cfd45a4bf05066cef409481d097b1">00030</a> function <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a> <a class="code" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a>::<a class="code" href="classcl__syoscb__compare__base.html#aa04cfd45a4bf05066cef409481d097b1">get_cfg</a>();
-<a name="l00031"></a>00031   return(this.cfg);
-<a name="l00032"></a>00032 endfunction : <a class="code" href="classcl__syoscb__compare__base.html#aa04cfd45a4bf05066cef409481d097b1">get_cfg</a>
-<a name="l00033"></a>00033 
-<a name="l00034"></a><a class="code" href="classcl__syoscb__compare__base.html#a35dfc9824d56bacb7ddf21437afa5b7b">00034</a> function string <a class="code" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a>::<a class="code" href="classcl__syoscb__compare__base.html#a35dfc9824d56bacb7ddf21437afa5b7b">get_primary_queue_name</a>();
-<a name="l00035"></a>00035    return(this.get_cfg().primary_queue);
-<a name="l00036"></a>00036 endfunction: <a class="code" href="classcl__syoscb__compare__base.html#a35dfc9824d56bacb7ddf21437afa5b7b">get_primary_queue_name</a>
+<a name="l00012"></a><a class="code" href="classcl__syoscb__compare__base.html#a99415805574bfcb0bbf8e20a761945b0">00012</a>   <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__compare__base.html#a99415805574bfcb0bbf8e20a761945b0">compare</a>();
+<a name="l00013"></a>00013     `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_compare_base::compare() *MUST* be overwritten&quot;));
+<a name="l00014"></a>00014      return(1&apos;b0);
+<a name="l00015"></a>00015   endfunction
+<a name="l00016"></a>00016 
+<a name="l00017"></a><a class="code" href="classcl__syoscb__compare__base.html#abac7f8c3bdef13fcae5bfddd09f411d5">00017</a>   <span class="keyword">virtual</span> function bit <a class="code" href="classcl__syoscb__compare__base.html#abac7f8c3bdef13fcae5bfddd09f411d5">compare_do</a>();
+<a name="l00018"></a>00018     `uvm_fatal(&quot;IMPL_ERROR&quot;, $sformatf(&quot;cl_syoscb_compare_base::compare_do() *MUST* be overwritten&quot;));
+<a name="l00019"></a>00019      return(1&apos;b0);
+<a name="l00020"></a>00020   endfunction
+<a name="l00021"></a>00021   
+<a name="l00022"></a>00022   extern function void <a class="code" href="classcl__syoscb__compare__base.html#a2f96c175e5bc576cc9fc33b09525e33f">set_cfg</a>(cl_syoscb_cfg cfg);
+<a name="l00023"></a>00023   extern function <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a> <a class="code" href="classcl__syoscb__compare__base.html#aa04cfd45a4bf05066cef409481d097b1">get_cfg</a>();
+<a name="l00024"></a>00024   extern function string <a class="code" href="classcl__syoscb__compare__base.html#a35dfc9824d56bacb7ddf21437afa5b7b">get_primary_queue_name</a>();   
+<a name="l00025"></a>00025 endclass: <a class="code" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a>
+<a name="l00026"></a>00026 
+<a name="l00027"></a><a class="code" href="classcl__syoscb__compare__base.html#a5a82cea4ab4296f7312cf0f366253685">00027</a> function <a class="code" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a>::<a class="code" href="classcl__syoscb__compare__base.html#a5a82cea4ab4296f7312cf0f366253685">new</a>(string name = &quot;cl_syoscb_compare_base&quot;);
+<a name="l00028"></a>00028    super.<a class="code" href="classcl__syoscb__compare__base.html#a5a82cea4ab4296f7312cf0f366253685">new</a>(name);
+<a name="l00029"></a>00029 endfunction : <a class="code" href="classcl__syoscb__compare__base.html#a5a82cea4ab4296f7312cf0f366253685">new</a>
+<a name="l00030"></a>00030 
+<a name="l00031"></a>00031 <span class="comment">// TBD: Replace by UVM cfg DB lookup?</span>
+<a name="l00032"></a><a class="code" href="classcl__syoscb__compare__base.html#a2f96c175e5bc576cc9fc33b09525e33f">00032</a> function void <a class="code" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a>::<a class="code" href="classcl__syoscb__compare__base.html#a2f96c175e5bc576cc9fc33b09525e33f">set_cfg</a>(cl_syoscb_cfg cfg);
+<a name="l00033"></a>00033   this.cfg = cfg;
+<a name="l00034"></a>00034 endfunction : <a class="code" href="classcl__syoscb__compare__base.html#a2f96c175e5bc576cc9fc33b09525e33f">set_cfg</a>
+<a name="l00035"></a>00035 
+<a name="l00036"></a><a class="code" href="classcl__syoscb__compare__base.html#aa04cfd45a4bf05066cef409481d097b1">00036</a> function <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a> <a class="code" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a>::<a class="code" href="classcl__syoscb__compare__base.html#aa04cfd45a4bf05066cef409481d097b1">get_cfg</a>();
+<a name="l00037"></a>00037   return(this.cfg);
+<a name="l00038"></a>00038 endfunction : <a class="code" href="classcl__syoscb__compare__base.html#aa04cfd45a4bf05066cef409481d097b1">get_cfg</a>
+<a name="l00039"></a>00039 
+<a name="l00040"></a><a class="code" href="classcl__syoscb__compare__base.html#a35dfc9824d56bacb7ddf21437afa5b7b">00040</a> function string <a class="code" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a>::<a class="code" href="classcl__syoscb__compare__base.html#a35dfc9824d56bacb7ddf21437afa5b7b">get_primary_queue_name</a>();
+<a name="l00041"></a>00041   <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a> ch = this.<a class="code" href="classcl__syoscb__compare__base.html#aa04cfd45a4bf05066cef409481d097b1">get_cfg</a>();
+<a name="l00042"></a>00042 
+<a name="l00043"></a>00043   return(ch.primary_queue);
+<a name="l00044"></a>00044 endfunction: <a class="code" href="classcl__syoscb__compare__base.html#a35dfc9824d56bacb7ddf21437afa5b7b">get_primary_queue_name</a>
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -183,7 +191,7 @@ window.onload = initDynSections;
   <tr>
     <td width = "20%">
        <address style="text-align: left;"><small>
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.1<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.2<br>
        </small></address>
     </td>
     <td width = "60%">
@@ -208,7 +216,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Nov 24 09:24:22 2014</small></address>
+      Wed Feb 25 04:01:40 2015</small></address>
    </td>
   </tr>
 </table>

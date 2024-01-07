@@ -102,8 +102,8 @@ Inheritance diagram for cl_syoscb_compare_base:</div>
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__compare__base.html#af4e83124be9197ce3f09b0b38a699359">uvm_object_utils</a> (<a class="el" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a>) <a class="el" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a> cfg</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__compare__base.html#a5a82cea4ab4296f7312cf0f366253685">new</a> (string name=&quot;cl_syoscb_compare_base&quot;)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__compare__base.html#a9853612ed57fe4f664c6c5349d71a69b">compare</a> ()=0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__compare__base.html#a973758f9aa756bd7184927e8764c0c2c">compare_do</a> ()=0</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__compare__base.html#a99415805574bfcb0bbf8e20a761945b0">compare</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__compare__base.html#abac7f8c3bdef13fcae5bfddd09f411d5">compare_do</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__compare__base.html#a2f96c175e5bc576cc9fc33b09525e33f">set_cfg</a> (<a class="el" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a> cfg)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__compare__base.html#aa04cfd45a4bf05066cef409481d097b1">get_cfg</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__compare__base.html#a35dfc9824d56bacb7ddf21437afa5b7b">get_primary_queue_name</a> ()</td></tr>
@@ -112,7 +112,7 @@ Inheritance diagram for cl_syoscb_compare_base:</div>
 
 <p>Definition at line <a class="el" href="cl__syoscb__compare__base_8svh_source.html#l00001">1</a> of file <a class="el" href="cl__syoscb__compare__base_8svh_source.html">cl_syoscb_compare_base.svh</a>.</p>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a9853612ed57fe4f664c6c5349d71a69b"></a><!-- doxytag: member="cl_syoscb_compare_base::compare" ref="a9853612ed57fe4f664c6c5349d71a69b" args="()=0" -->
+<a class="anchor" id="a99415805574bfcb0bbf8e20a761945b0"></a><!-- doxytag: member="cl_syoscb_compare_base::compare" ref="a99415805574bfcb0bbf8e20a761945b0" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -121,17 +121,19 @@ Inheritance diagram for cl_syoscb_compare_base:</div>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
-          <td><code> [pure virtual]</code></td>
+          <td><code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Implemented in <a class="el" href="classcl__syoscb__compare__ooo.html#a464ca0561e156b2832450607abc0c451">cl_syoscb_compare_ooo</a>.</p>
+<p>Reimplemented in <a class="el" href="classcl__syoscb__compare__ooo.html#a464ca0561e156b2832450607abc0c451">cl_syoscb_compare_ooo</a>.</p>
+
+<p>Definition at line <a class="el" href="cl__syoscb__compare__base_8svh_source.html#l00012">12</a> of file <a class="el" href="cl__syoscb__compare__base_8svh_source.html">cl_syoscb_compare_base.svh</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a973758f9aa756bd7184927e8764c0c2c"></a><!-- doxytag: member="cl_syoscb_compare_base::compare_do" ref="a973758f9aa756bd7184927e8764c0c2c" args="()=0" -->
+<a class="anchor" id="abac7f8c3bdef13fcae5bfddd09f411d5"></a><!-- doxytag: member="cl_syoscb_compare_base::compare_do" ref="abac7f8c3bdef13fcae5bfddd09f411d5" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -140,13 +142,15 @@ Inheritance diagram for cl_syoscb_compare_base:</div>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
-          <td><code> [pure virtual]</code></td>
+          <td><code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Implemented in <a class="el" href="classcl__syoscb__compare__ooo.html#a3d5d3650ead69b37364524b622831881">cl_syoscb_compare_ooo</a>.</p>
+<p>Reimplemented in <a class="el" href="classcl__syoscb__compare__ooo.html#a3d5d3650ead69b37364524b622831881">cl_syoscb_compare_ooo</a>.</p>
+
+<p>Definition at line <a class="el" href="cl__syoscb__compare__base_8svh_source.html#l00017">17</a> of file <a class="el" href="cl__syoscb__compare__base_8svh_source.html">cl_syoscb_compare_base.svh</a>.</p>
 
 </div>
 </div>
@@ -165,7 +169,7 @@ Inheritance diagram for cl_syoscb_compare_base:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="cl__syoscb__compare__base_8svh_source.html#l00030">30</a> of file <a class="el" href="cl__syoscb__compare__base_8svh_source.html">cl_syoscb_compare_base.svh</a>.</p>
+<p>Definition at line <a class="el" href="cl__syoscb__compare__base_8svh_source.html#l00036">36</a> of file <a class="el" href="cl__syoscb__compare__base_8svh_source.html">cl_syoscb_compare_base.svh</a>.</p>
 
 </div>
 </div>
@@ -184,7 +188,7 @@ Inheritance diagram for cl_syoscb_compare_base:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="cl__syoscb__compare__base_8svh_source.html#l00034">34</a> of file <a class="el" href="cl__syoscb__compare__base_8svh_source.html">cl_syoscb_compare_base.svh</a>.</p>
+<p>Definition at line <a class="el" href="cl__syoscb__compare__base_8svh_source.html#l00040">40</a> of file <a class="el" href="cl__syoscb__compare__base_8svh_source.html">cl_syoscb_compare_base.svh</a>.</p>
 
 </div>
 </div>
@@ -204,7 +208,7 @@ Inheritance diagram for cl_syoscb_compare_base:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="cl__syoscb__compare__base_8svh_source.html#l00021">21</a> of file <a class="el" href="cl__syoscb__compare__base_8svh_source.html">cl_syoscb_compare_base.svh</a>.</p>
+<p>Definition at line <a class="el" href="cl__syoscb__compare__base_8svh_source.html#l00027">27</a> of file <a class="el" href="cl__syoscb__compare__base_8svh_source.html">cl_syoscb_compare_base.svh</a>.</p>
 
 </div>
 </div>
@@ -224,7 +228,7 @@ Inheritance diagram for cl_syoscb_compare_base:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="cl__syoscb__compare__base_8svh_source.html#l00026">26</a> of file <a class="el" href="cl__syoscb__compare__base_8svh_source.html">cl_syoscb_compare_base.svh</a>.</p>
+<p>Definition at line <a class="el" href="cl__syoscb__compare__base_8svh_source.html#l00032">32</a> of file <a class="el" href="cl__syoscb__compare__base_8svh_source.html">cl_syoscb_compare_base.svh</a>.</p>
 
 </div>
 </div>
@@ -310,7 +314,7 @@ Inheritance diagram for cl_syoscb_compare_base:</div>
   <tr>
     <td width = "20%">
        <address style="text-align: left;"><small>
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.1<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.2<br>
        </small></address>
     </td>
     <td width = "60%">
@@ -335,7 +339,7 @@ Inheritance diagram for cl_syoscb_compare_base:</div>
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Nov 24 09:24:23 2014</small></address>
+      Wed Feb 25 04:01:41 2015</small></address>
    </td>
   </tr>
 </table>
