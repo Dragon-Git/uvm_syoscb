@@ -60,7 +60,6 @@ window.onload = initDynSections;
     <ul>
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
       <li class="current"><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
-      <li><a href="namespaces.html"><span>Packages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li><a href="dirs.html"><span>Directories</span></a></li>
@@ -83,21 +82,21 @@ window.onload = initDynSections;
 <div class="contents">
 
 
-<h1><a class="anchor" id="pIntegration">How to integrate the UVM scoreboard </a></h1><p>The UVM scorebaord is easily integrated into your existing testbench environment.</p>
+<h1><a class="anchor" id="pIntegration">How to integrate the UVM scoreboard </a></h1><p>The UVM scoreboard is easily integrated into your existing testbench environment.</p>
 <h2><a class="anchor" id="sCompile">
 Compiling the UVM scoreboard</a></h2>
-<p>To get the UVM scoreboard compiled you need to add <b><a class="el" href="pk__syoscb_8sv.html">src/pk_syoscb.sv</a></b> to your list of files that are compliled when compiling your testbench. How this is done is highly dependent on the verification environment since some environemnts compile everything into different libraries and some do not etc.</p>
+<p>To get the UVM scoreboard compiled you need to add <b><a class="el" href="pk__syoscb_8sv_source.html">src/pk_syoscb.sv</a></b> to your list of files that are complied when compiling your testbench. How this is done is highly dependent on the verification environment since some environments compile everything into different libraries and some do not etc.</p>
 <h2><a class="anchor" id="sAcccess">
 Accessing the UVM scoreboard from your own code</a></h2>
-<p>Once the UVM scoreboard is compiled with the veritication environment then it is accessible either by explicit scoping:</p>
+<p>Once the UVM scoreboard is compiled with the verification environment then it is accessible either by explicit scoping:</p>
 <div class="fragment"><pre class="fragment">   <span class="keyword">class </span>myclass;
-     <a class="code" href="classpk__syoscb_1_1cl__syoscb.html">pk_syoscb::cl_syoscb</a> my_new_scb;
+     pk_syoscb::cl_syoscb my_new_scb;
      ...
-</pre></div><p>or by importing the complte package into your scope:</p>
+</pre></div><p>or by importing the complete package into your scope:</p>
 <div class="fragment"><pre class="fragment">   <span class="keyword">import</span> pk_syoscb::*;
 
    <span class="keyword">class </span>myclass;
-     <a class="code" href="classcl__syoscb.html">cl_syoscb</a> my_new_scb;
+     <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a> my_new_scb;
      ...
 </pre></div><h2><a class="anchor" id="sInstantiation">
 Instantiating the UVM scoreboard</a></h2>
@@ -106,8 +105,8 @@ Instantiating the UVM scoreboard</a></h2>
 
    <span class="keyword">class </span>cl_scbtest_env <span class="keyword">extends</span> uvm_env;
 
-     <a class="code" href="classcl__syoscb.html">cl_syoscb</a>     syoscb;   
-     <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a> syoscb_cfg;
+     <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a>     syoscb;   
+     <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a> syoscb_cfg;
     
      `uvm_component_utils_begin(cl_scbtest_env)
        `uvm_field_object(syoscb,     UVM_ALL_ON)
@@ -122,20 +121,20 @@ Instantiating the UVM scoreboard</a></h2>
      super.build_phase(phase);
    
      <span class="comment">// Create the scoreboard configuration object</span>
-     this.syoscb_cfg = <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>::type_id::create(&quot;syoscb_cfg&quot;);
+     this.syoscb_cfg = <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::type_id::create(&quot;syoscb_cfg&quot;);
 
      <span class="comment">// Pass the scoreboard configuration object to the config_db</span>
      uvm_config_db #(cl_syoscb_cfg)::set(this, &quot;syoscb&quot;, &quot;cfg&quot;, this.syoscb_cfg);
 
-     <span class="comment">// Create the scoreaboard</span>
-     this.syoscb = <a class="code" href="classcl__syoscb.html">cl_syoscb</a>::type_id::create(&quot;syoscb&quot;, this);
+     <span class="comment">// Create the scoreboard</span>
+     this.syoscb = <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a>::type_id::create(&quot;syoscb&quot;, this);
    
      ...
                
    endfunction: build_phase
 </pre></div><h2><a class="anchor" id="sConfiguration">
 Configuring the UVM scoreboard</a></h2>
-<p>The UVM scoreboard ocnfiguration object needs to be configured after it has been created. The following example shows how two queues Q1 and Q2 wit Q1 as the primary queue. Futhermore one producer P1 is added to both queues:</p>
+<p>The UVM scoreboard configuration object needs to be configured after it has been created. The following example shows how two queues Q1 and Q2 wit Q1 as the primary queue. Furthermore, one producer P1 is added to both queues:</p>
 <div class="fragment"><pre class="fragment">   function <span class="keywordtype">void</span> cl_scbtest_env::build_phase(uvm_phase phase);
      super.build_phase(phase);
    
@@ -148,25 +147,146 @@ Configuring the UVM scoreboard</a></h2>
 <span class="stringliteral">     void&apos;</span>(this.syoscb_cfg.set_producer(<span class="stringliteral">&quot;P1&quot;</span>, {<span class="stringliteral">&quot;Q1&quot;</span>, <span class="stringliteral">&quot;Q2&quot;</span>})); 
 
      <span class="comment">// Pass the scoreboard configuration object to the config_db</span>
-     uvm_config_db #(<a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>)::<span class="keyword">set</span>(<span class="keyword">this</span>, <span class="stringliteral">&quot;syoscb&quot;</span>, <span class="stringliteral">&quot;cfg&quot;</span>, this.syoscb_cfg);
+     uvm_config_db #(<a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>)::<span class="keyword">set</span>(<span class="keyword">this</span>, <span class="stringliteral">&quot;syoscb&quot;</span>, <span class="stringliteral">&quot;cfg&quot;</span>, this.syoscb_cfg);
 
-     <span class="comment">// Create the scoreaboard</span>
+     <span class="comment">// Create the scoreboard</span>
      this.syoscb = cl_syoscb::type_id::create(<span class="stringliteral">&quot;syoscb&quot;</span>, <span class="keyword">this</span>);
                
      ...
 
    endfunction: build_phase
+</pre></div><h2><a class="anchor" id="sFunctionAPIHookUp">
+Function based API hook up</a></h2>
+<p>The function based API is very easy to use once you have done the configuration and instantiation of the scoreboard as describe above.</p>
+<p>Whenever you need to add an UVM sequence item to a queue produced by a specified producer then you simply invoke the <a class="el" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f" title="Method for adding a uvm_sequence_item to a given queue for a given producer.">cl_syoscb::add_item()</a> method:</p>
+<div class="fragment"><pre class="fragment">   <span class="comment">// *NOTE*: Assumes syoscb is handle to an instance of the scoreboard and</span>
+   <span class="comment">//         item1 is a handle to a UVM sequence item</span>
+
+   ...
+
+   <span class="comment">// Insert UVM sequence item for queue: Q1, for producer: P1</span>
+   syoscb.add_item(<span class="stringliteral">&quot;Q1&quot;</span>, <span class="stringliteral">&quot;P1&quot;</span>, item1);
+</pre></div><p>Invoking the <a class="el" href="classcl__syoscb.html#a26c59c91c6fdd22f29a411cba2d5ed8f" title="Method for adding a uvm_sequence_item to a given queue for a given producer.">cl_syoscb::add_item()</a> method will simply wrap the UVM sequence item in a <a class="el" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> object, add it the correct queue and finally invoke the configured compare method.</p>
+<p>The UVM environment will typically contain a handle to the scoreboard as described above. This can then be utilized if UVM sequences needs to be added from a test case:</p>
+<div class="fragment"><pre class="fragment">   <span class="keyword">class </span>cl_scbtest_seq_item <span class="keyword">extends</span> uvm_sequence_item;
+     <span class="comment">//-------------------------------------</span>
+     <span class="comment">// Randomizable variables</span>
+     <span class="comment">//-------------------------------------</span>
+     rand int unsigned int_a;
+   
+     <span class="comment">//-------------------------------------</span>
+     <span class="comment">// UVM Macros</span>
+     <span class="comment">//-------------------------------------</span>
+     `uvm_object_utils_begin(cl_scbtest_seq_item)
+       `uvm_field_int(int_a, UVM_ALL_ON)
+     `uvm_object_utils_end
+   
+     <span class="comment">//-------------------------------------</span>
+     <span class="comment">// Constructor</span>
+     <span class="comment">//-------------------------------------</span>
+     function cl_scbtest_seq_item::new (string name = &quot;cl_scbtest_seq_item&quot;);
+        super.new(name);
+     endfunction
+   endclass: cl_scbtest_seq_item
+
+   class cl_scbtest_test extends uvm_test;
+     <span class="comment">//-------------------------------------</span>
+     <span class="comment">// Non randomizable variables</span>
+     <span class="comment">//-------------------------------------</span>
+     cl_scbtest_env scbtest_env;
+   
+     <span class="comment">//-------------------------------------</span>
+     <span class="comment">// UVM Macros</span>
+     <span class="comment">//-------------------------------------</span>
+     `uvm_component_utils(cl_scbtest_test)
+   
+     <span class="comment">//-------------------------------------</span>
+     <span class="comment">// Constructor</span>
+     <span class="comment">//-------------------------------------</span>
+     function new(string name = &quot;cl_scbtest_test&quot;, uvm_component parent = null);
+       super.new(name, parent);
+     endfunction: new
+   
+     <span class="comment">//-------------------------------------</span>
+     <span class="comment">// UVM Phase methods</span>
+     <span class="comment">//-------------------------------------</span>
+     function void build_phase(uvm_phase phase);
+       super.build_phase(phase);
+       scbtest_env = cl_scbtest_env::type_id::create(&quot;scbtest_env&quot;, this);
+     endfunction: build_phase
+   
+     task run_phase(uvm_phase phase);
+       super.run_phase(phase);
+       begin
+         cl_scbtest_seq_item item1;
+         item1 = cl_scbtest_seq_item::type_id::create(&quot;item1&quot;);
+         item1.int_a = &apos;h3a;
+         scbtest_env.syoscb.add_item(&quot;Q1&quot;, &quot;P1&quot;, item1);
+       end
+       begin
+         cl_scbtest_seq_item item1;
+         item1 = cl_scbtest_seq_item::type_id::create(&quot;item1&quot;);
+         item1.int_a = &apos;h3a;
+         scbtest_env.syoscb.add_item(&quot;Q2&quot;, &quot;P1&quot;, item1);
+       end
+     endtask: run_phase
+   endclass: cl_scbtest_test
+</pre></div><h2><a class="anchor" id="sTLMAPIHookUp">
+TLM based API hook up</a></h2>
+<p>The TLM API is even easier to use than the function based API. The scoreboard provides generic UVM subscribers which can be connected to anything which has a UVM analysis port (e.g. a UVM monitor). Typically, the UVM agents inside the UVM environment contain one or more monitors with UVM analysis ports which should be connected to the scoreboard. The following example has two agents which each has a monitor. The monitors are connected to Q1 and Q2 in the scoreboard:</p>
+<div class="fragment"><pre class="fragment">   <span class="keyword">import</span> pk_syoscb::*;
+
+   <span class="keyword">class </span>cl_scbtest_env <span class="keyword">extends</span> uvm_env;
+
+     <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a>     syoscb;   
+     <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a> syoscb_cfg;
+     myagent       agent1;
+     myagent       agent2;
+
+     ...
+
+     function void build_phase(uvm_phase phase);
+       
+       ...     
+
+       <span class="comment">// Configure and create the scoreboard</span>
+       <span class="comment">// Create and configure the agents</span>
+       
+       ...     
+
+     endfunction: build_phase
+
+     ...
+
+     function void connect_phase(uvm_phase phase);
+       super.connect_phase(phase);
+
+       begin
+         <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a> subscriber;
+
+         <span class="comment">// Get the subscriber for Producer: P1 for queue: Q1 and connect it</span>
+         <span class="comment">// to the UVM monitor producing transactions for this queue</span>
+         subscriber = this.syoscb.get_subscriber(&quot;Q1&quot;, &quot;P1&quot;);
+         this.agent1.mon.&lt;analysis port&gt;.connect(subscriber.analysis_export);
+
+         <span class="comment">// Get the subscriber for Producer: P1 for queue: Q2 and connect it</span>
+         <span class="comment">// to the UVM monitor producing transactions for this queue</span>
+         subscriber = this.syoscb.get_subscriber(&quot;Q2&quot;, &quot;P1&quot;);
+         this.agent1.mon.&lt;analysis port&gt;.connect(subscriber.analysis_export);
+       end
+     endfunction: connect_phase
 </pre></div><h2><a class="anchor" id="sFactory">
 Factory overwrites</a></h2>
-<p>Finally, the wanted queue and compare algorithm implementation needs to be selected. This is done by facotry overwrites since they can be changed test etc.</p>
+<p>Finally, the wanted queue and compare algorithm implementation needs to be selected. This is done by factory overwrites since they can be changed test etc.</p>
 <p><b>NOTE: This MUST be done before creating the scoreboard!</b></p>
-<p>The following queue implemenations are available:</p>
+<p>The following queue implementations are available:</p>
 <ol type="1">
-<li>Standard SV squeue (<a class="el" href="classcl__syoscb__queue__std.html">cl_syoscb_queue_std</a>)</li>
+<li>Standard SV queue (<a class="el" href="classcl__syoscb__queue__std.html" title="Standard implementation of a queue.">cl_syoscb_queue_std</a>)</li>
 </ol>
-<p>and the following compare alorithms are available:</p>
+<p>and the following compare algorithms are available:</p>
 <ol type="1">
-<li>Out-of-Order (<a class="el" href="classcl__syoscb__compare__ooo.html">cl_syoscb_compare_ooo</a>)</li>
+<li>Out-of-Order (cl_syoscb_compare_ooo)</li>
+<li>In-Order (<a class="el" href="classcl__syoscb__compare__io.html" title="Class which implements the in order compare algorithm.">cl_syoscb_compare_io</a>)</li>
 </ol>
 <p>The following example shows how they are configured:</p>
 <div class="fragment"><pre class="fragment">   cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              
@@ -180,7 +300,7 @@ Factory overwrites</a></h2>
 <div class="fragment"><pre class="fragment">   function <span class="keywordtype">void</span> cl_scbtest_env::build_phase(uvm_phase phase);
      super.build_phase(phase);
 
-     <span class="comment">// USe the standard SV queue implementation as scoreboard queue</span>
+     <span class="comment">// Use the standard SV queue implementation as scoreboard queue</span>
      cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              
                                                 cl_syoscb_queue_std::get_type(),
                                                 <span class="stringliteral">&quot;*&quot;</span>);
@@ -199,9 +319,9 @@ Factory overwrites</a></h2>
 <span class="stringliteral">     void&apos;</span>(this.syoscb_cfg.set_producer(<span class="stringliteral">&quot;P1&quot;</span>, {<span class="stringliteral">&quot;Q1&quot;</span>, <span class="stringliteral">&quot;Q2&quot;</span>})); 
 
      <span class="comment">// Pass the scoreboard configuration object to the config_db</span>
-     uvm_config_db #(<a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>)::<span class="keyword">set</span>(<span class="keyword">this</span>, <span class="stringliteral">&quot;syoscb&quot;</span>, <span class="stringliteral">&quot;cfg&quot;</span>, this.syoscb_cfg);
+     uvm_config_db #(<a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>)::<span class="keyword">set</span>(<span class="keyword">this</span>, <span class="stringliteral">&quot;syoscb&quot;</span>, <span class="stringliteral">&quot;cfg&quot;</span>, this.syoscb_cfg);
 
-     <span class="comment">// Create the scoreaboard</span>
+     <span class="comment">// Create the scoreboard</span>
      this.syoscb = cl_syoscb::type_id::create(<span class="stringliteral">&quot;syoscb&quot;</span>, <span class="keyword">this</span>);
                
      ...
@@ -213,7 +333,7 @@ Factory overwrites</a></h2>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -265,13 +385,13 @@ Factory overwrites</a></h2>
 <table border="1" width = "100%">
   <tr>
     <td width = "20%">
-       <address style="text-align: left;"><small>
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.2<br>
-       </small></address>
+     <img src="syosil.jpg">
     </td>
     <td width = "60%">
-       <address style="text-align: center;"><small>
-       Copyright 2014 SyoSil ApS<br>
+       <address style="text-align: center;">
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.1<br>
+       <br>
+       Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
        <br>
       Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -284,14 +404,14 @@ Factory overwrites</a></h2>
       distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
       implied. See the License for the specific language governing permissions and limitations under
       the License.
-       </small></address>
+      </address>
     </td>
     <td width = "20%">
       <address style="text-align: right;"><small>
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Wed Feb 25 04:01:41 2015</small></address>
+      Thu Jun 4 23:02:22 2015</small></address>
    </td>
   </tr>
 </table>

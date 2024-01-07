@@ -60,7 +60,6 @@ window.onload = initDynSections;
     <ul>
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
       <li><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
-      <li><a href="namespaces.html"><span>Packages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li><a href="dirs.html"><span>Directories</span></a></li>
@@ -90,20 +89,19 @@ window.onload = initDynSections;
 </div>
 <div class="contents">
 <h1>cl_syoscb_compare_base Member List</h1>This is the complete list of members for <a class="el" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a>, including all inherited members.<table>
-  <tr class="memlist"><td><a class="el" href="classcl__syoscb__compare__base.html#a99415805574bfcb0bbf8e20a761945b0">compare</a>()</td><td><a class="el" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a></td><td><code> [virtual]</code></td></tr>
-  <tr class="memlist"><td><a class="el" href="classcl__syoscb__compare__base.html#abac7f8c3bdef13fcae5bfddd09f411d5">compare_do</a>()</td><td><a class="el" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a></td><td><code> [virtual]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classcl__syoscb__compare__base.html#a50220bf3939fd5d2c17f1e1ae7a794ba">cfg</a></td><td><a class="el" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a></td><td><code> [protected]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classcl__syoscb__compare__base.html#ae16d1f2c1a75d56ed5c955e3a14dd9db">compare</a>()</td><td><a class="el" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a></td><td><code> [virtual]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="classcl__syoscb__compare__base.html#ab2cef03989c4c28994c6cf52c5742bc9">compare_do</a>()</td><td><a class="el" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a></td><td><code> [virtual]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="classcl__syoscb__compare__base.html#aa04cfd45a4bf05066cef409481d097b1">get_cfg</a>()</td><td><a class="el" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classcl__syoscb__compare__base.html#a35dfc9824d56bacb7ddf21437afa5b7b">get_primary_queue_name</a>()</td><td><a class="el" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classcl__syoscb__compare__base.html#a5a82cea4ab4296f7312cf0f366253685">new</a>(string name=&quot;cl_syoscb_compare_base&quot;)</td><td><a class="el" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="classcl__syoscb__compare__base.html#a2f96c175e5bc576cc9fc33b09525e33f">set_cfg</a>(cl_syoscb_cfg cfg)</td><td><a class="el" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="classcl__syoscb__compare__base.html#af4e83124be9197ce3f09b0b38a699359">uvm_object_utils</a>(cl_syoscb_compare_base) cl_syoscb_cfg cfg</td><td><a class="el" href="classcl__syoscb__compare__base.html">cl_syoscb_compare_base</a></td><td></td></tr>
 </table></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -155,13 +153,13 @@ window.onload = initDynSections;
 <table border="1" width = "100%">
   <tr>
     <td width = "20%">
-       <address style="text-align: left;"><small>
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.2<br>
-       </small></address>
+     <img src="syosil.jpg">
     </td>
     <td width = "60%">
-       <address style="text-align: center;"><small>
-       Copyright 2014 SyoSil ApS<br>
+       <address style="text-align: center;">
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.1<br>
+       <br>
+       Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
        <br>
       Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -174,14 +172,14 @@ window.onload = initDynSections;
       distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
       implied. See the License for the specific language governing permissions and limitations under
       the License.
-       </small></address>
+      </address>
     </td>
     <td width = "20%">
       <address style="text-align: right;"><small>
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Wed Feb 25 04:01:41 2015</small></address>
+      Thu Jun 4 23:02:22 2015</small></address>
    </td>
   </tr>
 </table>

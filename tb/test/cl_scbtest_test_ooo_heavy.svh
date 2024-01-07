@@ -22,33 +22,40 @@
 // puts the CPU to sleep.
 
 class cl_scbtest_test_ooo_heavy extends cl_scbtest_test_base;
-   `uvm_component_utils(cl_scbtest_test_ooo_heavy)
-   extern function new(string name = "cl_scbtest_test_ooo_heavy", uvm_component parent = null);
-   extern virtual function void pre_build();
-   extern task run_phase(uvm_phase phase);
-endclass : cl_scbtest_test_ooo_heavy
+  //-------------------------------------
+  // UVM Macros
+  //-------------------------------------
+  `uvm_component_utils(cl_scbtest_test_ooo_heavy)
+
+  //-------------------------------------
+  // Constructor
+  //-------------------------------------
+  extern function new(string name = "cl_scbtest_test_ooo_heavy", uvm_component parent = null);
+
+  //-------------------------------------
+  // UVM Phase methods
+  //-------------------------------------
+  extern task run_phase(uvm_phase phase);
+endclass: cl_scbtest_test_ooo_heavy
 
 function cl_scbtest_test_ooo_heavy::new(string name = "cl_scbtest_test_ooo_heavy", uvm_component parent = null);
-   super.new(name, parent);
+  super.new(name, parent);
 endfunction : new
 
-function void cl_scbtest_test_ooo_heavy::pre_build();  // config changes to base test
-endfunction : pre_build
-
 task cl_scbtest_test_ooo_heavy::run_phase(uvm_phase phase);
-   super.run_phase(phase);
-   for (int i=0; i<1000; i++) begin
-      begin
-         cl_scbtest_seq_item item1;
-         item1 = cl_scbtest_seq_item::type_id::create("item1");
-         item1.int_a = i;
-         scbtest_env.syoscb.add_item("Q1", "P1", item1);
-      end
-      begin
-         cl_scbtest_seq_item item1;
-         item1 = cl_scbtest_seq_item::type_id::create("item1");
-         item1.int_a = i+'h80000000;
-         scbtest_env.syoscb.add_item("Q2", "P1", item1);
-      end
-   end
-endtask : run_phase
+  super.run_phase(phase);
+  for (int i=0; i<1000; i++) begin
+    begin
+      cl_scbtest_seq_item item1;
+      item1 = cl_scbtest_seq_item::type_id::create("item1");
+      item1.int_a = i;
+      scbtest_env.syoscb.add_item("Q1", "P1", item1);
+    end
+    begin
+      cl_scbtest_seq_item item1;
+      item1 = cl_scbtest_seq_item::type_id::create("item1");
+      item1.int_a = i+'h80000000;
+      scbtest_env.syoscb.add_item("Q2", "P1", item1);
+    end
+  end
+endtask: run_phase

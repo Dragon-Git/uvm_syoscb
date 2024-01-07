@@ -60,7 +60,6 @@ window.onload = initDynSections;
     <ul>
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
       <li><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
-      <li><a href="namespaces.html"><span>Packages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li><a href="dirs.html"><span>Directories</span></a></li>
@@ -88,79 +87,242 @@ window.onload = initDynSections;
   </div>
 </div>
 <div class="contents">
-<h1>cl_syoscb_cfg.svh</h1><a href="cl__syoscb__cfg_8svh.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a><a class="code" href="classcl__syoscb__cfg.html">00001</a> <span class="keyword">class </span><a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a> <span class="keyword">extends</span> uvm_object;
-<a name="l00002"></a>00002    <span class="comment">//---------------------------------</span>
-<a name="l00003"></a>00003    <span class="comment">// non randomizable member variables</span>
-<a name="l00004"></a>00004    <span class="comment">//---------------------------------</span>
-<a name="l00005"></a><a class="code" href="classcl__syoscb__cfg.html#afeb59b2f15d9fa1e65ac52a482af418c">00005</a>    <a class="code" href="classcl__syoscb__queue.html">cl_syoscb_queue</a>     <a class="code" href="classcl__syoscb__cfg.html#afeb59b2f15d9fa1e65ac52a482af418c">queues</a>[string];
-<a name="l00006"></a><a class="code" href="classcl__syoscb__cfg.html#a2c63d26ec881bff645c3b934f46b0639">00006</a>    <a class="code" href="classcl__syoscb__cfg__pl.html">cl_syoscb_cfg_pl</a> <a class="code" href="classcl__syoscb__cfg.html#a2c63d26ec881bff645c3b934f46b0639">producers</a>[string];
-<a name="l00007"></a><a class="code" href="classcl__syoscb__cfg.html#aa09d6f18b42063fff61d3c5459256f05">00007</a>    string               <a class="code" href="classcl__syoscb__cfg.html#aa09d6f18b42063fff61d3c5459256f05">primary_queue</a>;
-<a name="l00008"></a>00008 <span class="comment">// TBD   bit              full_scb_dump;</span>
-<a name="l00009"></a>00009 <span class="comment">// TBD  int unsigned     max_queue_size[string];</span>
-<a name="l00010"></a>00010 <span class="comment">// TBD  int unsigned     full_max_queue_size[string];</span>
-<a name="l00011"></a>00011 <span class="comment">// TBD  string           full_scb_type[];</span>
-<a name="l00012"></a>00012 <span class="comment">// TBD  int unsigned     item_time_out_queue[string];</span>
-<a name="l00013"></a>00013 <span class="comment">// TBD  int unsigned     item_time_out_producer[string];</span>
-<a name="l00014"></a>00014 
-<a name="l00015"></a>00015    `<a class="code" href="classcl__syoscb__cfg.html#a0e62e5a8d993029fe89a92542cd5cd87">uvm_object_utils_begin</a>(cl_syoscb_cfg)
-<a name="l00016"></a>00016      `<a class="code" href="classcl__syoscb__cfg.html#a59717709b48475264fc94c4374501bae">uvm_field_aa_object_string</a>(queues, UVM_DEFAULT)
-<a name="l00017"></a>00017      `<a class="code" href="classcl__syoscb__cfg.html#a59717709b48475264fc94c4374501bae">uvm_field_aa_object_string</a>(producers, UVM_DEFAULT)
-<a name="l00018"></a>00018      `uvm_field_string(primary_queue, UVM_DEFAULT)
-<a name="l00019"></a>00019    `uvm_object_utils_end
+<h1>cl_syoscb_cfg.svh</h1><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/// Configuration class for the SyoSil UVM scoreboard</span>
+<a name="l00002"></a><a class="code" href="classcl__syoscb__cfg.html">00002</a> <span class="comment"></span><span class="keyword">class </span><a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a> <span class="keyword">extends</span> uvm_object;
+<a name="l00003"></a>00003   <span class="comment">//---------------------------------</span>
+<a name="l00004"></a>00004   <span class="comment">// Non randomizable member variables</span>
+<a name="l00005"></a>00005   <span class="comment">//---------------------------------</span><span class="comment"></span>
+<a name="l00006"></a>00006 <span class="comment">  /// Associative array holding handles to each queue. Indexed by queue name</span>
+<a name="l00007"></a>00007 <span class="comment"></span>  local <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>  queues[string];
+<a name="l00008"></a>00008 <span class="comment"></span>
+<a name="l00009"></a>00009 <span class="comment">  /// Associative array indexed by producer name. Returns the list of queues which</span>
+<a name="l00010"></a>00010 <span class="comment">  /// this producer is related to.</span>
+<a name="l00011"></a>00011 <span class="comment"></span>  local cl_syoscb_cfg_pl producers[string];
+<a name="l00012"></a>00012   local string           primary_queue;
+<a name="l00013"></a>00013 <span class="comment"></span>
+<a name="l00014"></a>00014 <span class="comment">  /// 1&apos;b0 =&gt; Calls to cl_syoscb::add_item will clone the uvm_sequence_item</span>
+<a name="l00015"></a>00015 <span class="comment">  /// 1&apos;b1 =&gt; Calls to cl_syoscb::add_item will not clone the uvm_sequence_item</span>
+<a name="l00016"></a>00016 <span class="comment"></span>  local bit disable_clone = 1&apos;b0;
+<a name="l00017"></a>00017 <span class="comment"></span>
+<a name="l00018"></a>00018 <span class="comment">  /// Maximum number of elements in each queue before an error is signalled. 0 means no limit (default)</span>
+<a name="l00019"></a>00019 <span class="comment"></span>  local int unsigned     max_queue_size[string];
 <a name="l00020"></a>00020 
-<a name="l00021"></a>00021   extern function <a class="code" href="classcl__syoscb__cfg.html#a4c6ddbbe0bdb073cb2a5343271dfe4ab">new</a>(string name = &quot;cl_syoscb_cfg&quot;);
-<a name="l00022"></a>00022   extern function void <a class="code" href="classcl__syoscb__cfg.html#a676fd117aa8f2d4d0f1a81da0a0efe63">set_queues</a>(string queue_names[]);
-<a name="l00023"></a>00023   extern function void <a class="code" href="classcl__syoscb__cfg.html#a3da7c1920ef35cfe8b2b030ddd80e1ee">get_queues</a>(output string queue_names[]);
-<a name="l00024"></a>00024   extern function bit <a class="code" href="classcl__syoscb__cfg.html#a9386a9f42400830a58a629f22042d9fe">set_producer</a>(string producer, queue_names[]);
-<a name="l00025"></a>00025   extern function bit <a class="code" href="classcl__syoscb__cfg.html#af78cc5be3554089d3726e2f48e06b298">set_primary_queue</a>(string primary_queue_name);
+<a name="l00021"></a>00021 <span class="comment">// TBD::JSA   local bit              full_scb_dump;</span>
+<a name="l00022"></a>00022 <span class="comment">// TBD::JSA   local int unsigned     full_max_queue_size[string];</span>
+<a name="l00023"></a>00023 <span class="comment">// TBD::JSA   local string           full_scb_type[];</span>
+<a name="l00024"></a>00024 <span class="comment">// TBD::JSA   local int unsigned     item_time_out_queue[string];</span>
+<a name="l00025"></a>00025 <span class="comment">// TBD::JSA   local int unsigned     item_time_out_producer[string];</span>
 <a name="l00026"></a>00026 
-<a name="l00027"></a>00027 endclass : <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>
-<a name="l00028"></a>00028 
-<a name="l00029"></a>00029 
-<a name="l00030"></a><a class="code" href="classcl__syoscb__cfg.html#a4c6ddbbe0bdb073cb2a5343271dfe4ab">00030</a> function <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a4c6ddbbe0bdb073cb2a5343271dfe4ab">new</a>(string name = &quot;cl_syoscb_cfg&quot;);
-<a name="l00031"></a>00031    super.<a class="code" href="classcl__syoscb__cfg.html#a4c6ddbbe0bdb073cb2a5343271dfe4ab">new</a>(name);
-<a name="l00032"></a>00032 endfunction : <a class="code" href="classcl__syoscb__cfg.html#a4c6ddbbe0bdb073cb2a5343271dfe4ab">new</a>
-<a name="l00033"></a>00033 
-<a name="l00034"></a><a class="code" href="classcl__syoscb__cfg.html#a676fd117aa8f2d4d0f1a81da0a0efe63">00034</a> function void <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a676fd117aa8f2d4d0f1a81da0a0efe63">set_queues</a>(string queue_names[]);
-<a name="l00035"></a>00035    foreach(queue_names[i]) begin
-<a name="l00036"></a>00036      this.<a class="code" href="classcl__syoscb__cfg.html#afeb59b2f15d9fa1e65ac52a482af418c">queues</a>[queue_names[i]] = null;
-<a name="l00037"></a>00037    end
-<a name="l00038"></a>00038 endfunction : <a class="code" href="classcl__syoscb__cfg.html#a676fd117aa8f2d4d0f1a81da0a0efe63">set_queues</a>
-<a name="l00039"></a>00039 
-<a name="l00040"></a>00040 <span class="comment">// TBD: Can be fixed as a return type by using a typedef</span>
-<a name="l00041"></a>00041 <span class="comment">// TBD: The implementation is a bit clumsy...</span>
-<a name="l00042"></a><a class="code" href="classcl__syoscb__cfg.html#a3da7c1920ef35cfe8b2b030ddd80e1ee">00042</a> function void <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a3da7c1920ef35cfe8b2b030ddd80e1ee">get_queues</a>(output string queue_names[]);
-<a name="l00043"></a>00043    string queue_name;
-<a name="l00044"></a>00044    int    unsigned idx = 0;
-<a name="l00045"></a>00045    queue_names = <a class="code" href="classcl__syoscb__cfg.html#a4c6ddbbe0bdb073cb2a5343271dfe4ab">new</a>[this.<a class="code" href="classcl__syoscb__cfg.html#afeb59b2f15d9fa1e65ac52a482af418c">queues</a>.size()];
-<a name="l00046"></a>00046    while(this.queues.next(queue_name)) begin
-<a name="l00047"></a>00047       <span class="comment">//$display(&quot;get_queues: %s&quot;, queue_name);</span>
-<a name="l00048"></a>00048       queue_names[idx++] = queue_name;
-<a name="l00049"></a>00049    end
-<a name="l00050"></a>00050 endfunction : <a class="code" href="classcl__syoscb__cfg.html#a3da7c1920ef35cfe8b2b030ddd80e1ee">get_queues</a>
-<a name="l00051"></a>00051 
-<a name="l00052"></a><a class="code" href="classcl__syoscb__cfg.html#a9386a9f42400830a58a629f22042d9fe">00052</a> function bit <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a9386a9f42400830a58a629f22042d9fe">set_producer</a>(string producer, queue_names[]);
-<a name="l00053"></a>00053    <a class="code" href="classcl__syoscb__cfg__pl.html">cl_syoscb_cfg_pl</a> prod_list = <a class="code" href="classcl__syoscb__cfg.html#a4c6ddbbe0bdb073cb2a5343271dfe4ab">new</a>();
-<a name="l00054"></a>00054    <span class="comment">// TBD: Here there should be a check on the queue names</span>
-<a name="l00055"></a>00055    prod_list.set_list(queue_names);
-<a name="l00056"></a>00056    this.<a class="code" href="classcl__syoscb__cfg.html#a2c63d26ec881bff645c3b934f46b0639">producers</a>[producer] = prod_list;
-<a name="l00057"></a>00057    <span class="comment">// TBD: Shall be changed</span>
-<a name="l00058"></a>00058    return(1&apos;b1);
-<a name="l00059"></a>00059 endfunction: <a class="code" href="classcl__syoscb__cfg.html#a9386a9f42400830a58a629f22042d9fe">set_producer</a>
-<a name="l00060"></a>00060 
-<a name="l00061"></a><a class="code" href="classcl__syoscb__cfg.html#af78cc5be3554089d3726e2f48e06b298">00061</a> function bit <a class="code" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#af78cc5be3554089d3726e2f48e06b298">set_primary_queue</a>(string primary_queue_name);
-<a name="l00062"></a>00062    <span class="comment">// TBD: Here the should be an existence check on the queue</span>
-<a name="l00063"></a>00063    this.<a class="code" href="classcl__syoscb__cfg.html#aa09d6f18b42063fff61d3c5459256f05">primary_queue</a> = primary_queue_name;
-<a name="l00064"></a>00064    <span class="comment">// TBD: Shall be changed</span>
-<a name="l00065"></a>00065    return(1&apos;b1);
-<a name="l00066"></a>00066 endfunction: <a class="code" href="classcl__syoscb__cfg.html#af78cc5be3554089d3726e2f48e06b298">set_primary_queue</a>
+<a name="l00027"></a>00027   <span class="comment">//-------------------------------------</span>
+<a name="l00028"></a>00028   <span class="comment">// UVM Macros</span>
+<a name="l00029"></a>00029   <span class="comment">//-------------------------------------</span>
+<a name="l00030"></a>00030   `uvm_object_utils_begin(cl_syoscb_cfg)
+<a name="l00031"></a>00031     `uvm_field_aa_object_string(queues,      UVM_DEFAULT)
+<a name="l00032"></a>00032     `uvm_field_aa_object_string(producers,   UVM_DEFAULT)
+<a name="l00033"></a>00033     `uvm_field_string(primary_queue,         UVM_DEFAULT) 
+<a name="l00034"></a>00034     `uvm_field_int(disable_clone,            UVM_DEFAULT)
+<a name="l00035"></a>00035     `uvm_field_aa_int_string(max_queue_size, UVM_DEFAULT)
+<a name="l00036"></a>00036   `uvm_object_utils_end
+<a name="l00037"></a>00037 
+<a name="l00038"></a>00038   <span class="comment">//-------------------------------------</span>
+<a name="l00039"></a>00039   <span class="comment">// Constructor</span>
+<a name="l00040"></a>00040   <span class="comment">//-------------------------------------</span>
+<a name="l00041"></a>00041   extern function new(string name = &quot;cl_syoscb_cfg&quot;);
+<a name="l00042"></a>00042 
+<a name="l00043"></a>00043   <span class="comment">//-------------------------------------</span>
+<a name="l00044"></a>00044   <span class="comment">// Configuration API</span>
+<a name="l00045"></a>00045   <span class="comment">//-------------------------------------</span>
+<a name="l00046"></a>00046   extern function <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a> <a class="code" href="classcl__syoscb__cfg.html#ab0c58393e3df2c575ee49044dd0bb9f7" title="Configuration API: Returns a queue handle for the specificed queue">get_queue</a>(string queue_name);
+<a name="l00047"></a>00047   extern function void <a class="code" href="classcl__syoscb__cfg.html#ad30805eb6ea6a074b2673325177ddc4a" title="Configuration API: Sets the queue object for a given queue">set_queue</a>(string queue_name, cl_syoscb_queue queue);
+<a name="l00048"></a>00048   extern function void <a class="code" href="classcl__syoscb__cfg.html#a3da7c1920ef35cfe8b2b030ddd80e1ee" title="Configuration API: Returns all queue names a string list">get_queues</a>(output string queue_names[]);
+<a name="l00049"></a>00049   extern function void <a class="code" href="classcl__syoscb__cfg.html#a676fd117aa8f2d4d0f1a81da0a0efe63" title="Configuration API: Will set the legal queues when provides with a list of queue names...">set_queues</a>(string queue_names[]);
+<a name="l00050"></a>00050   extern function bit <a class="code" href="classcl__syoscb__cfg.html#a32d8529ecaa50ec267d0c348138a2a2f" title="Configuration API: Returns 1&amp;#39;b0 if the queue does not exist and 1&amp;#39;b1 if it...">exist_queue</a>(string queue_name);
+<a name="l00051"></a>00051   extern function int unsigned <a class="code" href="classcl__syoscb__cfg.html#ab1d0b6caf28edd029d164cc9d64d0fe6" title="Configuration API: Returns the number of queues">size_queues</a>();
+<a name="l00052"></a>00052   extern function cl_syoscb_cfg_pl <a class="code" href="classcl__syoscb__cfg.html#a50b5ce00366256269397f516bf166269" title="Configuration API: Gets the given producer object for a specified producer">get_producer</a>(string producer);
+<a name="l00053"></a>00053   extern function bit <a class="code" href="classcl__syoscb__cfg.html#a9386a9f42400830a58a629f22042d9fe" title="Configuration API: Sets the given producer for the listed queues">set_producer</a>(string producer, queue_names[]);
+<a name="l00054"></a>00054   extern function bit <a class="code" href="classcl__syoscb__cfg.html#a87bbd8f8fbf1e94ba0f64fa971ae06db" title="Configuration API: Checks if a given producer exists">exist_producer</a>(string producer);
+<a name="l00055"></a>00055   extern function void <a class="code" href="classcl__syoscb__cfg.html#a1ba596973a206feb7c4cf617485dca3f" title="Configuration API: Returns all producers as string list">get_producers</a>(output string producers[]);
+<a name="l00056"></a>00056   extern function string <a class="code" href="classcl__syoscb__cfg.html#a6a015afd02c4aea850269eb4341517fe" title="Configuration API: Gets the primary queue.">get_primary_queue</a>();
+<a name="l00057"></a>00057   extern function bit <a class="code" href="classcl__syoscb__cfg.html#af78cc5be3554089d3726e2f48e06b298" title="Configuration API: Sets the primary queue.">set_primary_queue</a>(string primary_queue_name);
+<a name="l00058"></a>00058   extern function void <a class="code" href="classcl__syoscb__cfg.html#a155c593c718b8b762e42f09d0c860dc2" title="Configuration API: Set the value of the disable_clone member variable">set_disable_clone</a>(bit dc);
+<a name="l00059"></a>00059   extern function bit <a class="code" href="classcl__syoscb__cfg.html#ab96e7f30252ad10aa193cc34d4de918d" title="Configuration API: Get the value of the disable_clone member variable">get_disable_clone</a>();
+<a name="l00060"></a>00060   extern function void <a class="code" href="classcl__syoscb__cfg.html#a96600ba778f0dbc1978e57d8c074daf4" title="Configuration API: Set the maximum number of items allowed for a given queue.">set_max_queue_size</a>(string queue_name, int unsigned mqs);
+<a name="l00061"></a>00061   extern function int unsigned <a class="code" href="classcl__syoscb__cfg.html#adf0dbd3835b9434d98481448261bf7c5" title="Configuration API: Returns the maximum number of allowed items for a given queue...">get_max_queue_size</a>(string queue_name);
+<a name="l00062"></a>00062 endclass : <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>
+<a name="l00063"></a>00063 
+<a name="l00064"></a>00064 function <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::new(string name = &quot;cl_syoscb_cfg&quot;);
+<a name="l00065"></a>00065   super.new(name);
+<a name="l00066"></a>00066 endfunction: new
+<a name="l00067"></a>00067 <span class="comment"></span>
+<a name="l00068"></a>00068 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Returns a queue handle for the specificed queue</span>
+<a name="l00069"></a><a class="code" href="classcl__syoscb__cfg.html#ab0c58393e3df2c575ee49044dd0bb9f7">00069</a> <span class="comment"></span>function <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a> <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#ab0c58393e3df2c575ee49044dd0bb9f7" title="Configuration API: Returns a queue handle for the specificed queue">get_queue</a>(string queue_name);
+<a name="l00070"></a>00070   <span class="comment">// If queue does not exist then return NULL</span>
+<a name="l00071"></a>00071   if(!this.exist_queue(queue_name)) begin
+<a name="l00072"></a>00072     `uvm_info(&quot;CFG_ERROR&quot;, $sformatf(&quot;Queue: %0s is not found&quot;, queue_name), UVM_DEBUG);
+<a name="l00073"></a>00073     return(null);
+<a name="l00074"></a>00074   end
+<a name="l00075"></a>00075 
+<a name="l00076"></a>00076   return(this.queues[queue_name]);
+<a name="l00077"></a>00077 endfunction: <a class="code" href="classcl__syoscb__cfg.html#ab0c58393e3df2c575ee49044dd0bb9f7" title="Configuration API: Returns a queue handle for the specificed queue">get_queue</a>
+<a name="l00078"></a>00078 <span class="comment"></span>
+<a name="l00079"></a>00079 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Sets the queue object for a given queue</span>
+<a name="l00080"></a><a class="code" href="classcl__syoscb__cfg.html#ad30805eb6ea6a074b2673325177ddc4a">00080</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#ad30805eb6ea6a074b2673325177ddc4a" title="Configuration API: Sets the queue object for a given queue">set_queue</a>(string queue_name, cl_syoscb_queue queue);
+<a name="l00081"></a>00081   this.queues[queue_name] = queue;
+<a name="l00082"></a>00082 endfunction: <a class="code" href="classcl__syoscb__cfg.html#ad30805eb6ea6a074b2673325177ddc4a" title="Configuration API: Sets the queue object for a given queue">set_queue</a>
+<a name="l00083"></a>00083 <span class="comment"></span>
+<a name="l00084"></a>00084 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Returns all queue names a string list</span>
+<a name="l00085"></a><a class="code" href="classcl__syoscb__cfg.html#a3da7c1920ef35cfe8b2b030ddd80e1ee">00085</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a3da7c1920ef35cfe8b2b030ddd80e1ee" title="Configuration API: Returns all queue names a string list">get_queues</a>(output string queue_names[]);
+<a name="l00086"></a>00086   string queue_name;
+<a name="l00087"></a>00087   int    unsigned idx = 0;
+<a name="l00088"></a>00088 
+<a name="l00089"></a>00089   queue_names = new[this.queues.size()];
+<a name="l00090"></a>00090 
+<a name="l00091"></a>00091   while(this.queues.next(queue_name)) begin
+<a name="l00092"></a>00092     queue_names[idx++] = queue_name;
+<a name="l00093"></a>00093   end
+<a name="l00094"></a>00094 endfunction: <a class="code" href="classcl__syoscb__cfg.html#a3da7c1920ef35cfe8b2b030ddd80e1ee" title="Configuration API: Returns all queue names a string list">get_queues</a>
+<a name="l00095"></a>00095 <span class="comment"></span>
+<a name="l00096"></a>00096 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Will set the legal queues when provides with a list of queue names.</span>
+<a name="l00097"></a>00097 <span class="comment">/// An example could be: set_queues({&quot;Q1&quot;, &quot;Q2&quot;})</span>
+<a name="l00098"></a>00098 <span class="comment">/// Will set the max_queue_size for each queue to 0 (no limit) as default</span>
+<a name="l00099"></a><a class="code" href="classcl__syoscb__cfg.html#a676fd117aa8f2d4d0f1a81da0a0efe63">00099</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a676fd117aa8f2d4d0f1a81da0a0efe63" title="Configuration API: Will set the legal queues when provides with a list of queue names...">set_queues</a>(string queue_names[]);
+<a name="l00100"></a>00100   foreach(queue_names[i]) begin
+<a name="l00101"></a>00101     this.queues[queue_names[i]] = null;
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103     <span class="comment">// Set default max queue size to no limit</span>
+<a name="l00104"></a>00104     this.max_queue_size[queue_names[i]] = 0;
+<a name="l00105"></a>00105   end
+<a name="l00106"></a>00106 endfunction: <a class="code" href="classcl__syoscb__cfg.html#a676fd117aa8f2d4d0f1a81da0a0efe63" title="Configuration API: Will set the legal queues when provides with a list of queue names...">set_queues</a>
+<a name="l00107"></a>00107 <span class="comment"></span>
+<a name="l00108"></a>00108 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Returns 1&apos;b0 if the queue does not exist and 1&apos;b1 if it exists</span>
+<a name="l00109"></a><a class="code" href="classcl__syoscb__cfg.html#a32d8529ecaa50ec267d0c348138a2a2f">00109</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a32d8529ecaa50ec267d0c348138a2a2f" title="Configuration API: Returns 1&amp;#39;b0 if the queue does not exist and 1&amp;#39;b1 if it...">exist_queue</a>(string queue_name);
+<a name="l00110"></a>00110   return(this.queues.exists(queue_name)==0 ? 1&apos;b0 : 1&apos;b1);
+<a name="l00111"></a>00111 endfunction
+<a name="l00112"></a>00112 <span class="comment"></span>
+<a name="l00113"></a>00113 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Returns the number of queues</span>
+<a name="l00114"></a><a class="code" href="classcl__syoscb__cfg.html#ab1d0b6caf28edd029d164cc9d64d0fe6">00114</a> <span class="comment"></span>function int unsigned <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#ab1d0b6caf28edd029d164cc9d64d0fe6" title="Configuration API: Returns the number of queues">size_queues</a>();
+<a name="l00115"></a>00115   return(this.queues.size());
+<a name="l00116"></a>00116 endfunction
+<a name="l00117"></a>00117 <span class="comment"></span>
+<a name="l00118"></a>00118 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Gets the given producer object for a specified producer</span>
+<a name="l00119"></a><a class="code" href="classcl__syoscb__cfg.html#a50b5ce00366256269397f516bf166269">00119</a> <span class="comment"></span>function cl_syoscb_cfg_pl <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a50b5ce00366256269397f516bf166269" title="Configuration API: Gets the given producer object for a specified producer">get_producer</a>(string producer);
+<a name="l00120"></a>00120   if(this.exist_producer(producer)) begin
+<a name="l00121"></a>00121     return(this.producers[producer]);
+<a name="l00122"></a>00122   end else begin
+<a name="l00123"></a>00123     `uvm_info(&quot;CFG_ERROR&quot;, $sformatf(&quot;Unable to get producer: %s&quot;, producer), UVM_DEBUG);
+<a name="l00124"></a>00124     return(null);
+<a name="l00125"></a>00125   end
+<a name="l00126"></a>00126 endfunction: <a class="code" href="classcl__syoscb__cfg.html#a50b5ce00366256269397f516bf166269" title="Configuration API: Gets the given producer object for a specified producer">get_producer</a>
+<a name="l00127"></a>00127 <span class="comment"></span>
+<a name="l00128"></a>00128 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Sets the given producer for the listed queues</span>
+<a name="l00129"></a><a class="code" href="classcl__syoscb__cfg.html#a9386a9f42400830a58a629f22042d9fe">00129</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a9386a9f42400830a58a629f22042d9fe" title="Configuration API: Sets the given producer for the listed queues">set_producer</a>(string producer, queue_names[]);
+<a name="l00130"></a>00130   cl_syoscb_cfg_pl prod_list;
+<a name="l00131"></a>00131 
+<a name="l00132"></a>00132   <span class="comment">// Check that all queues exists</span>
+<a name="l00133"></a>00133   begin
+<a name="l00134"></a>00134     bit unique_queue_name[string];
+<a name="l00135"></a>00135 
+<a name="l00136"></a>00136     foreach (queue_names[i]) begin
+<a name="l00137"></a>00137       if(!unique_queue_name.exists(queue_names[i])) begin
+<a name="l00138"></a>00138         unique_queue_name[queue_names[i]] = 1&apos;b1;
+<a name="l00139"></a>00139       end else begin
+<a name="l00140"></a>00140         `uvm_info(&quot;CFG_ERROR&quot;, $sformatf(&quot;Unable to set producer: %s. List of queue names contains dublicates&quot;, producer), UVM_DEBUG);
+<a name="l00141"></a>00141         return(1&apos;b0);
+<a name="l00142"></a>00142       end
+<a name="l00143"></a>00143 
+<a name="l00144"></a>00144       <span class="comment">// If queue does not exist then return 1&apos;b0</span>
+<a name="l00145"></a>00145       if(!this.exist_queue(queue_names[i])) begin
+<a name="l00146"></a>00146         `uvm_info(&quot;CFG_ERROR&quot;, $sformatf(&quot;Queue: %0s is not found&quot;, queue_names[i]), UVM_DEBUG);
+<a name="l00147"></a>00147         return(1&apos;b0);
+<a name="l00148"></a>00148       end
+<a name="l00149"></a>00149     end
+<a name="l00150"></a>00150   end
+<a name="l00151"></a>00151 
+<a name="l00152"></a>00152   <span class="comment">// All queues exist -&gt; set the producer</span>
+<a name="l00153"></a>00153   prod_list = new();                    <span class="comment">// Create producer list</span>
+<a name="l00154"></a>00154   prod_list.set_list(queue_names);      <span class="comment">// Set queue names in producer list</span>
+<a name="l00155"></a>00155   this.producers[producer] = prod_list; <span class="comment">// Set producer list for producer</span>
+<a name="l00156"></a>00156 
+<a name="l00157"></a>00157   <span class="comment">// Return 1&apos;b1 since all is good</span>
+<a name="l00158"></a>00158   return(1&apos;b1);
+<a name="l00159"></a>00159 endfunction: <a class="code" href="classcl__syoscb__cfg.html#a9386a9f42400830a58a629f22042d9fe" title="Configuration API: Sets the given producer for the listed queues">set_producer</a>
+<a name="l00160"></a>00160 <span class="comment"></span>
+<a name="l00161"></a>00161 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Checks if a given producer exists</span>
+<a name="l00162"></a><a class="code" href="classcl__syoscb__cfg.html#a87bbd8f8fbf1e94ba0f64fa971ae06db">00162</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a87bbd8f8fbf1e94ba0f64fa971ae06db" title="Configuration API: Checks if a given producer exists">exist_producer</a>(string producer);
+<a name="l00163"></a>00163   return(this.producers.exists(producer)==0 ? 1&apos;b0 : 1&apos;b1);
+<a name="l00164"></a>00164 endfunction
+<a name="l00165"></a>00165 <span class="comment"></span>
+<a name="l00166"></a>00166 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Returns all producers as string list</span>
+<a name="l00167"></a><a class="code" href="classcl__syoscb__cfg.html#a1ba596973a206feb7c4cf617485dca3f">00167</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a1ba596973a206feb7c4cf617485dca3f" title="Configuration API: Returns all producers as string list">get_producers</a>(output string producers[]);
+<a name="l00168"></a>00168   string producer;
+<a name="l00169"></a>00169   int    unsigned idx = 0;
+<a name="l00170"></a>00170 
+<a name="l00171"></a>00171   producers = new[this.producers.size()];
+<a name="l00172"></a>00172 
+<a name="l00173"></a>00173   while(this.producers.next(producer)) begin
+<a name="l00174"></a>00174     producers[idx++] = producer;
+<a name="l00175"></a>00175   end
+<a name="l00176"></a>00176 endfunction: <a class="code" href="classcl__syoscb__cfg.html#a1ba596973a206feb7c4cf617485dca3f" title="Configuration API: Returns all producers as string list">get_producers</a>
+<a name="l00177"></a>00177 <span class="comment"></span>
+<a name="l00178"></a>00178 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Gets the primary queue.</span>
+<a name="l00179"></a>00179 <span class="comment">/// The primary queue is used by the compare algorithms to select which queue to use as the primary one.</span>
+<a name="l00180"></a><a class="code" href="classcl__syoscb__cfg.html#a6a015afd02c4aea850269eb4341517fe">00180</a> <span class="comment"></span>function string <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a6a015afd02c4aea850269eb4341517fe" title="Configuration API: Gets the primary queue.">get_primary_queue</a>();
+<a name="l00181"></a>00181   return(this.primary_queue);
+<a name="l00182"></a>00182 endfunction: <a class="code" href="classcl__syoscb__cfg.html#a6a015afd02c4aea850269eb4341517fe" title="Configuration API: Gets the primary queue.">get_primary_queue</a>
+<a name="l00183"></a>00183 <span class="comment"></span>
+<a name="l00184"></a>00184 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Sets the primary queue.</span>
+<a name="l00185"></a>00185 <span class="comment">/// The primary queue is used by the compare algorithms to select which queue to use as the primary one.</span>
+<a name="l00186"></a><a class="code" href="classcl__syoscb__cfg.html#af78cc5be3554089d3726e2f48e06b298">00186</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#af78cc5be3554089d3726e2f48e06b298" title="Configuration API: Sets the primary queue.">set_primary_queue</a>(string primary_queue_name);
+<a name="l00187"></a>00187   <span class="comment">// If queue does not exist then return 1&apos;b0</span>
+<a name="l00188"></a>00188   if(!this.exist_queue(primary_queue_name)) begin
+<a name="l00189"></a>00189     `uvm_info(&quot;CFG_ERROR&quot;, $sformatf(&quot;Queue: %0s is not found&quot;, primary_queue_name), UVM_DEBUG);
+<a name="l00190"></a>00190     return(1&apos;b0);
+<a name="l00191"></a>00191   end
+<a name="l00192"></a>00192 
+<a name="l00193"></a>00193   <span class="comment">// Set the primary queue</span>
+<a name="l00194"></a>00194   this.primary_queue = primary_queue_name;
+<a name="l00195"></a>00195 
+<a name="l00196"></a>00196   <span class="comment">// Return 1&apos;b1 since all is good</span>
+<a name="l00197"></a>00197   return(1&apos;b1);
+<a name="l00198"></a>00198 endfunction: <a class="code" href="classcl__syoscb__cfg.html#af78cc5be3554089d3726e2f48e06b298" title="Configuration API: Sets the primary queue.">set_primary_queue</a>
+<a name="l00199"></a>00199 <span class="comment"></span>
+<a name="l00200"></a>00200 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Set the value of the disable_clone member variable</span>
+<a name="l00201"></a><a class="code" href="classcl__syoscb__cfg.html#a155c593c718b8b762e42f09d0c860dc2">00201</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a155c593c718b8b762e42f09d0c860dc2" title="Configuration API: Set the value of the disable_clone member variable">set_disable_clone</a>(bit dc);
+<a name="l00202"></a>00202   this.disable_clone = dc;
+<a name="l00203"></a>00203 endfunction
+<a name="l00204"></a>00204 <span class="comment"></span>
+<a name="l00205"></a>00205 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Get the value of the disable_clone member variable</span>
+<a name="l00206"></a><a class="code" href="classcl__syoscb__cfg.html#ab96e7f30252ad10aa193cc34d4de918d">00206</a> <span class="comment"></span>function bit <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#ab96e7f30252ad10aa193cc34d4de918d" title="Configuration API: Get the value of the disable_clone member variable">get_disable_clone</a>();
+<a name="l00207"></a>00207   return(this.disable_clone);
+<a name="l00208"></a>00208 endfunction
+<a name="l00209"></a>00209 <span class="comment"></span>
+<a name="l00210"></a>00210 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Set the maximum number of items allowed for a given queue.</span>
+<a name="l00211"></a>00211 <span class="comment">/// 0 (no limit) is default</span>
+<a name="l00212"></a><a class="code" href="classcl__syoscb__cfg.html#a96600ba778f0dbc1978e57d8c074daf4">00212</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#a96600ba778f0dbc1978e57d8c074daf4" title="Configuration API: Set the maximum number of items allowed for a given queue.">set_max_queue_size</a>(string queue_name, int unsigned mqs);
+<a name="l00213"></a>00213   if(this.exist_queue(queue_name)) begin
+<a name="l00214"></a>00214     this.max_queue_size[queue_name] = mqs;
+<a name="l00215"></a>00215   end else begin
+<a name="l00216"></a>00216     `uvm_fatal(&quot;CFG_ERROR&quot;, $sformatf(&quot;Queue: %s not found when trying to set max_queue_size&quot;, queue_name))  
+<a name="l00217"></a>00217   end
+<a name="l00218"></a>00218 endfunction
+<a name="l00219"></a>00219 <span class="comment"></span>
+<a name="l00220"></a>00220 <span class="comment">/// &lt;b&gt;Configuration API:&lt;/b&gt; Returns the maximum number of allowed items for a given queue.</span>
+<a name="l00221"></a>00221 <span class="comment">/// 0 (no limit) is default</span>
+<a name="l00222"></a><a class="code" href="classcl__syoscb__cfg.html#adf0dbd3835b9434d98481448261bf7c5">00222</a> <span class="comment"></span>function int unsigned <a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>::<a class="code" href="classcl__syoscb__cfg.html#adf0dbd3835b9434d98481448261bf7c5" title="Configuration API: Returns the maximum number of allowed items for a given queue...">get_max_queue_size</a>(string queue_name);
+<a name="l00223"></a>00223   if(this.exist_queue(queue_name)) begin
+<a name="l00224"></a>00224     return(this.max_queue_size[queue_name]);
+<a name="l00225"></a>00225   end else begin
+<a name="l00226"></a>00226     `uvm_fatal(&quot;CFG_ERROR&quot;, $sformatf(&quot;Queue: %s not found when trying to get max_queue_size&quot;, queue_name))
+<a name="l00227"></a>00227     return(0);
+<a name="l00228"></a>00228   end
+<a name="l00229"></a>00229 endfunction
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -212,13 +374,13 @@ window.onload = initDynSections;
 <table border="1" width = "100%">
   <tr>
     <td width = "20%">
-       <address style="text-align: left;"><small>
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.2<br>
-       </small></address>
+     <img src="syosil.jpg">
     </td>
     <td width = "60%">
-       <address style="text-align: center;"><small>
-       Copyright 2014 SyoSil ApS<br>
+       <address style="text-align: center;">
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.1<br>
+       <br>
+       Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
        <br>
       Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -231,14 +393,14 @@ window.onload = initDynSections;
       distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
       implied. See the License for the specific language governing permissions and limitations under
       the License.
-       </small></address>
+      </address>
     </td>
     <td width = "20%">
       <address style="text-align: right;"><small>
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Wed Feb 25 04:01:40 2015</small></address>
+      Thu Jun 4 23:02:22 2015</small></address>
    </td>
   </tr>
 </table>

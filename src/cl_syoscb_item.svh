@@ -16,43 +16,63 @@
 //   the License for the specific language governing
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
+/// The UVM scoreboard item. This item wraps the uvm_sequence_items. This ensures that future
+/// extensions to the UVM scoreboard will always be able to use all uvm_sqeuence_items from
+/// already existing testbenches etc. even htough more META data is added to the wrapping item.
 class cl_syoscb_item extends uvm_object;
+  //-------------------------------------
+  // Non randomizable variables
+  //-------------------------------------
+  /// Hold the name of the producer
+  string producer;
 
-   // TBD: MD5 Checksum
-   string producer;
-   uvm_sequence_item item;
+  /// Handle to the wrapped uvm_sequence_item
+  uvm_sequence_item item;
 
-   `uvm_object_utils_begin(cl_syoscb_item)
-     `uvm_field_string(producer, UVM_DEFAULT)
-     `uvm_field_object(item, UVM_DEFAULT)
-   `uvm_object_utils_end
+  //-------------------------------------
+  // UVM Macros
+  //-------------------------------------
+  `uvm_object_utils_begin(cl_syoscb_item)
+    `uvm_field_string(producer, UVM_DEFAULT)
+    `uvm_field_object(item, UVM_DEFAULT)
+  `uvm_object_utils_end
 
-   extern function new(string name = "cl_syoscb_item");
-   extern function string get_producer();
-   extern function void set_producer(string producer);
-   extern function uvm_sequence_item get_item();
-   extern function void set_item(uvm_sequence_item item);
+  //-------------------------------------
+  // Constructor
+  //-------------------------------------
+  extern function new(string name = "cl_syoscb_item");
 
-endclass : cl_syoscb_item
+  //-------------------------------------
+  // Item API
+  //-------------------------------------
+  extern function string get_producer();
+  extern function void set_producer(string producer);
+  extern function uvm_sequence_item get_item();
+  extern function void set_item(uvm_sequence_item item);
+endclass: cl_syoscb_item
 
 function cl_syoscb_item::new(string name = "cl_syoscb_item");
-   super.new(name);
+  super.new(name);
 endfunction : new 	 
 
+/// <b>Item API:</b> Returns the producer
 function string cl_syoscb_item::get_producer();
-   return(this.producer);
+  return(this.producer);
 endfunction: get_producer
 
+/// <b>Item API:</b> Sets the producer
 function void cl_syoscb_item::set_producer(string producer);
-      // TBD: Check that it is a valid producer
-   this.producer = producer;
+  // The producer has been checked by the parent prior
+  // to the insertion
+  this.producer = producer;
 endfunction: set_producer
 
+/// <b>Item API:</b> Returns the wrapped uvm_sequence_item
 function uvm_sequence_item cl_syoscb_item::get_item();
-   return(this.item);
+  return(this.item);
 endfunction: get_item
 
+/// <b>Item API:</b> Sets the to be wrapped uvm_sequence_item
 function void cl_syoscb_item::set_item(uvm_sequence_item item);
-   this.item = item;
+  this.item = item;
 endfunction: set_item
-

@@ -60,7 +60,6 @@ window.onload = initDynSections;
     <ul>
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
       <li><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
-      <li><a href="namespaces.html"><span>Packages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li><a href="dirs.html"><span>Directories</span></a></li>
@@ -89,41 +88,81 @@ window.onload = initDynSections;
   </div>
 </div>
 <div class="contents">
-<h1>cl_syoscb_queue Class Reference</h1><!-- doxytag: class="cl_syoscb_queue" --><div class="dynheader">
+<h1>cl_syoscb_queue Class Reference</h1><!-- doxytag: class="cl_syoscb_queue" -->
+<p>Class which base concet of a queue.  
+<a href="#_details">More...</a></p>
+<div class="dynheader">
 Inheritance diagram for cl_syoscb_queue:</div>
 <div class="dynsection">
 <div class="center"><img src="classcl__syoscb__queue__inherit__graph.png" border="0" usemap="#cl__syoscb__queue_inherit__map" alt="Inheritance graph"/></div>
 <map name="cl__syoscb__queue_inherit__map" id="cl__syoscb__queue_inherit__map">
-<area shape="rect" id="node3" href="classcl__syoscb__queue__std.html" title="cl_syoscb_queue_std" alt="" coords="5,83,168,112"/></map>
+<area shape="rect" id="node3" href="classcl__syoscb__queue__std.html" title="Standard implementation of a queue." alt="" coords="5,83,168,112"/></map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for cl_syoscb_queue:</div>
+<div class="dynsection">
+<div class="center"><img src="classcl__syoscb__queue__coll__graph.png" border="0" usemap="#cl__syoscb__queue_coll__map" alt="Collaboration graph"/></div>
+<map name="cl__syoscb__queue_coll__map" id="cl__syoscb__queue_coll__map">
+<area shape="rect" id="node2" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard." alt="" coords="5,101,120,131"/><area shape="rect" id="node5" href="classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues." alt="" coords="147,101,379,131"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="classcl__syoscb__queue-members.html">List of all members.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a7c607521bf2d7f1e11b925f0d280ea6b">uvm_component_utils</a> (<a class="el" href="classcl__syoscb__queue.html">cl_syoscb_queue</a>) <a class="el" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a> iterators[<a class="el" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a>]</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#ad3b2567b0c3a36e96936d2ef0a1cb9d1">add_item</a> (string producer, uvm_sequence_item item)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a6a39c6052e61279f73964dd790d5a501">delete_item</a> (int unsigned idx)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual uvm_sequence_item&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a8aeb5aa73238b93a67b0eded170bd2ef">get_item</a> (int unsigned idx)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual int unsigned&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#ae54e6d007b3696f6113c7fc7bfc2ad87">get_size</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#add1067adfa733826869458c1a104bcbd">insert_item</a> (string producer, uvm_sequence_item item, int unsigned idx)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual <br class="typebreak"/>
-<a class="el" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#aa49ceabfea9002e5126f9fcd83654936">create_iterator</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a6d49c2185a33ce4b3b6805b57ab34d5f">delete_iterator</a> (<a class="el" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a> iterator)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#aa5a474a5220840f8fc220cd64aba6270">new</a> (string name, uvm_component parent)</td></tr>
-<tr><td colspan="2"><h2>Public Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int unsigned&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a3b9f8500d7d93d01eda717aac6ef4c28">iter_idx</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">semaphore&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a7ce6c5e6c1b4fcd09f90ec2699cc594c">iter_sem</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a14e4b7b0e2931b2b1e7f54e7cde32152"></a><!-- doxytag: member="cl_syoscb_queue::build_phase" ref="a14e4b7b0e2931b2b1e7f54e7cde32152" args="(uvm_phase phase)" -->
+void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a14e4b7b0e2931b2b1e7f54e7cde32152">build_phase</a> (uvm_phase phase)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Gets the global scoreboard configuration. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28b1b880efb1f93eeb48890914685e43"></a><!-- doxytag: member="cl_syoscb_queue::check_phase" ref="a28b1b880efb1f93eeb48890914685e43" args="(uvm_phase phase)" -->
+void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a28b1b880efb1f93eeb48890914685e43">check_phase</a> (uvm_phase phase)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Checks if the queue is empty. If not then a UVM error is issued. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#ada66fbc0eb1ef86b417fcdeaa5e9b9e0">add_item</a> (string producer, uvm_sequence_item item)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Queue API:</b> Adds an uvm_sequence_item.  <a href="#ada66fbc0eb1ef86b417fcdeaa5e9b9e0"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ff5e60a18767a97056e02baf47b26b8"></a><!-- doxytag: member="cl_syoscb_queue::delete_item" ref="a0ff5e60a18767a97056e02baf47b26b8" args="(int unsigned idx)" -->
+virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a0ff5e60a18767a97056e02baf47b26b8">delete_item</a> (int unsigned idx)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Queue API:</b> Deletes the item at index idx from the queue <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5610529db04d89e3ad4173e9960b04fa"></a><!-- doxytag: member="cl_syoscb_queue::get_item" ref="a5610529db04d89e3ad4173e9960b04fa" args="(int unsigned idx)" -->
+virtual <a class="el" href="classcl__syoscb__item.html">cl_syoscb_item</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a5610529db04d89e3ad4173e9960b04fa">get_item</a> (int unsigned idx)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Queue API:</b> Gets the item at index idx from the queue <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa5f825cc085c487e603257e10bcc3f86"></a><!-- doxytag: member="cl_syoscb_queue::get_size" ref="aa5f825cc085c487e603257e10bcc3f86" args="()" -->
+virtual int unsigned&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#aa5f825cc085c487e603257e10bcc3f86">get_size</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Queue API:</b> Returns the current size of the queue <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a5b02ba85e905f5119ee18239f0e471d3">empty</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Queue API:</b> Returns whether or not the queue is empty.  <a href="#a5b02ba85e905f5119ee18239f0e471d3"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#adbb41d1162a0f3dbb84c657d2274c0cb">insert_item</a> (string producer, uvm_sequence_item item, int unsigned idx)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Queue API:</b> Inserts a uvm_sequence_item at index idx.  <a href="#adbb41d1162a0f3dbb84c657d2274c0cb"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a443750e1bf6c4a231438e821466f1d7e"></a><!-- doxytag: member="cl_syoscb_queue::create_iterator" ref="a443750e1bf6c4a231438e821466f1d7e" args="()" -->
+virtual <br class="typebreak"/>
+<a class="el" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a443750e1bf6c4a231438e821466f1d7e">create_iterator</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Queue API:</b> Creates an iterator for this queue. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a21e2463b97abce478edd3aa94d17372e"></a><!-- doxytag: member="cl_syoscb_queue::delete_iterator" ref="a21e2463b97abce478edd3aa94d17372e" args="(cl_syoscb_queue_iterator_base iterator)" -->
+virtual bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a21e2463b97abce478edd3aa94d17372e">delete_iterator</a> (<a class="el" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a> iterator)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Queue API:</b> Deletes a given iterator for this queue. <br/></td></tr>
+<tr><td colspan="2"><h2>Protected Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab92efb1fb67ec7cc8dfe928a474a3e2b"></a><!-- doxytag: member="cl_syoscb_queue::cfg" ref="ab92efb1fb67ec7cc8dfe928a474a3e2b" args="" -->
+<a class="el" href="classcl__syoscb__cfg.html">cl_syoscb_cfg</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#ab92efb1fb67ec7cc8dfe928a474a3e2b">cfg</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Handle to the configuration. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af73fa6ac19ef7a629ad5f5eddf918780"></a><!-- doxytag: member="cl_syoscb_queue::iterators" ref="af73fa6ac19ef7a629ad5f5eddf918780" args="[cl_syoscb_queue_iterator_base]" -->
+<a class="el" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#af73fa6ac19ef7a629ad5f5eddf918780">iterators</a> [<a class="el" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a>]</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">List of iterators registered with queue. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b9f8500d7d93d01eda717aac6ef4c28"></a><!-- doxytag: member="cl_syoscb_queue::iter_idx" ref="a3b9f8500d7d93d01eda717aac6ef4c28" args="" -->
+int unsigned&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a3b9f8500d7d93d01eda717aac6ef4c28">iter_idx</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Current number of iterators. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ce6c5e6c1b4fcd09f90ec2699cc594c"></a><!-- doxytag: member="cl_syoscb_queue::iter_sem" ref="a7ce6c5e6c1b4fcd09f90ec2699cc594c" args="" -->
+semaphore&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__queue.html#a7ce6c5e6c1b4fcd09f90ec2699cc594c">iter_sem</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Semaphore guarding exclusive access to the queue when multiple iterators are in play. <br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
+<p>Class which base concet of a queue. </p>
+<p>All queues must extend this class and implement the queue API. </p>
 
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00001">1</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
+<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00003">3</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="ad3b2567b0c3a36e96936d2ef0a1cb9d1"></a><!-- doxytag: member="cl_syoscb_queue::add_item" ref="ad3b2567b0c3a36e96936d2ef0a1cb9d1" args="(string producer, uvm_sequence_item item)" -->
+<a class="anchor" id="ada66fbc0eb1ef86b417fcdeaa5e9b9e0"></a><!-- doxytag: member="cl_syoscb_queue::add_item" ref="ada66fbc0eb1ef86b417fcdeaa5e9b9e0" args="(string producer, uvm_sequence_item item)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bit cl_syoscb_queue::add_item </td>
+          <td class="memname">bit cl_syoscb_queue::add_item </td>
           <td>(</td>
           <td class="paramtype">string&nbsp;</td>
           <td class="paramname"> <em>producer</em>, </td>
@@ -143,18 +182,21 @@ Inheritance diagram for cl_syoscb_queue:</div>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#a68f61e7f53901acb3cc50a9001193c0f">cl_syoscb_queue_std</a>.</p>
+<p><b>Queue API:</b> Adds an uvm_sequence_item. </p>
+<p>The implementation must wrap this in a <a class="el" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> object before the item is inserted </p>
 
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00011">11</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
+<p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#a68f61e7f53901acb3cc50a9001193c0f">cl_syoscb_queue_std</a>, and <a class="el" href="classcl__syoscb__queue__std.html#aa131215a6166ff20ec3146386666a1f2">cl_syoscb_queue_std</a>.</p>
+
+<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00084">84</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aa49ceabfea9002e5126f9fcd83654936"></a><!-- doxytag: member="cl_syoscb_queue::create_iterator" ref="aa49ceabfea9002e5126f9fcd83654936" args="()" -->
+<a class="anchor" id="a5b02ba85e905f5119ee18239f0e471d3"></a><!-- doxytag: member="cl_syoscb_queue::empty" ref="a5b02ba85e905f5119ee18239f0e471d3" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a> cl_syoscb_queue::create_iterator </td>
+          <td class="memname">bit cl_syoscb_queue::empty </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -164,105 +206,21 @@ Inheritance diagram for cl_syoscb_queue:</div>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#a84149180e88153757ac3df08fe6dd3ce">cl_syoscb_queue_std</a>.</p>
+<p><b>Queue API:</b> Returns whether or not the queue is empty. </p>
+<p>1'b0 means thet te queue is not empty. 1'b1 means that the queue is empty </p>
 
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00037">37</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
+<p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#a812d7f4d7143c9bef1f3181e24347d5c">cl_syoscb_queue_std</a>, and <a class="el" href="classcl__syoscb__queue__std.html#aa63237c16ac2ca71f9ca07131e9d79c8">cl_syoscb_queue_std</a>.</p>
+
+<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00109">109</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a6a39c6052e61279f73964dd790d5a501"></a><!-- doxytag: member="cl_syoscb_queue::delete_item" ref="a6a39c6052e61279f73964dd790d5a501" args="(int unsigned idx)" -->
+<a class="anchor" id="adbb41d1162a0f3dbb84c657d2274c0cb"></a><!-- doxytag: member="cl_syoscb_queue::insert_item" ref="adbb41d1162a0f3dbb84c657d2274c0cb" args="(string producer, uvm_sequence_item item, int unsigned idx)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bit cl_syoscb_queue::delete_item </td>
-          <td>(</td>
-          <td class="paramtype">int unsigned&nbsp;</td>
-          <td class="paramname"> <em>idx</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#a9cae04fa7b9a40a5554ef24bfaac851b">cl_syoscb_queue_std</a>.</p>
-
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00016">16</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6d49c2185a33ce4b3b6805b57ab34d5f"></a><!-- doxytag: member="cl_syoscb_queue::delete_iterator" ref="a6d49c2185a33ce4b3b6805b57ab34d5f" args="(cl_syoscb_queue_iterator_base iterator)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bit cl_syoscb_queue::delete_iterator </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcl__syoscb__queue__iterator__base.html">cl_syoscb_queue_iterator_base</a>&nbsp;</td>
-          <td class="paramname"> <em>iterator</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#ada80798fcd391e309e0e85f68cda98e1">cl_syoscb_queue_std</a>.</p>
-
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00042">42</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a8aeb5aa73238b93a67b0eded170bd2ef"></a><!-- doxytag: member="cl_syoscb_queue::get_item" ref="a8aeb5aa73238b93a67b0eded170bd2ef" args="(int unsigned idx)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual uvm_sequence_item cl_syoscb_queue::get_item </td>
-          <td>(</td>
-          <td class="paramtype">int unsigned&nbsp;</td>
-          <td class="paramname"> <em>idx</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#a08d6415cc4e1b10832d8748378edaa6d">cl_syoscb_queue_std</a>.</p>
-
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00021">21</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae54e6d007b3696f6113c7fc7bfc2ad87"></a><!-- doxytag: member="cl_syoscb_queue::get_size" ref="ae54e6d007b3696f6113c7fc7bfc2ad87" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual int unsigned cl_syoscb_queue::get_size </td>
-          <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#ac91a26574353c8c24789a993d3ffc12d">cl_syoscb_queue_std</a>.</p>
-
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00026">26</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="add1067adfa733826869458c1a104bcbd"></a><!-- doxytag: member="cl_syoscb_queue::insert_item" ref="add1067adfa733826869458c1a104bcbd" args="(string producer, uvm_sequence_item item, int unsigned idx)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bit cl_syoscb_queue::insert_item </td>
+          <td class="memname">bit cl_syoscb_queue::insert_item </td>
           <td>(</td>
           <td class="paramtype">string&nbsp;</td>
           <td class="paramname"> <em>producer</em>, </td>
@@ -288,89 +246,12 @@ Inheritance diagram for cl_syoscb_queue:</div>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#ad293b78071120f596e3884980e36a9fa">cl_syoscb_queue_std</a>.</p>
+<p><b>Queue API:</b> Inserts a uvm_sequence_item at index idx. </p>
+<p>The implementation must wrap the uvm_sequence_item in a <a class="el" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> before it is inserted. </p>
 
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00031">31</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
+<p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#ad293b78071120f596e3884980e36a9fa">cl_syoscb_queue_std</a>, and <a class="el" href="classcl__syoscb__queue__std.html#aca0fb79ae56d3b0394c6c6d1bfc3bbd3">cl_syoscb_queue_std</a>.</p>
 
-</div>
-</div>
-<a class="anchor" id="aa5a474a5220840f8fc220cd64aba6270"></a><!-- doxytag: member="cl_syoscb_queue::new" ref="aa5a474a5220840f8fc220cd64aba6270" args="(string name, uvm_component parent)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">cl_syoscb_queue::new </td>
-          <td>(</td>
-          <td class="paramtype">string&nbsp;</td>
-          <td class="paramname"> <em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uvm_component&nbsp;</td>
-          <td class="paramname"> <em>parent</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Reimplemented in <a class="el" href="classcl__syoscb__queue__std.html#acc17e7ed4858dff2fc233f4885bb74ae">cl_syoscb_queue_std</a>.</p>
-
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00053">53</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a7c607521bf2d7f1e11b925f0d280ea6b"></a><!-- doxytag: member="cl_syoscb_queue::uvm_component_utils" ref="a7c607521bf2d7f1e11b925f0d280ea6b" args="(cl_syoscb_queue) cl_syoscb_queue_iterator_base iterators[cl_syoscb_queue_iterator_base]" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">cl_syoscb_queue::uvm_component_utils </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcl__syoscb__queue.html">cl_syoscb_queue</a>&nbsp;</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="a3b9f8500d7d93d01eda717aac6ef4c28"></a><!-- doxytag: member="cl_syoscb_queue::iter_idx" ref="a3b9f8500d7d93d01eda717aac6ef4c28" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int unsigned <a class="el" href="classcl__syoscb__queue.html#a3b9f8500d7d93d01eda717aac6ef4c28">cl_syoscb_queue::iter_idx</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00006">6</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a7ce6c5e6c1b4fcd09f90ec2699cc594c"></a><!-- doxytag: member="cl_syoscb_queue::iter_sem" ref="a7ce6c5e6c1b4fcd09f90ec2699cc594c" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">semaphore <a class="el" href="classcl__syoscb__queue.html#a7ce6c5e6c1b4fcd09f90ec2699cc594c">cl_syoscb_queue::iter_sem</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00008">8</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
+<p>Definition at line <a class="el" href="cl__syoscb__queue_8svh_source.html#l00116">116</a> of file <a class="el" href="cl__syoscb__queue_8svh_source.html">cl_syoscb_queue.svh</a>.</p>
 
 </div>
 </div>
@@ -383,7 +264,7 @@ Inheritance diagram for cl_syoscb_queue:</div>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -435,13 +316,13 @@ Inheritance diagram for cl_syoscb_queue:</div>
 <table border="1" width = "100%">
   <tr>
     <td width = "20%">
-       <address style="text-align: left;"><small>
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.2<br>
-       </small></address>
+     <img src="syosil.jpg">
     </td>
     <td width = "60%">
-       <address style="text-align: center;"><small>
-       Copyright 2014 SyoSil ApS<br>
+       <address style="text-align: center;">
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.1<br>
+       <br>
+       Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
        <br>
       Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -454,14 +335,14 @@ Inheritance diagram for cl_syoscb_queue:</div>
       distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
       implied. See the License for the specific language governing permissions and limitations under
       the License.
-       </small></address>
+      </address>
     </td>
     <td width = "20%">
       <address style="text-align: right;"><small>
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Wed Feb 25 04:01:41 2015</small></address>
+      Thu Jun 4 23:02:22 2015</small></address>
    </td>
   </tr>
 </table>

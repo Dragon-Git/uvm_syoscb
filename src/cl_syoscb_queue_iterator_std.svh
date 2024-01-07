@@ -16,22 +16,27 @@
 //   the License for the specific language governing
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
+/// Queue iterator class defining the iterator API used for iterating std queues.
 class cl_syoscb_queue_iterator_std extends cl_syoscb_queue_iterator_base;
-
+  //-------------------------------------
+  // UVM Macros
+  //-------------------------------------
   `uvm_object_utils(cl_syoscb_queue_iterator_std)
 
+  //-------------------------------------
+  // Iterator API
+  //-------------------------------------
   extern virtual function bit next();
   extern virtual function bit previous();
   extern virtual function bit first();
   extern virtual function bit last();
   extern virtual function int unsigned get_idx();
-  extern virtual function uvm_sequence_item get_item();
+  extern virtual function cl_syoscb_item get_item();
   extern virtual function bit is_done();
   extern virtual function bit set_queue(cl_syoscb_queue owner);
+endclass: cl_syoscb_queue_iterator_std
 
-endclass : cl_syoscb_queue_iterator_std
-
-
+/// <b>Iterator API:</b> See cl_syoscb_queue_iterator_base for details
 function bit cl_syoscb_queue_iterator_std::next();
   cl_syoscb_queue qh = this.get_queue();
 
@@ -44,9 +49,9 @@ function bit cl_syoscb_queue_iterator_std::next();
                                          qh.get_name()), UVM_DEBUG);
     return 0;
   end
-endfunction : next
+endfunction: next
 
-
+/// <b>Iterator API:</b> See cl_syoscb_queue_iterator_base for details
 function bit cl_syoscb_queue_iterator_std::previous();
   if(this.position != 0) begin
     this.position--;
@@ -59,36 +64,35 @@ function bit cl_syoscb_queue_iterator_std::previous();
                                          qh.get_name()), UVM_DEBUG);
     return 0;
   end
-endfunction : previous
+endfunction: previous
 
-
+/// <b>Iterator API:</b> See cl_syoscb_queue_iterator_base for details
 function bit cl_syoscb_queue_iterator_std::first();
   // Std queue uses an SV queue for its items, first item is always 0
   this.position = 0;
   return 1;
-endfunction : first
-
+endfunction: first
 
 function bit cl_syoscb_queue_iterator_std::last();
   cl_syoscb_queue qh = this.get_queue();
 
   this.position = qh.get_size()-1;
   return 1;
-endfunction : last
+endfunction: last
 
-
+/// <b>Iterator API:</b> See cl_syoscb_queue_iterator_base for details
 function int unsigned cl_syoscb_queue_iterator_std::get_idx();
   return this.position;
-endfunction : get_idx
+endfunction: get_idx
 
-
-function uvm_sequence_item cl_syoscb_queue_iterator_std::get_item();
+/// <b>Iterator API:</b> See cl_syoscb_queue_iterator_base for details
+function cl_syoscb_item cl_syoscb_queue_iterator_std::get_item();
   cl_syoscb_queue qh = this.get_queue();
 
   return qh.get_item(this.position);
-endfunction : get_item
+endfunction: get_item
 
-
+/// <b>Iterator API:</b> See cl_syoscb_queue_iterator_base for details
 function bit cl_syoscb_queue_iterator_std::is_done();
   cl_syoscb_queue qh = this.get_queue();
 
@@ -97,8 +101,9 @@ function bit cl_syoscb_queue_iterator_std::is_done();
   end else begin
     return 0;
   end
-endfunction : is_done
+endfunction: is_done
 
+/// <b>Iterator API:</b> See cl_syoscb_queue_iterator_base for details
 function bit cl_syoscb_queue_iterator_std::set_queue(cl_syoscb_queue owner);
   if(owner == null) begin
     // An iterator should always have an associated queue
@@ -108,4 +113,4 @@ function bit cl_syoscb_queue_iterator_std::set_queue(cl_syoscb_queue owner);
     this.owner = owner;
     return 1;
   end
-endfunction : set_queue
+endfunction: set_queue

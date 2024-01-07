@@ -30,6 +30,7 @@ package pk_scbtest;
   `include "cl_scbtest_test_base.svh"
   `include "cl_scbtest_test_simple1.svh"
   `include "cl_scbtest_test_ooo_heavy.svh"
+  `include "cl_scbtest_test_tlm.svh"
    
 endpackage: pk_scbtest
 

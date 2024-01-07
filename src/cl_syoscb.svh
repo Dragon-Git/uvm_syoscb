@@ -16,109 +16,175 @@
 //   the License for the specific language governing
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
+/// Top level class implementing the root of the SyoSil UVM scoreboard
 class cl_syoscb extends uvm_scoreboard;
-   cl_syoscb_cfg cfg;
-   cl_syoscb_queue queues[];
-   cl_syoscb_compare compare_strategy;
+  //-------------------------------------
+  // Non randomizable variables
+  //-------------------------------------
+  /// Handle to the global UVM scoreboard configuration
+  local cl_syoscb_cfg cfg;
 
-   `uvm_component_utils_begin(cl_syoscb)
-     `uvm_field_object(cfg, UVM_ALL_ON)
-     `uvm_field_array_object(queues, UVM_ALL_ON)
-     `uvm_field_object(compare_strategy, UVM_ALL_ON)
-   `uvm_component_utils_end
+  /// Array holding handles to all queues
+  local cl_syoscb_queue queues[];
 
-   extern function new(string name, uvm_component parent);
-   extern function void build_phase(uvm_phase phase);
-   extern function void check_phase(uvm_phase phase);
-   extern function void report_phase(uvm_phase phase);
-   extern function bit compare();
-   extern function void add_item(string queue_name, string producer, uvm_sequence_item item);
+  // Handle to the compare startegy
+  local cl_syoscb_compare compare_strategy;
+
+  // Assoc array holding each uvm_subscriber
+  local cl_syoscb_subscriber subscribers[string];
+
+  //-------------------------------------
+  // UVM Macros
+  //-------------------------------------
+  `uvm_component_utils_begin(cl_syoscb)
+    `uvm_field_object(cfg, UVM_ALL_ON)
+    `uvm_field_array_object(queues, UVM_ALL_ON)
+    `uvm_field_object(compare_strategy, UVM_ALL_ON)
+  `uvm_component_utils_end
+
+  //-------------------------------------
+  // Constructor
+  //-------------------------------------
+  extern function new(string name = "cl_syoscb", uvm_component parent = null);
+
+  //-------------------------------------
+  // UVM Phase methods
+  //-------------------------------------
+  extern function void build_phase(uvm_phase phase);
+
+  //-------------------------------------
+  // Function based API
+  //-------------------------------------
+  extern function void add_item(string queue_name, string producer, uvm_sequence_item item);
+  extern function void compare();
+
+  //-------------------------------------
+  // Transaction based API
+  //-------------------------------------
+  extern function cl_syoscb_subscriber get_subscriber(string queue_name, string producer);
 endclass: cl_syoscb
 
-function cl_syoscb::new(string name, uvm_component parent);
+function cl_syoscb::new(string name = "cl_syoscb", uvm_component parent = null);
    super.new(name, parent);
 endfunction : new
 
+/// The build_phase gets the scoreboard configuration and forwards it to the child components (cl_syoscb_queue
+/// and cl_syoscb_compare). Additionally, it creates all of the queues defined in the configuration object. Finally,
+/// it also creates the compare strategy via a factory create call.
 function void cl_syoscb::build_phase(uvm_phase phase);
-   // TBD: This contradicts the paper. It states that a default one is created
-   // TBD push config further down?
-   if (!uvm_config_db #(cl_syoscb_cfg)::get(this, "", "cfg", this.cfg))
-     `uvm_fatal("CFG", "Configuration object not passed.")
-   // TBD: This is snooping directly in the CFG - use get/set functions instead?
-   this.queues = new[this.cfg.queues.size()];
-   begin
-     int unsigned idx = 0;
-     foreach(this.cfg.queues[queue_name]) begin
-     	this.queues[idx] = cl_syoscb_queue::type_id::create({"queue", $psprintf("%0d",idx)}, this);
-         this.cfg.queues[queue_name] = this.queues[idx++];
+  if (!uvm_config_db #(cl_syoscb_cfg)::get(this, "", "cfg", this.cfg)) begin
+    `uvm_fatal("CFG_ERROR", "Configuration object not passed.")
+  end
+
+  // Create list of queues
+  this.queues = new[this.cfg.size_queues()];
+
+  // Create the queues as defined in the configuration
+  begin
+    string queue_names[];
+
+    // Get teh list of queue names
+    this.cfg.get_queues(queue_names);
+
+    foreach(queue_names[i]) begin
+      this.queues[i] = cl_syoscb_queue::type_id::create(queue_names[i], this);
+      this.cfg.set_queue(queue_names[i], this.queues[i]);
+
+      // Forward the configuration to the queue
+      uvm_config_db #(cl_syoscb_cfg)::set(this, queue_names[i], "cfg", this.cfg); 
+    end
+  end
+
+  // Forward the configuration to the compare_strategy
+  uvm_config_db #(cl_syoscb_cfg)::set(this, "compare_strategy", "cfg", this.cfg); 
+
+  // Create the compare strategy
+  this.compare_strategy = cl_syoscb_compare::type_id::create(.name("compare_strategy"), .parent(this));
+
+  begin
+    cl_syoscb_report_catcher catcher = new();
+    uvm_report_cb::add(null, catcher);
+  end
+
+  begin
+    string producers[];
+
+    this.cfg.get_producers(producers);
+
+    foreach(producers[i]) begin
+      cl_syoscb_cfg_pl pl = this.cfg.get_producer(producers[i]);
+
+      foreach(pl.list[j]) begin
+        cl_syoscb_subscriber subscriber;
+
+        subscriber = new({producers[i], "_", pl.list[j], "_subscr"}, this);
+        subscriber.set_queue_name(pl.list[j]);
+        subscriber.set_producer(producers[i]);
+        this.subscribers[{pl.list[j], producers[i]}] = subscriber;
       end
-   end
+    end
+  end
+endfunction: build_phase
 
-   this.compare_strategy = cl_syoscb_compare::type_id::create(.name("compare_strategy"), .parent(this));
+/// Method for adding a uvm_sequence_item to a given queue for a given producer.
+/// The method will check if the queue and producer exists before adding it to the queue.
+/// 
+/// The uvm_sequence_item will be wrapped by a cl_syoscb_item along with some META data
+/// Thus, it is the cl_syoscb_item which will be added to the queue and not the uvm_sequence_item
+/// directly.
+///
+/// This ensures that the scoreboard can easily be added to an existing testbench with already defined
+/// sequence items etc.
+function void cl_syoscb::add_item(string queue_name, string producer, uvm_sequence_item item);
+  uvm_sequence_item item_clone;
 
-   // TBD: This should either be passed as args to constructor
-   //      or the objects should query the CFG DB directly if possible
-   //      The parent path is not available anymore after we changed to uvm_object
-   this.compare_strategy.compare_algo.set_cfg(this.cfg);
-      
-   begin
-      cl_syoscb_report_catcher catcher = new();
-      uvm_report_cb::add(null, catcher);
-   end
-endfunction : build_phase
+  // Check queue
+  if(!this.cfg.exist_queue(queue_name)) begin
+    `uvm_fatal("CFG_ERROR", $sformatf("Queue: %0s is not found", queue_name));
+  end
 
-function bit cl_syoscb::compare();
-   return(this.compare_strategy.compare());
+  // Check producer
+  if(!this.cfg.exist_producer(producer)) begin
+    `uvm_fatal("CFG_ERROR", $sformatf("Producer: %0s is not found", producer));
+  end
+
+  // Clone the item if not disabled
+  // Clone the item in order to isolate the UVM scb from the rest of the TB
+  if(this.cfg.get_disable_clone() == 1'b0) begin
+    if(!$cast(item_clone, item.clone())) begin
+      `uvm_fatal("QUEUE_ERROR", "Unable to cast cloned item to uvm_sequence_item");
+    end
+  end else begin
+    item_clone = item;
+  end
+
+  // Add the uvm_sequence_item to the queue for the given producer
+  begin
+    cl_syoscb_queue queue;
+
+    queue = this.cfg.get_queue(queue_name);
+   
+    if(queue == null) begin
+      `uvm_fatal("QUEUE_ERROR", $sformatf("Queue: %s not found by add_item method", queue_name));
+    end
+
+    if(!queue.add_item(producer, item_clone)) begin
+      `uvm_fatal("QUEUE_ERROR", $sformatf("Unable to add item to queue: %s", queue_name));
+    end
+  end
+
+  // Invoke the compare algorithm
+  void'(this.compare());
+endfunction: add_item
+
+/// Invokes the compare strategy
+function void cl_syoscb::compare();
+  this.compare_strategy.compare();
 endfunction: compare
 
-///////////////////////////////////////
-// Function based API
-///////////////////////////////////////
-function void cl_syoscb::add_item(string queue_name, string producer, uvm_sequence_item item);
-   // TBD: Add checks of correct queue and producer
-   if(!this.cfg.queues[queue_name].add_item(producer, item)) begin
-     `uvm_fatal("QUEUE_ERROR", $sformatf("Unable to add item to queue: %s", queue_name));
-   end
-
-   // TBD: This should be revised according to how it was in the old SCB
-   // TBD: Return value from compare() should also be handled
-   void'(this.compare());
-endfunction : add_item
-
-///////////////////////////////////////
-// Transaction based API
-///////////////////////////////////////
-// TBD
-
-function void cl_syoscb::check_phase(uvm_phase phase);
-	string queue_names[];
-	cl_syoscb_queue_std queue;
-	super.check_phase(phase);
-
-	this.cfg.get_queues(queue_names);
-	foreach (queue_names[i]) begin
-		$cast(queue, this.cfg.queues[queue_names[i]]);
-		if (queue.items.size()!=0) begin
-			string firstitem = queue.items[0].sprint();
-			`uvm_error("SYOSCB", $psprintf("Queue %s not empty, entries : %d, first element : \n%s", queue_names[i], queue.items.size(), firstitem));
-			// TBD dump first parts of each queue !
-			// will we use std UVM report mechanisms or a special channel we can redirect ?
-		end
-	end
-endfunction : check_phase
-
-function void cl_syoscb::report_phase(uvm_phase phase);
-   super.report_phase(phase);
-   // TBD this should NOT  call the report phase of the compare method !
-   // as cl_syoscb_compare_base extends uvm_component the compare method should just perform its end of test checks in
-   // uvm_check_phase, from the UVM 1.1 class ref manual:
-   // uvm_build_phase      Create and configure of testbench structure
-   // uvm_connect_phase      Establish cross-component connections.
-   // uvm_end_of_elaboration_phase      Fine-tune the testbench.
-   // uvm_start_of_simulation_phase      Get ready for DUT to be simulated.
-   // uvm_run_phase      Stimulate the DUT.
-   // uvm_extract_phase      Extract data from different points of the verficiation environment.
-   // uvm_check_phase      Check for any unexpected conditions in the verification environment.
-   // uvm_report_phase      Report results of the test.
-   // uvm_final_phase      Tie up loose ends.
-endfunction : report_phase
+/// Returns a UVM subscriber for a given combination of queue and producer
+/// The retrurned UVM subscriber can then be connected to a UVM monitor or similar
+/// which produces transactions which should be scoreboarded.
+function cl_syoscb_subscriber cl_syoscb::get_subscriber(string queue_name, string producer);
+    return(this.subscribers[{queue_name, producer}]);
+endfunction: get_subscriber

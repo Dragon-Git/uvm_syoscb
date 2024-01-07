@@ -17,11 +17,17 @@
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
 class cl_syoscb_report_catcher extends uvm_report_catcher;
-   int max_num_scb_errors = 10;  	// allow that many SCB errors before stopping the simulation
-   int num_scb_errors = 0;
-   extern virtual function action_e catch();
-endclass: cl_syoscb_report_catcher
+  //-------------------------------------
+  // Non randomizable variables
+  //-------------------------------------
+  int max_num_scb_errors = 10;  	// allow that many SCB errors before stopping the simulation
+  int num_scb_errors = 0;
 
+  //-------------------------------------
+  // API
+  //-------------------------------------
+  extern virtual function action_e catch();
+endclass: cl_syoscb_report_catcher
 
 function cl_syoscb_report_catcher::action_e cl_syoscb_report_catcher::catch();
    if (get_severity()==UVM_INFO) begin

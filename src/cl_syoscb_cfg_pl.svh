@@ -17,16 +17,28 @@
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
 class cl_syoscb_cfg_pl extends uvm_object;
-   string list[];
+  //-------------------------------------
+  // Non randomizable member variables
+  //-------------------------------------
+  string list[];
 
-   `uvm_object_utils_begin(cl_syoscb_cfg_pl)
-     `uvm_field_array_string(list, UVM_DEFAULT)
-   `uvm_object_utils_end
+  //-------------------------------------
+  // UVM Macros
+  //-------------------------------------
+  `uvm_object_utils_begin(cl_syoscb_cfg_pl)
+    `uvm_field_array_string(list, UVM_DEFAULT)
+  `uvm_object_utils_end
 
-   extern function new(string name = "cl_syoscb_cfg_pl");
-   extern function void set_list(string list[]);
+  //-------------------------------------
+  // Constructor
+  //-------------------------------------
+  extern function new(string name = "cl_syoscb_cfg_pl");
 
-endclass : cl_syoscb_cfg_pl
+  //-------------------------------------
+  // Class methods
+  //-------------------------------------
+  extern function void set_list(string list[]);
+endclass: cl_syoscb_cfg_pl
 
 function cl_syoscb_cfg_pl::new(string name = "cl_syoscb_cfg_pl");
    super.new(name);

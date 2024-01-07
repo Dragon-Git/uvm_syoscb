@@ -20,22 +20,32 @@
 // Base class for all SCB tests
 
 class cl_scbtest_test_base extends uvm_test;
-   `uvm_component_utils(cl_scbtest_test_base)
-   cl_scbtest_env scbtest_env;
-   extern function new(string name = "cl_scbtest_test_base", uvm_component parent = null);
-   extern virtual function void pre_build();
-   extern virtual function void build_phase(uvm_phase phase);
+  //-------------------------------------
+  // Non randomizable variables
+  //-------------------------------------
+  cl_scbtest_env scbtest_env;
+
+  //-------------------------------------
+  // UVM Macros
+  //-------------------------------------
+  `uvm_component_utils(cl_scbtest_test_base)
+
+  //-------------------------------------
+  // Constructor
+  //-------------------------------------
+  extern function new(string name = "cl_scbtest_test_base", uvm_component parent = null);
+
+  //-------------------------------------
+  // UVM Phase methods
+  //-------------------------------------
+  extern virtual function void build_phase(uvm_phase phase);
 endclass : cl_scbtest_test_base
 
 function cl_scbtest_test_base::new(string name = "cl_scbtest_test_base", uvm_component parent = null);
    super.new(name, parent);
 endfunction : new
 
-function void cl_scbtest_test_base::pre_build();   // overload in extended classes to add config changes
-endfunction : pre_build
-
 function void cl_scbtest_test_base::build_phase(uvm_phase phase);
-   pre_build();
    super.build_phase(phase);
    scbtest_env = cl_scbtest_env::type_id::create("scbtest_env", this);
-endfunction : build_phase
+endfunction: build_phase

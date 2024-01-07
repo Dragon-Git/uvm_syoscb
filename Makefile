@@ -23,6 +23,7 @@ TB                   := scbtest
 #############################################################################
 # Global UVM Options
 #############################################################################
+UVM_VERBOSITY ?= UVM_MEDIUM
 UVM_TESTNAME ?= cl_scbtest_test_simple1
 
 #############################################################################
@@ -75,7 +76,10 @@ $(COMPILE_DIR) :
 #############################################################################
 # Common targets
 #############################################################################
-# Currently none
+.PHONY: regression
+regression:
+	make UVM_TESTNAME=cl_scbtest_test_simple1 sim
+	make UVM_TESTNAME=cl_scbtest_test_tlm sim
 
 #############################################################################
 # Mentor targets
@@ -87,7 +91,7 @@ compile_vc: $(foreach vc,$(VERIFICATION_COMPS), $(COMPILE_DIR)/$(vc)_vc/compiled
 .PHONY: sim
 sim: $(COMPILE_DIR)/work/compiled_tb
 	$(VSIM) $(VSIM_OPTS) -lib $(COMPILE_DIR)/work \
-        +UVM_MAX_QUIT_COUNT=1,0 +UVM_TESTNAME=$(UVM_TESTNAME) \
+        +UVM_MAX_QUIT_COUNT=1,0 +UVM_TESTNAME=$(UVM_TESTNAME) +UVM_VERBOSITY=$(UVM_VERBOSITY) \
 	$(foreach vc,$(VERIFICATION_COMPS), -L $(COMPILE_DIR)/$(vc)_vc)\
         -do "$(VSIM_DO_CMD)" \
 	scbtest_top
@@ -132,6 +136,7 @@ sim:
 	-top scbtest_top \
 	+UVM_MAX_QUIT_COUNT=1,0 \
 	+UVM_TESTNAME=$(UVM_TESTNAME) \
+	+UVM_VERBOSITY=$(UVM_VERBOSITY) \
 	./src/pk_syoscb.sv \
 	./tb/pk_scbtest.sv \
 	./tb/scbtest_top.sv
@@ -164,7 +169,7 @@ synopsys_uvm:
 
 .PHONY: sim
 sim: elaborate_tb
-	./simv +UVM_TESTNAME=$(UVM_TESTNAME)
+	./simv +UVM_TESTNAME=$(UVM_TESTNAME) +UVM_VERBOSITY=$(UVM_VERBOSITY)
 
 .PHONY: synsopsys_clean
 synsopsys_clean:
@@ -206,10 +211,18 @@ help_top:
 	@echo "  VENDOR=MENTOR | CADENCE | SYNOPSYS"
 	@echo "  Current value: $(VENDOR)"
 	@echo ""
-	@echo "  UVM_TESTNAME=cl_scbtest_test_base |"
-	@echo "               cl_scbtest_test_simple1 |"
-	@echo "               cl_scbtest_test_ooo_heavy"
+	@echo "  UVM_TESTNAME = cl_scbtest_test_base      |"
+	@echo "                 cl_scbtest_test_simple1   |"
+	@echo "                 cl_scbtest_test_tlm       |"
+	@echo "                 cl_scbtest_test_ooo_heavy"
 	@echo "  Current value: $(UVM_TESTNAME)"
+	@echo ""
+	@echo "  UVM_VERBOSITY = UVM_FULL   |"
+	@echo "                = UVM_HIGH   |"
+	@echo "                = UVM_MEDIUM |"
+	@echo "                = UVM_LOW    |"
+	@echo "                = UVM_NONE"
+	@echo "  Current value: $(UVM_VERBOSITY)"
 	@echo ""
 
 .PHONY: help

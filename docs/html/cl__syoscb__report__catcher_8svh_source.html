@@ -60,7 +60,6 @@ window.onload = initDynSections;
     <ul>
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
       <li><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
-      <li><a href="namespaces.html"><span>Packages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li><a href="dirs.html"><span>Directories</span></a></li>
@@ -88,36 +87,42 @@ window.onload = initDynSections;
   </div>
 </div>
 <div class="contents">
-<h1>cl_syoscb_report_catcher.svh</h1><a href="cl__syoscb__report__catcher_8svh.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a><a class="code" href="classcl__syoscb__report__catcher.html">00001</a> <span class="keyword">class </span><a class="code" href="classcl__syoscb__report__catcher.html">cl_syoscb_report_catcher</a> <span class="keyword">extends</span> uvm_report_catcher;
-<a name="l00002"></a><a class="code" href="classcl__syoscb__report__catcher.html#af76b6efed25cd284679e18b3d87217e4">00002</a>    int <a class="code" href="classcl__syoscb__report__catcher.html#af76b6efed25cd284679e18b3d87217e4">max_num_scb_errors</a> = 10;     <span class="comment">// allow that many SCB errors before stopping the simulation</span>
-<a name="l00003"></a><a class="code" href="classcl__syoscb__report__catcher.html#a1288d2193d3c49a3c846403e81e63165">00003</a>    int <a class="code" href="classcl__syoscb__report__catcher.html#a1288d2193d3c49a3c846403e81e63165">num_scb_errors</a> = 0;
-<a name="l00004"></a>00004    extern <span class="keyword">virtual</span> function action_e <a class="code" href="classcl__syoscb__report__catcher.html#a940ba8cd78735345750d2a2e6b5e018b">catch</a>();
-<a name="l00005"></a>00005 endclass: <a class="code" href="classcl__syoscb__report__catcher.html">cl_syoscb_report_catcher</a>
-<a name="l00006"></a>00006 
+<h1>cl_syoscb_report_catcher.svh</h1><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="keyword">class </span>cl_syoscb_report_catcher <span class="keyword">extends</span> uvm_report_catcher;
+<a name="l00002"></a>00002   <span class="comment">//-------------------------------------</span>
+<a name="l00003"></a>00003   <span class="comment">// Non randomizable variables</span>
+<a name="l00004"></a>00004   <span class="comment">//-------------------------------------</span>
+<a name="l00005"></a>00005   int max_num_scb_errors = 10;   <span class="comment">// allow that many SCB errors before stopping the simulation</span>
+<a name="l00006"></a>00006   int num_scb_errors = 0;
 <a name="l00007"></a>00007 
-<a name="l00008"></a><a class="code" href="classcl__syoscb__report__catcher.html#a940ba8cd78735345750d2a2e6b5e018b">00008</a> function <a class="code" href="classcl__syoscb__report__catcher.html">cl_syoscb_report_catcher</a>::action_e <a class="code" href="classcl__syoscb__report__catcher.html">cl_syoscb_report_catcher</a>::<a class="code" href="classcl__syoscb__report__catcher.html#a940ba8cd78735345750d2a2e6b5e018b">catch</a>();
-<a name="l00009"></a>00009    if (get_severity()==UVM_INFO) begin
-<a name="l00010"></a>00010       if (get_id()==&quot;MISCMP&quot;) begin     
-<a name="l00011"></a>00011          return CAUGHT;       <span class="comment">// Avoid the OOO compare to report lots of mismatches for the compare method</span>
-<a name="l00012"></a>00012       end
-<a name="l00013"></a>00013    end else if (get_severity()==UVM_ERROR) begin
-<a name="l00014"></a>00014       if (get_id() == &quot;SYOSCB&quot;) begin
-<a name="l00015"></a>00015          if (num_scb_errors &lt; max_num_scb_errors) begin
-<a name="l00016"></a>00016             set_severity(UVM_WARNING);
-<a name="l00017"></a>00017          end
-<a name="l00018"></a>00018          num_scb_errors++;
-<a name="l00019"></a>00019       end
-<a name="l00020"></a>00020     end
-<a name="l00021"></a>00021    return THROW;
-<a name="l00022"></a>00022 endfunction
-<a name="l00023"></a>00023 
+<a name="l00008"></a>00008   <span class="comment">//-------------------------------------</span>
+<a name="l00009"></a>00009   <span class="comment">// API</span>
+<a name="l00010"></a>00010   <span class="comment">//-------------------------------------</span>
+<a name="l00011"></a>00011   extern <span class="keyword">virtual</span> function action_e catch();
+<a name="l00012"></a>00012 endclass: cl_syoscb_report_catcher
+<a name="l00013"></a>00013 
+<a name="l00014"></a>00014 function cl_syoscb_report_catcher::action_e cl_syoscb_report_catcher::catch();
+<a name="l00015"></a>00015    if (get_severity()==UVM_INFO) begin
+<a name="l00016"></a>00016       if (get_id()==&quot;MISCMP&quot;) begin     
+<a name="l00017"></a>00017          return CAUGHT;       <span class="comment">// Avoid the OOO compare to report lots of mismatches for the compare method</span>
+<a name="l00018"></a>00018       end
+<a name="l00019"></a>00019    end else if (get_severity()==UVM_ERROR) begin
+<a name="l00020"></a>00020       if (get_id() == &quot;SYOSCB&quot;) begin
+<a name="l00021"></a>00021          if (num_scb_errors &lt; max_num_scb_errors) begin
+<a name="l00022"></a>00022             set_severity(UVM_WARNING);
+<a name="l00023"></a>00023          end
+<a name="l00024"></a>00024          num_scb_errors++;
+<a name="l00025"></a>00025       end
+<a name="l00026"></a>00026     end
+<a name="l00027"></a>00027    return THROW;
+<a name="l00028"></a>00028 endfunction
+<a name="l00029"></a>00029 
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -169,13 +174,13 @@ window.onload = initDynSections;
 <table border="1" width = "100%">
   <tr>
     <td width = "20%">
-       <address style="text-align: left;"><small>
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.2<br>
-       </small></address>
+     <img src="syosil.jpg">
     </td>
     <td width = "60%">
-       <address style="text-align: center;"><small>
-       Copyright 2014 SyoSil ApS<br>
+       <address style="text-align: center;">
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.1<br>
+       <br>
+       Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
        <br>
       Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -188,14 +193,14 @@ window.onload = initDynSections;
       distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
       implied. See the License for the specific language governing permissions and limitations under
       the License.
-       </small></address>
+      </address>
     </td>
     <td width = "20%">
       <address style="text-align: right;"><small>
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Wed Feb 25 04:01:40 2015</small></address>
+      Thu Jun 4 23:02:22 2015</small></address>
    </td>
   </tr>
 </table>

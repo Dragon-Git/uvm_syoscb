@@ -25,11 +25,12 @@ syoscb_INC_DIR := $(VC_DIR)
 syoscb_VLOG_OPTS :=
 
 # Simple rule to capture the package dependency on the included files
-$(VC_DIR)/pk_syoscb.sv : $(VC_DIR)/cl_syoscb_compare_base.svh \
+$(VC_DIR)/pk_syoscb.sv : $(VC_DIR)/cl_syoscb_cfg_pl.svh \
+                         $(VC_DIR)/cl_syoscb_cfg.svh \
+                         $(VC_DIR)/cl_syoscb_compare_base.svh \
                          $(VC_DIR)/cl_syoscb_compare.svh \
                          $(VC_DIR)/cl_syoscb_compare_ooo.svh \
-                         $(VC_DIR)/cl_syoscb_cfg_pl.svh \
-                         $(VC_DIR)/cl_syoscb_cfg.svh \
+                         $(VC_DIR)/cl_syoscb_compare_io.svh \
                          $(VC_DIR)/cl_syoscb_item.svh \
                          $(VC_DIR)/cl_syoscb_queue.svh \
                          $(VC_DIR)/cl_syoscb_queue_std.svh \

@@ -1,4 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="node2" href="$classpk__syoscb_1_1cl__syoscb__queue.html" title="pk_syoscb::cl_syoscb_queue" alt="" coords="5,5,219,35"/>
-<area shape="rect" id="node4" href="$classpk__syoscb_1_1cl__syoscb__cfg__pl.html" title="pk_syoscb::cl_syoscb_cfg_pl" alt="" coords="243,5,453,35"/>
+<area shape="rect" id="node2" href="$classcl__syoscb__queue.html" title="Class which base concet of a queue." alt="" coords="285,5,419,35"/>
+<area shape="rect" id="node4" href="$classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard." alt="" coords="221,101,336,131"/>
+<area shape="rect" id="node7" href="$classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues." alt="" coords="360,101,592,131"/>
 </map>

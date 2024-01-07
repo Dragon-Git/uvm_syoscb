@@ -60,7 +60,6 @@ window.onload = initDynSections;
     <ul>
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
       <li><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
-      <li><a href="namespaces.html"><span>Packages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li><a href="dirs.html"><span>Directories</span></a></li>
@@ -88,53 +87,73 @@ window.onload = initDynSections;
   </div>
 </div>
 <div class="contents">
-<h1>cl_syoscb_item.svh</h1><a href="cl__syoscb__item_8svh.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a><a class="code" href="classcl__syoscb__item.html">00001</a> <span class="keyword">class </span><a class="code" href="classcl__syoscb__item.html">cl_syoscb_item</a> <span class="keyword">extends</span> uvm_object;
-<a name="l00002"></a>00002 
-<a name="l00003"></a>00003    <span class="comment">// TBD: MD5 Checksum</span>
-<a name="l00004"></a><a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb">00004</a>    string <a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb">producer</a>;
-<a name="l00005"></a><a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203">00005</a>    uvm_sequence_item <a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203">item</a>;
-<a name="l00006"></a>00006 
-<a name="l00007"></a>00007    `<a class="code" href="classcl__syoscb__item.html#a82c30b3d1edef17fd48f7cebce4253c6">uvm_object_utils_begin</a>(cl_syoscb_item)
-<a name="l00008"></a>00008      `uvm_field_string(producer, UVM_DEFAULT)
-<a name="l00009"></a>00009      `<a class="code" href="classcl__syoscb__item.html#a14387e2791866157daff467ddb43b09f">uvm_field_object</a>(item, UVM_DEFAULT)
-<a name="l00010"></a>00010    `uvm_object_utils_end
-<a name="l00011"></a>00011 
-<a name="l00012"></a>00012    extern function new(string name = &quot;cl_syoscb_item&quot;);
-<a name="l00013"></a>00013    extern function string <a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5">get_producer</a>();
-<a name="l00014"></a>00014    extern function void <a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f">set_producer</a>(string producer);
-<a name="l00015"></a>00015    extern function uvm_sequence_item <a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb">get_item</a>();
-<a name="l00016"></a>00016    extern function void <a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb">set_item</a>(uvm_sequence_item item);
-<a name="l00017"></a>00017 
-<a name="l00018"></a>00018 endclass : <a class="code" href="classcl__syoscb__item.html">cl_syoscb_item</a>
-<a name="l00019"></a>00019 
-<a name="l00020"></a>00020 function <a class="code" href="classcl__syoscb__item.html">cl_syoscb_item</a>::new(string name = &quot;cl_syoscb_item&quot;);
-<a name="l00021"></a>00021    super.new(name);
-<a name="l00022"></a>00022 endfunction : new     
-<a name="l00023"></a>00023 
-<a name="l00024"></a><a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5">00024</a> function string <a class="code" href="classcl__syoscb__item.html">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5">get_producer</a>();
-<a name="l00025"></a>00025    return(this.producer);
-<a name="l00026"></a>00026 endfunction: <a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5">get_producer</a>
-<a name="l00027"></a>00027 
-<a name="l00028"></a><a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f">00028</a> function void <a class="code" href="classcl__syoscb__item.html">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f">set_producer</a>(string producer);
-<a name="l00029"></a>00029       <span class="comment">// TBD: Check that it is a valid producer</span>
-<a name="l00030"></a>00030    this.<a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb">producer</a> = <a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb">producer</a>;
-<a name="l00031"></a>00031 endfunction: <a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f">set_producer</a>
-<a name="l00032"></a>00032 
-<a name="l00033"></a><a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb">00033</a> function uvm_sequence_item <a class="code" href="classcl__syoscb__item.html">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb">get_item</a>();
-<a name="l00034"></a>00034    return(this.item);
-<a name="l00035"></a>00035 endfunction: <a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb">get_item</a>
-<a name="l00036"></a>00036 
-<a name="l00037"></a><a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb">00037</a> function void <a class="code" href="classcl__syoscb__item.html">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb">set_item</a>(uvm_sequence_item item);
-<a name="l00038"></a>00038    this.<a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203">item</a> = <a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203">item</a>;
-<a name="l00039"></a>00039 endfunction: <a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb">set_item</a>
-<a name="l00040"></a>00040 
+<h1>cl_syoscb_item.svh</h1><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/// The UVM scoreboard item. This item wraps the uvm_sequence_items. This ensures that future</span>
+<a name="l00002"></a>00002 <span class="comment"></span><span class="comment">/// extensions to the UVM scoreboard will always be able to use all uvm_sqeuence_items from</span>
+<a name="l00003"></a>00003 <span class="comment"></span><span class="comment">/// already existing testbenches etc. even htough more META data is added to the wrapping item.</span>
+<a name="l00004"></a><a class="code" href="classcl__syoscb__item.html">00004</a> <span class="comment"></span><span class="keyword">class </span><a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> <span class="keyword">extends</span> uvm_object;
+<a name="l00005"></a>00005   <span class="comment">//-------------------------------------</span>
+<a name="l00006"></a>00006   <span class="comment">// Non randomizable variables</span>
+<a name="l00007"></a>00007   <span class="comment">//-------------------------------------</span><span class="comment"></span>
+<a name="l00008"></a>00008 <span class="comment">  /// Hold the name of the producer</span>
+<a name="l00009"></a><a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb">00009</a> <span class="comment"></span>  string <a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb" title="Hold the name of the producer.">producer</a>;
+<a name="l00010"></a>00010 <span class="comment"></span>
+<a name="l00011"></a>00011 <span class="comment">  /// Handle to the wrapped uvm_sequence_item</span>
+<a name="l00012"></a><a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203">00012</a> <span class="comment"></span>  uvm_sequence_item <a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203" title="Handle to the wrapped uvm_sequence_item.">item</a>;
+<a name="l00013"></a>00013 
+<a name="l00014"></a>00014   <span class="comment">//-------------------------------------</span>
+<a name="l00015"></a>00015   <span class="comment">// UVM Macros</span>
+<a name="l00016"></a>00016   <span class="comment">//-------------------------------------</span>
+<a name="l00017"></a>00017   `uvm_object_utils_begin(cl_syoscb_item)
+<a name="l00018"></a>00018     `uvm_field_string(producer, UVM_DEFAULT)
+<a name="l00019"></a>00019     `uvm_field_object(item, UVM_DEFAULT)
+<a name="l00020"></a>00020   `uvm_object_utils_end
+<a name="l00021"></a>00021 
+<a name="l00022"></a>00022   <span class="comment">//-------------------------------------</span>
+<a name="l00023"></a>00023   <span class="comment">// Constructor</span>
+<a name="l00024"></a>00024   <span class="comment">//-------------------------------------</span>
+<a name="l00025"></a>00025   extern function new(string name = &quot;cl_syoscb_item&quot;);
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027   <span class="comment">//-------------------------------------</span>
+<a name="l00028"></a>00028   <span class="comment">// Item API</span>
+<a name="l00029"></a>00029   <span class="comment">//-------------------------------------</span>
+<a name="l00030"></a>00030   extern function string <a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5" title="Item API: Returns the producer">get_producer</a>();
+<a name="l00031"></a>00031   extern function void <a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f" title="Item API: Sets the producer">set_producer</a>(string producer);
+<a name="l00032"></a>00032   extern function uvm_sequence_item <a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb" title="Item API: Returns the wrapped uvm_sequence_item">get_item</a>();
+<a name="l00033"></a>00033   extern function void <a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb" title="Item API: Sets the to be wrapped uvm_sequence_item">set_item</a>(uvm_sequence_item item);
+<a name="l00034"></a>00034 endclass: <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>
+<a name="l00035"></a>00035 
+<a name="l00036"></a>00036 function <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::new(string name = &quot;cl_syoscb_item&quot;);
+<a name="l00037"></a>00037   super.new(name);
+<a name="l00038"></a>00038 endfunction : new     
+<a name="l00039"></a>00039 <span class="comment"></span>
+<a name="l00040"></a>00040 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Returns the producer</span>
+<a name="l00041"></a><a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5">00041</a> <span class="comment"></span>function string <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5" title="Item API: Returns the producer">get_producer</a>();
+<a name="l00042"></a>00042   return(this.producer);
+<a name="l00043"></a>00043 endfunction: <a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5" title="Item API: Returns the producer">get_producer</a>
+<a name="l00044"></a>00044 <span class="comment"></span>
+<a name="l00045"></a>00045 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Sets the producer</span>
+<a name="l00046"></a><a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f">00046</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f" title="Item API: Sets the producer">set_producer</a>(string producer);
+<a name="l00047"></a>00047   <span class="comment">// The producer has been checked by the parent prior</span>
+<a name="l00048"></a>00048   <span class="comment">// to the insertion</span>
+<a name="l00049"></a>00049   this.<a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb" title="Hold the name of the producer.">producer</a> = <a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb" title="Hold the name of the producer.">producer</a>;
+<a name="l00050"></a>00050 endfunction: <a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f" title="Item API: Sets the producer">set_producer</a>
+<a name="l00051"></a>00051 <span class="comment"></span>
+<a name="l00052"></a>00052 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Returns the wrapped uvm_sequence_item</span>
+<a name="l00053"></a><a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb">00053</a> <span class="comment"></span>function uvm_sequence_item <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb" title="Item API: Returns the wrapped uvm_sequence_item">get_item</a>();
+<a name="l00054"></a>00054   return(this.item);
+<a name="l00055"></a>00055 endfunction: <a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb" title="Item API: Returns the wrapped uvm_sequence_item">get_item</a>
+<a name="l00056"></a>00056 <span class="comment"></span>
+<a name="l00057"></a>00057 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Sets the to be wrapped uvm_sequence_item</span>
+<a name="l00058"></a><a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb">00058</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb" title="Item API: Sets the to be wrapped uvm_sequence_item">set_item</a>(uvm_sequence_item item);
+<a name="l00059"></a>00059   this.<a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203" title="Handle to the wrapped uvm_sequence_item.">item</a> = <a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203" title="Handle to the wrapped uvm_sequence_item.">item</a>;
+<a name="l00060"></a>00060 endfunction: <a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb" title="Item API: Sets the to be wrapped uvm_sequence_item">set_item</a>
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -186,13 +205,13 @@ window.onload = initDynSections;
 <table border="1" width = "100%">
   <tr>
     <td width = "20%">
-       <address style="text-align: left;"><small>
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.2<br>
-       </small></address>
+     <img src="syosil.jpg">
     </td>
     <td width = "60%">
-       <address style="text-align: center;"><small>
-       Copyright 2014 SyoSil ApS<br>
+       <address style="text-align: center;">
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.1<br>
+       <br>
+       Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
        <br>
       Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -205,14 +224,14 @@ window.onload = initDynSections;
       distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
       implied. See the License for the specific language governing permissions and limitations under
       the License.
-       </small></address>
+      </address>
     </td>
     <td width = "20%">
       <address style="text-align: right;"><small>
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Wed Feb 25 04:01:40 2015</small></address>
+      Thu Jun 4 23:02:22 2015</small></address>
    </td>
   </tr>
 </table>

@@ -22,14 +22,14 @@
 This file describes the basic contents of the UVM scoreboard release
 and how to get started.
 
-It is assumed that the UVM scorebaord is unpacked into the directory:
+It is assumed that the UVM scoreboard is unpacked into the directory:
 <UVMSCB>
 
 In general, the UVM scoreboard is documented in the generated
 documentation. See file:///<UVMSCB>/docs/html/index.html for more
 information.
 
-Furthermore, the <UVMSCB>/docs/ alsp contains the latest paper
+Furthermore, the <UVMSCB>/docs/ also contains the latest paper
 describing the fundamentals of the SyoSil UVM scoreboard.
 
 *NOTE*: The documentation is also available in PDF (<UVMSCB>/docs/)

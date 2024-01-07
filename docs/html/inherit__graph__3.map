@@ -1,3 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" id="node1" href="$classcl__syoscb__compare.html" title="cl_syoscb_compare" alt="" coords="5,5,157,35"/>
+<area shape="rect" id="node1" href="$classcl__syoscb__compare__base.html" title="Base class for all comapre algorithms." alt="" coords="7,5,196,35"/>
+<area shape="rect" id="node3" href="$classcl__syoscb__compare__io.html" title="Class which implements the in order compare algorithm." alt="" coords="245,5,416,35"/>
 </map>

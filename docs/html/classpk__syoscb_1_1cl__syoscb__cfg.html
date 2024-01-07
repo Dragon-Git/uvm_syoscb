@@ -60,7 +60,6 @@ window.onload = initDynSections;
     <ul>
       <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
       <li><a href="pages.html"><span>Related&nbsp;Pages</span></a></li>
-      <li><a href="namespaces.html"><span>Packages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li><a href="dirs.html"><span>Directories</span></a></li>
@@ -87,67 +86,82 @@ window.onload = initDynSections;
       <li><a href="functions.html"><span>Class&nbsp;Members</span></a></li>
     </ul>
   </div>
-  <div class="navpath"><a class="el" href="namespacepk__syoscb.html">pk_syoscb</a>::<a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html">cl_syoscb_cfg</a>
+  <div class="navpath"><b>pk_syoscb</b>::<a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html">cl_syoscb_cfg</a>
   </div>
 </div>
 <div class="contents">
-<h1>pk_syoscb::cl_syoscb_cfg Class Reference</h1><!-- doxytag: class="pk_syoscb::cl_syoscb_cfg" --><div class="dynheader">
+<h1>pk_syoscb::cl_syoscb_cfg Class Reference</h1><!-- doxytag: class="pk_syoscb::cl_syoscb_cfg" -->
+<p>Configuration class for the SyoSil UVM scoreboard.  
+<a href="#_details">More...</a></p>
+<div class="dynheader">
 Collaboration diagram for pk_syoscb::cl_syoscb_cfg:</div>
 <div class="dynsection">
 <div class="center"><img src="classpk__syoscb_1_1cl__syoscb__cfg__coll__graph.png" border="0" usemap="#pk__syoscb_1_1cl__syoscb__cfg_coll__map" alt="Collaboration graph"/></div>
 <map name="pk__syoscb_1_1cl__syoscb__cfg_coll__map" id="pk__syoscb_1_1cl__syoscb__cfg_coll__map">
-<area shape="rect" id="node2" href="classpk__syoscb_1_1cl__syoscb__queue.html" title="pk_syoscb::cl_syoscb_queue" alt="" coords="5,5,219,35"/><area shape="rect" id="node4" href="classpk__syoscb_1_1cl__syoscb__cfg__pl.html" title="pk_syoscb::cl_syoscb_cfg_pl" alt="" coords="243,5,453,35"/></map>
+<area shape="rect" id="node2" href="classcl__syoscb__queue.html" title="Class which base concet of a queue." alt="" coords="285,5,419,35"/><area shape="rect" id="node4" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard." alt="" coords="221,101,336,131"/><area shape="rect" id="node7" href="classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues." alt="" coords="360,101,592,131"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="classpk__syoscb_1_1cl__syoscb__cfg-members.html">List of all members.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a5f07736c1548c5ff03b746df02f09ad7">uvm_object_utils_begin</a> (<a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html">cl_syoscb_cfg</a>) uvm_field_aa_object_string(<a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a0b2d39ce3800c015333bd5abcb6d643a">queues</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">UVM_DEFAULT&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a23b00d979afda1e286fed605392994e6">uvm_field_aa_object_string</a> (<a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a4555ca49ef4bf777607a0d9f2db9f11e">producers</a>, UVM_DEFAULT) uvm_field_string(<a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a350ff85b4d498010e49c587336605124">primary_queue</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">UVM_DEFAULT UVM_DEFAULT <br class="typebreak"/>
-uvm_object_utils_end&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a4c6ddbbe0bdb073cb2a5343271dfe4ab">new</a> (string name=&quot;cl_syoscb_cfg&quot;)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0c58393e3df2c575ee49044dd0bb9f7"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::get_queue" ref="ab0c58393e3df2c575ee49044dd0bb9f7" args="(string queue_name)" -->
+<a class="el" href="classcl__syoscb__queue.html">cl_syoscb_queue</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#ab0c58393e3df2c575ee49044dd0bb9f7">get_queue</a> (string queue_name)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Returns a queue handle for the specificed queue <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad30805eb6ea6a074b2673325177ddc4a"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::set_queue" ref="ad30805eb6ea6a074b2673325177ddc4a" args="(string queue_name, cl_syoscb_queue queue)" -->
+void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#ad30805eb6ea6a074b2673325177ddc4a">set_queue</a> (string queue_name, <a class="el" href="classcl__syoscb__queue.html">cl_syoscb_queue</a> queue)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Sets the queue object for a given queue <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3da7c1920ef35cfe8b2b030ddd80e1ee"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::get_queues" ref="a3da7c1920ef35cfe8b2b030ddd80e1ee" args="(output string queue_names[])" -->
+void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a3da7c1920ef35cfe8b2b030ddd80e1ee">get_queues</a> (output string queue_names[])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Returns all queue names a string list <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a676fd117aa8f2d4d0f1a81da0a0efe63">set_queues</a> (string queue_names[])</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a3da7c1920ef35cfe8b2b030ddd80e1ee">get_queues</a> (output string queue_names[])</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a9386a9f42400830a58a629f22042d9fe">set_producer</a> (string producer, queue_names[])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Will set the legal queues when provides with a list of queue names.  <a href="#a676fd117aa8f2d4d0f1a81da0a0efe63"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a32d8529ecaa50ec267d0c348138a2a2f"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::exist_queue" ref="a32d8529ecaa50ec267d0c348138a2a2f" args="(string queue_name)" -->
+bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a32d8529ecaa50ec267d0c348138a2a2f">exist_queue</a> (string queue_name)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Returns 1'b0 if the queue does not exist and 1'b1 if it exists <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab1d0b6caf28edd029d164cc9d64d0fe6"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::size_queues" ref="ab1d0b6caf28edd029d164cc9d64d0fe6" args="()" -->
+int unsigned&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#ab1d0b6caf28edd029d164cc9d64d0fe6">size_queues</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Returns the number of queues <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a50b5ce00366256269397f516bf166269"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::get_producer" ref="a50b5ce00366256269397f516bf166269" args="(string producer)" -->
+cl_syoscb_cfg_pl&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a50b5ce00366256269397f516bf166269">get_producer</a> (string producer)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Gets the given producer object for a specified producer <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9386a9f42400830a58a629f22042d9fe"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::set_producer" ref="a9386a9f42400830a58a629f22042d9fe" args="(string producer, queue_names[])" -->
+bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a9386a9f42400830a58a629f22042d9fe">set_producer</a> (string producer, queue_names[])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Sets the given producer for the listed queues <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a87bbd8f8fbf1e94ba0f64fa971ae06db"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::exist_producer" ref="a87bbd8f8fbf1e94ba0f64fa971ae06db" args="(string producer)" -->
+bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a87bbd8f8fbf1e94ba0f64fa971ae06db">exist_producer</a> (string producer)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Checks if a given producer exists <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ba596973a206feb7c4cf617485dca3f"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::get_producers" ref="a1ba596973a206feb7c4cf617485dca3f" args="(output string producers[])" -->
+void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a1ba596973a206feb7c4cf617485dca3f">get_producers</a> (output string producers[])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Returns all producers as string list <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a6a015afd02c4aea850269eb4341517fe">get_primary_queue</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Gets the primary queue.  <a href="#a6a015afd02c4aea850269eb4341517fe"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#af78cc5be3554089d3726e2f48e06b298">set_primary_queue</a> (string primary_queue_name)</td></tr>
-<tr><td colspan="2"><h2>Public Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classpk__syoscb_1_1cl__syoscb__queue.html">cl_syoscb_queue</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a0b2d39ce3800c015333bd5abcb6d643a">queues</a> [string]</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg__pl.html">cl_syoscb_cfg_pl</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a4555ca49ef4bf777607a0d9f2db9f11e">producers</a> [string]</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a350ff85b4d498010e49c587336605124">primary_queue</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Sets the primary queue.  <a href="#af78cc5be3554089d3726e2f48e06b298"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a155c593c718b8b762e42f09d0c860dc2"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::set_disable_clone" ref="a155c593c718b8b762e42f09d0c860dc2" args="(bit dc)" -->
+void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a155c593c718b8b762e42f09d0c860dc2">set_disable_clone</a> (bit dc)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Set the value of the disable_clone member variable <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab96e7f30252ad10aa193cc34d4de918d"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::get_disable_clone" ref="ab96e7f30252ad10aa193cc34d4de918d" args="()" -->
+bit&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#ab96e7f30252ad10aa193cc34d4de918d">get_disable_clone</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Get the value of the disable_clone member variable <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a96600ba778f0dbc1978e57d8c074daf4">set_max_queue_size</a> (string queue_name, int unsigned mqs)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Set the maximum number of items allowed for a given queue.  <a href="#a96600ba778f0dbc1978e57d8c074daf4"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int unsigned&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#adf0dbd3835b9434d98481448261bf7c5">get_max_queue_size</a> (string queue_name)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Configuration API:</b> Returns the maximum number of allowed items for a given queue.  <a href="#adf0dbd3835b9434d98481448261bf7c5"></a><br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
+<p>Configuration class for the SyoSil UVM scoreboard. </p>
 
-<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00608">608</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
+<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00402">402</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a3da7c1920ef35cfe8b2b030ddd80e1ee"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::get_queues" ref="a3da7c1920ef35cfe8b2b030ddd80e1ee" args="(output string queue_names[])" -->
+<a class="anchor" id="adf0dbd3835b9434d98481448261bf7c5"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::get_max_queue_size" ref="adf0dbd3835b9434d98481448261bf7c5" args="(string queue_name)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cl_syoscb_cfg::get_queues </td>
-          <td>(</td>
-          <td class="paramtype">output string&nbsp;</td>
-          <td class="paramname"> <em>queue_names</em>[]</td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00649">649</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a4c6ddbbe0bdb073cb2a5343271dfe4ab"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::new" ref="a4c6ddbbe0bdb073cb2a5343271dfe4ab" args="(string name=&quot;cl_syoscb_cfg&quot;)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">cl_syoscb_cfg::new </td>
+          <td class="memname">int unsigned cl_syoscb_cfg::get_max_queue_size </td>
           <td>(</td>
           <td class="paramtype">string&nbsp;</td>
-          <td class="paramname"> <em>name</em> = <code>&quot;cl_syoscb_cfg&quot;</code></td>
+          <td class="paramname"> <em>queue_name</em></td>
           <td>&nbsp;)&nbsp;</td>
           <td></td>
         </tr>
@@ -155,7 +169,64 @@ uvm_object_utils_end&nbsp;</td><td class="memItemRight" valign="bottom"><a class
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00637">637</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
+<p><b>Configuration API:</b> Returns the maximum number of allowed items for a given queue. </p>
+<p>0 (no limit) is default </p>
+
+<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00622">622</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6a015afd02c4aea850269eb4341517fe"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::get_primary_queue" ref="a6a015afd02c4aea850269eb4341517fe" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string cl_syoscb_cfg::get_primary_queue </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p><b>Configuration API:</b> Gets the primary queue. </p>
+<p>The primary queue is used by the compare algorithms to select which queue to use as the primary one. </p>
+
+<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00580">580</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a96600ba778f0dbc1978e57d8c074daf4"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::set_max_queue_size" ref="a96600ba778f0dbc1978e57d8c074daf4" args="(string queue_name, int unsigned mqs)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cl_syoscb_cfg::set_max_queue_size </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>queue_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int unsigned&nbsp;</td>
+          <td class="paramname"> <em>mqs</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p><b>Configuration API:</b> Set the maximum number of items allowed for a given queue. </p>
+<p>0 (no limit) is default </p>
+
+<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00612">612</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
 
 </div>
 </div>
@@ -175,36 +246,10 @@ uvm_object_utils_end&nbsp;</td><td class="memItemRight" valign="bottom"><a class
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00668">668</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
+<p><b>Configuration API:</b> Sets the primary queue. </p>
+<p>The primary queue is used by the compare algorithms to select which queue to use as the primary one. </p>
 
-</div>
-</div>
-<a class="anchor" id="a9386a9f42400830a58a629f22042d9fe"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::set_producer" ref="a9386a9f42400830a58a629f22042d9fe" args="(string producer, queue_names[])" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bit cl_syoscb_cfg::set_producer </td>
-          <td>(</td>
-          <td class="paramtype">string&nbsp;</td>
-          <td class="paramname"> <em>producer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">queue_names&nbsp;</td>
-          <td class="paramname">[]</td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00659">659</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
+<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00586">586</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
 
 </div>
 </div>
@@ -224,98 +269,10 @@ uvm_object_utils_end&nbsp;</td><td class="memItemRight" valign="bottom"><a class
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00641">641</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
+<p><b>Configuration API:</b> Will set the legal queues when provides with a list of queue names. </p>
+<p>An example could be: set_queues({"Q1", "Q2"}) Will set the max_queue_size for each queue to 0 (no limit) as default </p>
 
-</div>
-</div>
-<a class="anchor" id="a23b00d979afda1e286fed605392994e6"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::uvm_field_aa_object_string" ref="a23b00d979afda1e286fed605392994e6" args="(producers, UVM_DEFAULT) uvm_field_string(primary_queue" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">UVM_DEFAULT pk_syoscb::cl_syoscb_cfg::uvm_field_aa_object_string </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a4555ca49ef4bf777607a0d9f2db9f11e">producers</a>&nbsp;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">UVM_DEFAULT&nbsp;</td>
-          <td class="paramname"></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a5f07736c1548c5ff03b746df02f09ad7"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::uvm_object_utils_begin" ref="a5f07736c1548c5ff03b746df02f09ad7" args="(cl_syoscb_cfg) uvm_field_aa_object_string(queues" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">pk_syoscb::cl_syoscb_cfg::uvm_object_utils_begin </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html">cl_syoscb_cfg</a>&nbsp;</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="a350ff85b4d498010e49c587336605124"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::primary_queue" ref="a350ff85b4d498010e49c587336605124" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">string <a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a350ff85b4d498010e49c587336605124">pk_syoscb::cl_syoscb_cfg::primary_queue</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00614">614</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a4555ca49ef4bf777607a0d9f2db9f11e"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::producers" ref="a4555ca49ef4bf777607a0d9f2db9f11e" args="[string]" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg__pl.html">cl_syoscb_cfg_pl</a> <a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a4555ca49ef4bf777607a0d9f2db9f11e">pk_syoscb::cl_syoscb_cfg::producers</a>[string]</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00613">613</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a0b2d39ce3800c015333bd5abcb6d643a"></a><!-- doxytag: member="pk_syoscb::cl_syoscb_cfg::queues" ref="a0b2d39ce3800c015333bd5abcb6d643a" args="[string]" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classpk__syoscb_1_1cl__syoscb__queue.html">cl_syoscb_queue</a> <a class="el" href="classpk__syoscb_1_1cl__syoscb__cfg.html#a0b2d39ce3800c015333bd5abcb6d643a">pk_syoscb::cl_syoscb_cfg::queues</a>[string]</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00612">612</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
+<p>Definition at line <a class="el" href="pk__syoscb_8sv_source.html#l00499">499</a> of file <a class="el" href="pk__syoscb_8sv_source.html">pk_syoscb.sv</a>.</p>
 
 </div>
 </div>
@@ -328,7 +285,7 @@ uvm_object_utils_end&nbsp;</td><td class="memItemRight" valign="bottom"><a class
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&nbsp;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&nbsp;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&nbsp;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&nbsp;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -380,13 +337,13 @@ uvm_object_utils_end&nbsp;</td><td class="memItemRight" valign="bottom"><a class
 <table border="1" width = "100%">
   <tr>
     <td width = "20%">
-       <address style="text-align: left;"><small>
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.0.2<br>
-       </small></address>
+     <img src="syosil.jpg">
     </td>
     <td width = "60%">
-       <address style="text-align: center;"><small>
-       Copyright 2014 SyoSil ApS<br>
+       <address style="text-align: center;">
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.1<br>
+       <br>
+       Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
        <br>
       Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -399,14 +356,14 @@ uvm_object_utils_end&nbsp;</td><td class="memItemRight" valign="bottom"><a class
       distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
       implied. See the License for the specific language governing permissions and limitations under
       the License.
-       </small></address>
+      </address>
     </td>
     <td width = "20%">
       <address style="text-align: right;"><small>
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Wed Feb 25 04:01:42 2015</small></address>
+      Thu Jun 4 23:02:23 2015</small></address>
    </td>
   </tr>
 </table>

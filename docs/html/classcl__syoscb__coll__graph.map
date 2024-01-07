@@ -1,7 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="node2" href="$classcl__syoscb__cfg.html" title="cl_syoscb_cfg" alt="" coords="91,101,205,131"/>
-<area shape="rect" id="node4" href="$classcl__syoscb__cfg__pl.html" title="cl_syoscb_cfg_pl" alt="" coords="5,5,136,35"/>
-<area shape="rect" id="node6" href="$classcl__syoscb__queue.html" title="cl_syoscb_queue" alt="" coords="160,5,293,35"/>
-<area shape="rect" id="node9" href="$classcl__syoscb__compare.html" title="cl_syoscb_compare" alt="" coords="333,101,485,131"/>
-<area shape="rect" id="node11" href="$classcl__syoscb__compare__base.html" title="cl_syoscb_compare_base" alt="" coords="317,5,507,35"/>
+<area shape="rect" id="node2" href="$classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard." alt="" coords="142,5,257,35"/>
+<area shape="rect" id="node4" href="$classcl__syoscb__queue.html" title="Class which base concet of a queue." alt="" coords="81,101,214,131"/>
+<area shape="rect" id="node11" href="$classcl__syoscb__compare.html" title="Class which act as the root of the compare algorithm." alt="" coords="345,197,497,227"/>
+<area shape="rect" id="node13" href="$classcl__syoscb__compare__base.html" title="Base class for all comapre algorithms." alt="" coords="329,101,518,131"/>
+<area shape="rect" id="node7" href="$classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues." alt="" coords="89,197,321,227"/>
+<area shape="rect" id="node17" href="$classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard." alt="" coords="521,197,681,227"/>
 </map>

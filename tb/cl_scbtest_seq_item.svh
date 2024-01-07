@@ -17,15 +17,20 @@
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
 class cl_scbtest_seq_item extends uvm_sequence_item;
-   rand int unsigned int_a;
+  //-------------------------------------
+  // Randomizable variables
+  //-------------------------------------
+  rand int unsigned int_a;
 
-   `uvm_object_utils_begin(cl_scbtest_seq_item)
-     `uvm_field_int(int_a, UVM_ALL_ON)
-   `uvm_object_utils_end
+  //-------------------------------------
+  // UVM Macros
+  //-------------------------------------
+  `uvm_object_utils_begin(cl_scbtest_seq_item)
+    `uvm_field_int(int_a, UVM_ALL_ON)
+  `uvm_object_utils_end
 
-   extern function new (string name = "cl_scbtest_seq_item");
-
-endclass : cl_scbtest_seq_item
+  extern function new (string name = "cl_scbtest_seq_item");
+endclass: cl_scbtest_seq_item
 
 function cl_scbtest_seq_item::new (string name = "cl_scbtest_seq_item");
    super.new(name);

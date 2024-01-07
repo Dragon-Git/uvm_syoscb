@@ -16,28 +16,46 @@
 //   the License for the specific language governing
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
+// Class which implements the out of order compare algorithm
 class cl_syoscb_compare_ooo extends cl_syoscb_compare_base;
+  //-------------------------------------
+  // UVM Macros
+  //-------------------------------------
   `uvm_object_utils(cl_syoscb_compare_ooo)
 
-  // TBD: max_search_window for OOO compare?
-
+  //-------------------------------------
+  // Constructor
+  //-------------------------------------
   extern function new(string name = "cl_syoscb_compare_ooo");
-  extern virtual function bit compare();
-  extern function bit compare_do();
 
+  //-------------------------------------
+  // Compare API
+  //-------------------------------------
+  extern virtual function void compare();
+  extern function void compare_do();
 endclass: cl_syoscb_compare_ooo
 
 function cl_syoscb_compare_ooo::new(string name = "cl_syoscb_compare_ooo");
   super.new(name);
 endfunction: new
 
-function bit cl_syoscb_compare_ooo::compare();
+/// <b>Compare API</b>: Mandatory overwriting of the base class' compare method.
+/// Currently, this just calls do_copy() blindly 
+function void cl_syoscb_compare_ooo::compare();
   // Here any state variables should be queried
   // to compute if the compare should be done or not
-  return(this.compare_do());
+  this.compare_do();
 endfunction: compare
 
-function bit cl_syoscb_compare_ooo::compare_do();
+/// <b>Compare API</b>: Mandatory overwriting of the base class' do_compare method.
+/// Here the actual out of order compare is implemented.
+///
+/// The algorithm gets the primary queue and then loops over all other queues to see if
+/// it can find primary item as any item in all of the other queues. If so then the items
+/// are removed from all queues. If not then nothing is done. Thus, if some items are not
+/// matched then the result is that the queue will be non-empty at the end of simulation.
+/// This will then be caught by the check_phase.
+function void cl_syoscb_compare_ooo::compare_do();
   string primary_queue_name;
   cl_syoscb_queue primary_queue;
   cl_syoscb_queue_iterator_base primary_queue_iter;
@@ -45,25 +63,28 @@ function bit cl_syoscb_compare_ooo::compare_do();
   int unsigned secondary_item_found[string];
   bit compare_continue = 1'b1;
   bit compare_result = 1'b0;
-  uvm_sequence_item primary_item;
+  cl_syoscb_item primary_item;
 
+  // Initialize state variables
   primary_queue_name = this.get_primary_queue_name();
   this.cfg.get_queues(queue_names);
 
-  `uvm_info("DEBUG", $sformatf("cmp-ooo: primary queue: %s", primary_queue_name), UVM_FULL);
-  `uvm_info("DEBUG", $sformatf("cmp-ooo: number of queues: %0d", queue_names.size()), UVM_FULL);
-
-  if(!$cast(primary_queue, this.cfg.queues[primary_queue_name])) begin
-    `uvm_fatal("TYPE_ERROR", $sformatf("Unable to cast type %0s to type %0s",
-                                       this.cfg.queues[primary_queue_name].get_type_name(),
-                                       primary_queue.get_type_name()));
+  primary_queue = this.cfg.get_queue(primary_queue_name);
+  if(primary_queue == null) begin
+    `uvm_fatal("QUEUE_ERROR", "Unable to retrieve primary queue handle");
   end
 
   primary_queue_iter = primary_queue.create_iterator();
 
+  `uvm_info("DEBUG", $sformatf("cmp-ooo: primary queue: %s", primary_queue_name), UVM_FULL);
+  `uvm_info("DEBUG", $sformatf("cmp-ooo: number of queues: %0d", queue_names.size()), UVM_FULL);
+
   // Outer loop loops through all
   while (!primary_queue_iter.is_done()) begin
     primary_item = primary_queue_iter.get_item();
+
+    // Clear list of found slave items before starting new inner loop
+    secondary_item_found.delete();
 
     // Inner loop through all queues
     foreach(queue_names[i]) begin
@@ -75,23 +96,24 @@ function bit cl_syoscb_compare_ooo::compare_do();
 
         `uvm_info("DEBUG", $sformatf("%s is a secondary queue - now comparing", queue_names[i]), UVM_FULL);
 
-        if(!$cast(secondary_queue, this.cfg.queues[queue_names[i]])) begin
-          `uvm_fatal("TYPE_ERROR", $sformatf("Unable to cast type %0s to type %0s",
-                                             this.cfg.queues[primary_queue_name].get_type_name(),
-                                             primary_queue.get_type_name()));
+        // Get the secondary queue
+        secondary_queue = this.cfg.get_queue(queue_names[i]);
+
+        if(secondary_queue == null) begin
+          `uvm_fatal("QUEUE_ERROR", "Unable to retrieve secondary queue handle");
         end
+
+        // Get an iterator for the secondary queue
         secondary_queue_iter = secondary_queue.create_iterator();
 
         // Only the first match is removed
         while(!secondary_queue_iter.is_done()) begin
-	
-	  // TBD: This is not correct!!! WRONG type ??
-	  uvm_sequence_item sih = secondary_queue_iter.get_item();
+          // Get the item from the secondary queue
+          cl_syoscb_item sih = secondary_queue_iter.get_item();
 
           if(sih.compare(primary_item) == 1'b1) begin
             secondary_item_found[queue_names[i]] = secondary_queue_iter.get_idx();
-            `uvm_info("DEBUG", $sformatf("Secondary item found at index: %0d", secondary_queue_iter.get_idx()),
-                      UVM_FULL);
+            `uvm_info("DEBUG", $sformatf("Secondary item found at index: %0d", secondary_queue_iter.get_idx()), UVM_FULL);
             break;
           end
           if(!secondary_queue_iter.next()) begin
@@ -109,12 +131,12 @@ function bit cl_syoscb_compare_ooo::compare_do();
     // Only start to remove items if all slave items are found (One from each slave queue)
     if(secondary_item_found.size() == queue_names.size()-1) begin
       string queue_name;
+      cl_syoscb_item pih;
 
-      // TBD: This is not correct!!! WRONG type ??
-      uvm_sequence_item pih = primary_queue_iter.get_item();
+      // Get the item from the primary queue
+      pih = primary_queue_iter.get_item();
 
-
-      `uvm_info("DEBUG", $sformatf("Found match for primary queue item : %s",
+      `uvm_info("DEBUG", $sformatf("Found match for primary queue item :\n%s",
                                    pih.sprint()), UVM_FULL);
 
       // Remove from primary
@@ -127,11 +149,13 @@ function bit cl_syoscb_compare_ooo::compare_do();
       while(secondary_item_found.next(queue_name)) begin
         cl_syoscb_queue secondary_queue;
 
-        if(!$cast(secondary_queue, this.cfg.queues[queue_name])) begin
-          `uvm_fatal("TYPE_ERROR", $sformatf("Unable to cast type %0s to type %0s",
-                                             this.cfg.queues[primary_queue_name].get_type_name(),
-                                             primary_queue.get_type_name()));
+        // Get the secondary queue
+        secondary_queue = this.cfg.get_queue(queue_name);
+
+        if(secondary_queue == null) begin
+          `uvm_fatal("QUEUE_ERROR", "Unable to retrieve secondary queue handle");
         end
+
         if(!secondary_queue.delete_item(secondary_item_found[queue_name])) begin
           `uvm_error("QUEUE_ERROR", $sformatf("Unable to delete item idx %0d from queue %s",
                                               secondary_item_found[queue_name], secondary_queue.get_name()));
@@ -148,7 +172,4 @@ function bit cl_syoscb_compare_ooo::compare_do();
   if(!primary_queue.delete_iterator(primary_queue_iter)) begin
     `uvm_fatal("QUEUE_ERROR", $sformatf("Unable to delete iterator from primary queue: %s", primary_queue_name));
   end
-
-  // TBD: See note in cl_scbsyo_compare_base.svh
-  return(1'b1);
-endfunction : compare_do
+endfunction: compare_do

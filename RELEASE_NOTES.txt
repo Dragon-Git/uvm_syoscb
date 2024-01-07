@@ -17,9 +17,9 @@
 #   permissions and limitations under the License.
 #######################################################################
 #######################################################################
-# RELASE NOTES for UVM scoreboard
+# RELASE NOTES for UVM scoreboard version 1.0 RC build 1
 #
-# Feb 25 2015
+# June 04 2015
 #
 # Copyright 2014-2015 SyoSil ApS
 # All Rights Reserved Worldwide 
@@ -38,32 +38,41 @@ The index:
 #######################################################################
 # [1]: General Information
 #######################################################################
-This vesion of the UVM scoreboard is a preliminary version of the
+This version of the UVM scoreboard is the second RC for version 1.0 of the
 UVM scoreboard architecture presented at DVCon 2015 in the paper:
-Versatile UVM Scoreboarding.
+Versatile UVM Scoreboarding. Never versions will be made accesible via:
+
+  www.syosil.com
 
 #######################################################################
 # [2]: Bug Fixes
 #######################################################################
 
-  * Minor bug fixes
+  * Fixed bug in OOO compare
+  * Fixed bug in set_producer method. The queue list was not checked
+    for duplicates
 
 #######################################################################
 # [3]: New Features
 #######################################################################
 
-  * Added support for Cadence and Synopsys
-  * Added some simple examples
+  * Added support for controlling the +UVM_VERBOSITY option from the
+    makefiles
+  * Implemented the TLM API
+  * Added more strict OOO scoping by adding local/protected to member
+    variables
+  * Updated documentation
 
 #######################################################################
 # [4]: Known Limitations
 #######################################################################
 The current known limitations for this relase are:
 
-  1. The TLM API is not supported. Thus, the user needs to implement tasks
-     which calls the scoreboards add_item() method
-  2. Only Out-of-Order compare is supported
-  3. Only a standard SystemVerilog queue is supported
+  1. uvm_sequence_item_vmm not implemented 
+  2. In order by producer compare not implemented
+  3. item_time_out_queue and item_time_out_producer knobs not implemented
+  4. Locater API and queue specific versions not implemented
+  5. Only a standard SystemVerilog queue is supported
 
 #######################################################################
 # [5]: Compatibility List
@@ -74,7 +83,6 @@ tools:
   * Centos Linux release 6.6
   * Make version 3.81
   * UVM version 1.1d
-  * Synopsys VCS® version J-2014.12-1
-  * Mentor Questa® Advanced Simulator version 10.2c
-  * Cadence® Incisive® version 14.10.014
-
+  * Synopsys VCS® version J-2014.12-SP1-1
+  * Mentor Questa® Advanced Simulator version 10.4a
+  * Cadence® Incisive® version 14.20.006
