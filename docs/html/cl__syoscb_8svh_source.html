@@ -188,7 +188,7 @@ window.onload = initDynSections;
 <a name="l00099"></a>00099       foreach(pl.list[j]) begin
 <a name="l00100"></a>00100         <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a> subscriber;
 <a name="l00101"></a>00101 
-<a name="l00102"></a>00102         subscriber = new({producers[i], &quot;_&quot;, pl.list[j], &quot;_subscr&quot;}, this);
+<a name="l00102"></a>00102         subscriber = <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::type_id::create({producers[i], &quot;_&quot;, pl.list[j], &quot;_subscr&quot;}, this);
 <a name="l00103"></a>00103         subscriber.set_queue_name(pl.list[j]);
 <a name="l00104"></a>00104         subscriber.set_producer(producers[i]);
 <a name="l00105"></a>00105         this.subscribers[{pl.list[j], producers[i]}] = subscriber;
@@ -321,7 +321,7 @@ window.onload = initDynSections;
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.2<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.3<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -343,7 +343,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Wed Jul 29 14:03:55 2015</small></address>
+      Mon Sep 28 02:57:58 2015</small></address>
    </td>
   </tr>
 </table>

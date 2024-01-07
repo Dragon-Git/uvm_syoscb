@@ -40,6 +40,8 @@
 ///
 /// Once the vendor has been selected then the available Make targets for that vendor can be listed by typing: "make". Typically, you run the simulation with: <b>make sim</b>.
 ///
+/// In general you can type: <b>make help</b> to get information about what Make options are available.
+///
 /// @page pIntegration How to integrate the UVM scoreboard
 /// The UVM scoreboard is easily integrated into your existing testbench environment.
 ///
@@ -329,6 +331,17 @@
 /// @endcode
 ///
 /// @page pImplementationNotes Implementation notes
+///
+/// @section sAPIs Implementation APIs
+///
+/// The following APIs have been defined for easy extension fo the scoreboard classes:
+///
+///   -# Configuration API: cl_syoscb_cfg
+///   -# Item API: cl_syoscb_item
+///   -# Queue API: cl_syoscb_queue
+///   -# Compare API: cl_syoscb_compare_base
+///   -# Subscriber API: cl_syoscb_subscriber
+///   -# Iterator API: cl_syoscb_queue_iterator_base
 ///
 /// @section sGeneralErrorHandling General error handling
 /// In general when a lower level method detects an error then two concepts are used. Primarily, the method will either issue a UVM info with some information about what went wrong or issue a UVM error/fatal immediately. The first one will then return <b>1'b0</b> to signal that something went wrong. Thus, it is up to the parent levels to catch the error and convert them into UVM errors/fatals etc. This method was chosen since the parent level typically provides more and better information when things go wrong. 

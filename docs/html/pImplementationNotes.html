@@ -82,7 +82,18 @@ window.onload = initDynSections;
 <div class="contents">
 
 
-<h1><a class="anchor" id="pImplementationNotes">Implementation notes </a></h1><h2><a class="anchor" id="sGeneralErrorHandling">
+<h1><a class="anchor" id="pImplementationNotes">Implementation notes </a></h1><h2><a class="anchor" id="sAPIs">
+Implementation APIs</a></h2>
+<p>The following APIs have been defined for easy extension fo the scoreboard classes:</p>
+<ol type="1">
+<li>Configuration API: <a class="el" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a></li>
+<li>Item API: <a class="el" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a></li>
+<li>Queue API: <a class="el" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a></li>
+<li>Compare API: <a class="el" href="classcl__syoscb__compare__base.html" title="Base class for all comapre algorithms.">cl_syoscb_compare_base</a></li>
+<li>Subscriber API: <a class="el" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a></li>
+<li>Iterator API: <a class="el" href="classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating queues.">cl_syoscb_queue_iterator_base</a></li>
+</ol>
+<h2><a class="anchor" id="sGeneralErrorHandling">
 General error handling</a></h2>
 <p>In general when a lower level method detects an error then two concepts are used. Primarily, the method will either issue a UVM info with some information about what went wrong or issue a UVM error/fatal immediately. The first one will then return <b>1'b0</b> to signal that something went wrong. Thus, it is up to the parent levels to catch the error and convert them into UVM errors/fatals etc. This method was chosen since the parent level typically provides more and better information when things go wrong. </p>
 <h2><a class="anchor" id="sErrorCategories">
@@ -180,7 +191,7 @@ Multiple queue references</a></h2>
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.2<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.3<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -202,7 +213,7 @@ Multiple queue references</a></h2>
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Wed Jul 29 14:03:55 2015</small></address>
+      Mon Sep 28 02:57:58 2015</small></address>
    </td>
   </tr>
 </table>

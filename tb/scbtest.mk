@@ -83,13 +83,13 @@ endif
 ifeq ($(VENDOR),SYNOPSYS)
 .PHONY : compile_tb
 compile_tb: $(scbtest_SRC) synopsys_uvm $(foreach dep,$(scbtest_DEPS),compile_$(dep)_vc)
-	vlogan -ntb_opts uvm-1.1 -sverilog \
+	vlogan -ntb_opts uvm-$(UVM_VERSION) -sverilog $(VLOG_OPTS) \
           $(foreach inc_dir,$(scbtest_INC_DIR),+incdir+$(inc_dir)) \
           $(scbtest_SRC)
 
 .PHONY: elaborate_tb
 elaborate_tb: compile_tb
-	vcs -sverilog -ntb_opts uvm-1.1 scbtest_top
+	vcs -sverilog -ntb_opts uvm-$(UVM_VERSION) scbtest_top
 
 .PHONY: help_tb
 help_tb: help_tb_common

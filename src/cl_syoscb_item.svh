@@ -18,7 +18,7 @@
 //----------------------------------------------------------------------
 /// The UVM scoreboard item. This item wraps the uvm_sequence_items. This ensures that future
 /// extensions to the UVM scoreboard will always be able to use all uvm_sqeuence_items from
-/// already existing testbenches etc. even htough more META data is added to the wrapping item.
+/// already existing testbenches etc. even though more META data is added to the wrapping item.
 class cl_syoscb_item extends uvm_object;
   //-------------------------------------
   // Non randomizable variables
@@ -33,8 +33,16 @@ class cl_syoscb_item extends uvm_object;
   // UVM Macros
   //-------------------------------------
   `uvm_object_utils_begin(cl_syoscb_item)
+`ifdef SYOSIL_APPLY_TLM_GP_CMP_WORKAROUND
+    // Use NOCOMPARE when do_compare is implemented. Otherwise the compare is done twice since
+    // the super of uvm field automation is called before do_compare. This will invoke the compare
+    // since the functions are virtual
+    `uvm_field_string(producer, UVM_DEFAULT | UVM_NOCOMPARE)
+    `uvm_field_object(item,     UVM_DEFAULT | UVM_NOCOMPARE)
+`else
     `uvm_field_string(producer, UVM_DEFAULT)
-    `uvm_field_object(item, UVM_DEFAULT)
+    `uvm_field_object(item,     UVM_DEFAULT)
+`endif
   `uvm_object_utils_end
 
   //-------------------------------------
@@ -49,6 +57,31 @@ class cl_syoscb_item extends uvm_object;
   extern function void set_producer(string producer);
   extern function uvm_sequence_item get_item();
   extern function void set_item(uvm_sequence_item item);
+
+`ifdef SYOSIL_APPLY_TLM_GP_CMP_WORKAROUND
+  //-------------------------------------
+  // UVM TLM2 Generic Payload compare
+  // workaround
+  //-------------------------------------
+  function bit do_compare(uvm_object rhs, uvm_comparer comparer);
+    bit status = 1'b1;
+    cl_syoscb_item that;
+   
+    // Code it properly using the comparer policy
+    if(!$cast(that, rhs)) begin
+      status = 1'b0;
+    end else begin
+      // "producer" compare using the comparer object
+      status &= comparer.compare_string("producer", this.producer, that.producer);
+
+      // Apply WORKAROUND:
+      //   Ensure that the comparer object is properly updated at this level
+      //   and propagate the compare result bit correctly
+      status &= comparer.compare_object("item", this.item, that.item);
+    end
+    return(status);
+  endfunction: do_compare
+`endif
 endclass: cl_syoscb_item
 
 function cl_syoscb_item::new(string name = "cl_syoscb_item");

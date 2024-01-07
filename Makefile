@@ -17,14 +17,16 @@ EXTERN_LIB_SRC_DIR := $(BASE_DIR)/extern
 LIB_DIR            := $(OUTPUT_DIR)/lib
 
 # Misc variables
-VERIFICATION_COMPS   := syoscb
-TB                   := scbtest
+VERIFICATION_COMPS     := syoscb
+TB                     := scbtest
+SYOSIL_DISABLE_TLM_GP_CMP_WORKAROUND ?= 0
 
 #############################################################################
 # Global UVM Options
 #############################################################################
 UVM_VERBOSITY ?= UVM_MEDIUM
-UVM_TESTNAME ?= cl_scbtest_test_simple1
+UVM_TESTNAME  ?= cl_scbtest_test_simple1
+UVM_VERSION   ?= 1.2
 
 #############################################################################
 # Global Mentor Options
@@ -35,8 +37,12 @@ VMAP := vmap
 VLOG := vlog
 VSIM := vsim
 GCC  := gcc
-VLOG_OPTS := -64 -timescale "1ps / 100fs" +define+ASSERTIONS +define+CLOCKING +acc -sv -novopt
-VSIM_OPTS := -classdebug -novopt -64 -c
+ifeq ($(SYOSIL_DISABLE_TLM_GP_CMP_WORKAROUND),1)
+VLOG_OPTS := -64 -timescale "1ps / 100fs" +define+ASSERTIONS +define+CLOCKING +acc -sv -novopt -L $(MTI_HOME)/uvm-$(UVM_VERSION)
+else
+VLOG_OPTS := -64 -timescale "1ps / 100fs" +define+SYOSIL_APPLY_TLM_GP_CMP_WORKAROUND +define+ASSERTIONS +define+CLOCKING +acc -sv -novopt -L $(MTI_HOME)/uvm-$(UVM_VERSION)
+endif
+VSIM_OPTS := -classdebug -novopt -64 -c -L $(MTI_HOME)/uvm-$(UVM_VERSION)
 VSIM_WAVE ?= 0
 VSIM_DO_CMD ?= run -all
 ifeq ($(VSIM_WAVE), 1)
@@ -47,12 +53,24 @@ endif
 #############################################################################
 # Global Cadence Options
 #############################################################################
-# Currently none
+ifeq ($(VENDOR),CADENCE)
+ifeq ($(SYOSIL_DISABLE_TLM_GP_CMP_WORKAROUND),1)
+IRUN_OPTS :=
+else
+IRUN_OPTS := +define+SYOSIL_APPLY_TLM_GP_CMP_WORKAROUND=1
+endif
+endif
 
 #############################################################################
 # Global Synopsys Options
 #############################################################################
-# Currently none
+ifeq ($(VENDOR),SYNOPSYS)
+ifeq ($(SYOSIL_DISABLE_TLM_GP_CMP_WORKAROUND),1)
+VLOG_OPTS :=
+else
+VLOG_OPTS := +define+SYOSIL_APPLY_TLM_GP_CMP_WORKAROUND=1
+endif
+endif
 
 #############################################################################
 # Include make targets for each VC
@@ -128,6 +146,7 @@ sim:
 	worklib \
 	-endlib	\
 	-uvm \
+	-uvmhome $(IFV_ROOT)/tools/methodology/UVM/CDNS-$(UVM_VERSION) \
 	-sv \
 	-64bit \
 	+incdir+./src \
@@ -137,6 +156,7 @@ sim:
 	+UVM_MAX_QUIT_COUNT=1,0 \
 	+UVM_TESTNAME=$(UVM_TESTNAME) \
 	+UVM_VERBOSITY=$(UVM_VERBOSITY) \
+	$(IRUN_OPTS) \
 	./src/pk_syoscb.sv \
 	./tb/pk_scbtest.sv \
 	./tb/scbtest_top.sv
@@ -165,7 +185,7 @@ endif
 ifeq ($(VENDOR),SYNOPSYS)
 .PHONY: synopsys_uvm
 synopsys_uvm:
-	vlogan -ntb_opts uvm-1.1
+	vlogan -ntb_opts uvm-$(UVM_VERSION)
 
 .PHONY: sim
 sim: elaborate_tb
@@ -214,7 +234,8 @@ help_top:
 	@echo "  UVM_TESTNAME = cl_scbtest_test_base      |"
 	@echo "                 cl_scbtest_test_simple1   |"
 	@echo "                 cl_scbtest_test_tlm       |"
-	@echo "                 cl_scbtest_test_ooo_heavy"
+	@echo "                 cl_scbtest_test_ooo_heavy |"
+	@echo "                 cl_scbtest_test_gp         "
 	@echo "  Current value: $(UVM_TESTNAME)"
 	@echo ""
 	@echo "  UVM_VERBOSITY = UVM_FULL   |"
@@ -223,6 +244,18 @@ help_top:
 	@echo "                = UVM_LOW    |"
 	@echo "                = UVM_NONE"
 	@echo "  Current value: $(UVM_VERBOSITY)"
+	@echo ""
+ifeq ($(VENDOR), SYNOPSYS)
+	@echo "  UVM_VERSION = 1.1 |"
+else
+	@echo "  UVM_VERSION = 1.1d |"
+endif
+	@echo "              = 1.2"
+	@echo "  Current value: $(UVM_VERSION)"
+	@echo ""
+	@echo "  SYOSIL_DISABLE_TLM_GP_CMP_WORKAROUND = 0 |"
+	@echo "                                       = 1"
+	@echo "  Current value: $(SYOSIL_DISABLE_TLM_GP_CMP_WORKAROUND)"
 	@echo ""
 
 .PHONY: help

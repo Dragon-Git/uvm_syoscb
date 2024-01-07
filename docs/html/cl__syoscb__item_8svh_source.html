@@ -89,7 +89,7 @@ window.onload = initDynSections;
 <div class="contents">
 <h1>cl_syoscb_item.svh</h1><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/// The UVM scoreboard item. This item wraps the uvm_sequence_items. This ensures that future</span>
 <a name="l00002"></a>00002 <span class="comment"></span><span class="comment">/// extensions to the UVM scoreboard will always be able to use all uvm_sqeuence_items from</span>
-<a name="l00003"></a>00003 <span class="comment"></span><span class="comment">/// already existing testbenches etc. even htough more META data is added to the wrapping item.</span>
+<a name="l00003"></a>00003 <span class="comment"></span><span class="comment">/// already existing testbenches etc. even though more META data is added to the wrapping item.</span>
 <a name="l00004"></a><a class="code" href="classcl__syoscb__item.html">00004</a> <span class="comment"></span><span class="keyword">class </span><a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> <span class="keyword">extends</span> uvm_object;
 <a name="l00005"></a>00005   <span class="comment">//-------------------------------------</span>
 <a name="l00006"></a>00006   <span class="comment">// Non randomizable variables</span>
@@ -104,49 +104,82 @@ window.onload = initDynSections;
 <a name="l00015"></a>00015   <span class="comment">// UVM Macros</span>
 <a name="l00016"></a>00016   <span class="comment">//-------------------------------------</span>
 <a name="l00017"></a>00017   `uvm_object_utils_begin(cl_syoscb_item)
-<a name="l00018"></a>00018     `uvm_field_string(producer, UVM_DEFAULT)
-<a name="l00019"></a>00019     `uvm_field_object(item, UVM_DEFAULT)
-<a name="l00020"></a>00020   `uvm_object_utils_end
-<a name="l00021"></a>00021 
-<a name="l00022"></a>00022   <span class="comment">//-------------------------------------</span>
-<a name="l00023"></a>00023   <span class="comment">// Constructor</span>
-<a name="l00024"></a>00024   <span class="comment">//-------------------------------------</span>
-<a name="l00025"></a>00025   extern function new(string name = &quot;cl_syoscb_item&quot;);
-<a name="l00026"></a>00026 
-<a name="l00027"></a>00027   <span class="comment">//-------------------------------------</span>
-<a name="l00028"></a>00028   <span class="comment">// Item API</span>
-<a name="l00029"></a>00029   <span class="comment">//-------------------------------------</span>
-<a name="l00030"></a>00030   extern function string <a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5" title="Item API: Returns the producer">get_producer</a>();
-<a name="l00031"></a>00031   extern function void <a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f" title="Item API: Sets the producer">set_producer</a>(string producer);
-<a name="l00032"></a>00032   extern function uvm_sequence_item <a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb" title="Item API: Returns the wrapped uvm_sequence_item">get_item</a>();
-<a name="l00033"></a>00033   extern function void <a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb" title="Item API: Sets the to be wrapped uvm_sequence_item">set_item</a>(uvm_sequence_item item);
-<a name="l00034"></a>00034 endclass: <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>
-<a name="l00035"></a>00035 
-<a name="l00036"></a>00036 function <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::new(string name = &quot;cl_syoscb_item&quot;);
-<a name="l00037"></a>00037   super.new(name);
-<a name="l00038"></a>00038 endfunction : new     
-<a name="l00039"></a>00039 <span class="comment"></span>
-<a name="l00040"></a>00040 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Returns the producer</span>
-<a name="l00041"></a><a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5">00041</a> <span class="comment"></span>function string <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5" title="Item API: Returns the producer">get_producer</a>();
-<a name="l00042"></a>00042   return(this.producer);
-<a name="l00043"></a>00043 endfunction: <a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5" title="Item API: Returns the producer">get_producer</a>
-<a name="l00044"></a>00044 <span class="comment"></span>
-<a name="l00045"></a>00045 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Sets the producer</span>
-<a name="l00046"></a><a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f">00046</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f" title="Item API: Sets the producer">set_producer</a>(string producer);
-<a name="l00047"></a>00047   <span class="comment">// The producer has been checked by the parent prior</span>
-<a name="l00048"></a>00048   <span class="comment">// to the insertion</span>
-<a name="l00049"></a>00049   this.<a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb" title="Hold the name of the producer.">producer</a> = <a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb" title="Hold the name of the producer.">producer</a>;
-<a name="l00050"></a>00050 endfunction: <a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f" title="Item API: Sets the producer">set_producer</a>
-<a name="l00051"></a>00051 <span class="comment"></span>
-<a name="l00052"></a>00052 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Returns the wrapped uvm_sequence_item</span>
-<a name="l00053"></a><a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb">00053</a> <span class="comment"></span>function uvm_sequence_item <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb" title="Item API: Returns the wrapped uvm_sequence_item">get_item</a>();
-<a name="l00054"></a>00054   return(this.item);
-<a name="l00055"></a>00055 endfunction: <a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb" title="Item API: Returns the wrapped uvm_sequence_item">get_item</a>
-<a name="l00056"></a>00056 <span class="comment"></span>
-<a name="l00057"></a>00057 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Sets the to be wrapped uvm_sequence_item</span>
-<a name="l00058"></a><a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb">00058</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb" title="Item API: Sets the to be wrapped uvm_sequence_item">set_item</a>(uvm_sequence_item item);
-<a name="l00059"></a>00059   this.<a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203" title="Handle to the wrapped uvm_sequence_item.">item</a> = <a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203" title="Handle to the wrapped uvm_sequence_item.">item</a>;
-<a name="l00060"></a>00060 endfunction: <a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb" title="Item API: Sets the to be wrapped uvm_sequence_item">set_item</a>
+<a name="l00018"></a>00018 `ifdef SYOSIL_APPLY_TLM_GP_CMP_WORKAROUND
+<a name="l00019"></a>00019     <span class="comment">// Use NOCOMPARE when do_compare is implemented. Otherwise the compare is done twice since</span>
+<a name="l00020"></a>00020     <span class="comment">// the super of uvm field automation is called before do_compare. This will invoke the compare</span>
+<a name="l00021"></a>00021     <span class="comment">// since the functions are virtual</span>
+<a name="l00022"></a>00022     `uvm_field_string(producer, UVM_DEFAULT | UVM_NOCOMPARE)
+<a name="l00023"></a>00023     `uvm_field_object(item,     UVM_DEFAULT | UVM_NOCOMPARE)
+<a name="l00024"></a>00024 `else
+<a name="l00025"></a>00025     `uvm_field_string(producer, UVM_DEFAULT)
+<a name="l00026"></a>00026     `uvm_field_object(item,     UVM_DEFAULT)
+<a name="l00027"></a>00027 `endif
+<a name="l00028"></a>00028   `uvm_object_utils_end
+<a name="l00029"></a>00029 
+<a name="l00030"></a>00030   <span class="comment">//-------------------------------------</span>
+<a name="l00031"></a>00031   <span class="comment">// Constructor</span>
+<a name="l00032"></a>00032   <span class="comment">//-------------------------------------</span>
+<a name="l00033"></a>00033   extern function new(string name = &quot;cl_syoscb_item&quot;);
+<a name="l00034"></a>00034 
+<a name="l00035"></a>00035   <span class="comment">//-------------------------------------</span>
+<a name="l00036"></a>00036   <span class="comment">// Item API</span>
+<a name="l00037"></a>00037   <span class="comment">//-------------------------------------</span>
+<a name="l00038"></a>00038   extern function string <a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5" title="Item API: Returns the producer">get_producer</a>();
+<a name="l00039"></a>00039   extern function void <a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f" title="Item API: Sets the producer">set_producer</a>(string producer);
+<a name="l00040"></a>00040   extern function uvm_sequence_item <a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb" title="Item API: Returns the wrapped uvm_sequence_item">get_item</a>();
+<a name="l00041"></a>00041   extern function void <a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb" title="Item API: Sets the to be wrapped uvm_sequence_item">set_item</a>(uvm_sequence_item item);
+<a name="l00042"></a>00042 
+<a name="l00043"></a>00043 `ifdef SYOSIL_APPLY_TLM_GP_CMP_WORKAROUND
+<a name="l00044"></a>00044   <span class="comment">//-------------------------------------</span>
+<a name="l00045"></a>00045   <span class="comment">// UVM TLM2 Generic Payload compare</span>
+<a name="l00046"></a>00046   <span class="comment">// workaround</span>
+<a name="l00047"></a>00047   <span class="comment">//-------------------------------------</span>
+<a name="l00048"></a>00048   function bit do_compare(uvm_object rhs, uvm_comparer comparer);
+<a name="l00049"></a>00049     bit status = 1&apos;b1;
+<a name="l00050"></a>00050     <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a> that;
+<a name="l00051"></a>00051    
+<a name="l00052"></a>00052     <span class="comment">// Code it properly using the comparer policy</span>
+<a name="l00053"></a>00053     if(!$cast(that, rhs)) begin
+<a name="l00054"></a>00054       status = 1&apos;b0;
+<a name="l00055"></a>00055     end else begin
+<a name="l00056"></a>00056       <span class="comment">// &quot;producer&quot; compare using the comparer object</span>
+<a name="l00057"></a>00057       status &amp;= comparer.compare_string(&quot;producer&quot;, this.producer, that.producer);
+<a name="l00058"></a>00058 
+<a name="l00059"></a>00059       <span class="comment">// Apply WORKAROUND:</span>
+<a name="l00060"></a>00060       <span class="comment">//   Ensure that the comparer object is properly updated at this level</span>
+<a name="l00061"></a>00061       <span class="comment">//   and propagate the compare result bit correctly</span>
+<a name="l00062"></a>00062       status &amp;= comparer.compare_object(&quot;item&quot;, this.item, that.item);
+<a name="l00063"></a>00063     end
+<a name="l00064"></a>00064     return(status);
+<a name="l00065"></a>00065   endfunction: do_compare
+<a name="l00066"></a>00066 `endif
+<a name="l00067"></a>00067 endclass: <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>
+<a name="l00068"></a>00068 
+<a name="l00069"></a>00069 function <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::new(string name = &quot;cl_syoscb_item&quot;);
+<a name="l00070"></a>00070   super.new(name);
+<a name="l00071"></a>00071 endfunction : new     
+<a name="l00072"></a>00072 <span class="comment"></span>
+<a name="l00073"></a>00073 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Returns the producer</span>
+<a name="l00074"></a><a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5">00074</a> <span class="comment"></span>function string <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5" title="Item API: Returns the producer">get_producer</a>();
+<a name="l00075"></a>00075   return(this.producer);
+<a name="l00076"></a>00076 endfunction: <a class="code" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5" title="Item API: Returns the producer">get_producer</a>
+<a name="l00077"></a>00077 <span class="comment"></span>
+<a name="l00078"></a>00078 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Sets the producer</span>
+<a name="l00079"></a><a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f">00079</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f" title="Item API: Sets the producer">set_producer</a>(string producer);
+<a name="l00080"></a>00080   <span class="comment">// The producer has been checked by the parent prior</span>
+<a name="l00081"></a>00081   <span class="comment">// to the insertion</span>
+<a name="l00082"></a>00082   this.<a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb" title="Hold the name of the producer.">producer</a> = <a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb" title="Hold the name of the producer.">producer</a>;
+<a name="l00083"></a>00083 endfunction: <a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f" title="Item API: Sets the producer">set_producer</a>
+<a name="l00084"></a>00084 <span class="comment"></span>
+<a name="l00085"></a>00085 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Returns the wrapped uvm_sequence_item</span>
+<a name="l00086"></a><a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb">00086</a> <span class="comment"></span>function uvm_sequence_item <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb" title="Item API: Returns the wrapped uvm_sequence_item">get_item</a>();
+<a name="l00087"></a>00087   return(this.item);
+<a name="l00088"></a>00088 endfunction: <a class="code" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb" title="Item API: Returns the wrapped uvm_sequence_item">get_item</a>
+<a name="l00089"></a>00089 <span class="comment"></span>
+<a name="l00090"></a>00090 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Sets the to be wrapped uvm_sequence_item</span>
+<a name="l00091"></a><a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb">00091</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb" title="Item API: Sets the to be wrapped uvm_sequence_item">set_item</a>(uvm_sequence_item item);
+<a name="l00092"></a>00092   this.<a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203" title="Handle to the wrapped uvm_sequence_item.">item</a> = <a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203" title="Handle to the wrapped uvm_sequence_item.">item</a>;
+<a name="l00093"></a>00093 endfunction: <a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb" title="Item API: Sets the to be wrapped uvm_sequence_item">set_item</a>
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -209,7 +242,7 @@ window.onload = initDynSections;
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.2<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.3<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -231,7 +264,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Wed Jul 29 14:03:55 2015</small></address>
+      Mon Sep 28 02:57:58 2015</small></address>
    </td>
   </tr>
 </table>

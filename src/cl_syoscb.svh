@@ -117,7 +117,7 @@ function void cl_syoscb::build_phase(uvm_phase phase);
       foreach(pl.list[j]) begin
         cl_syoscb_subscriber subscriber;
 
-        subscriber = new({producers[i], "_", pl.list[j], "_subscr"}, this);
+        subscriber = cl_syoscb_subscriber::type_id::create({producers[i], "_", pl.list[j], "_subscr"}, this);
         subscriber.set_queue_name(pl.list[j]);
         subscriber.set_producer(producers[i]);
         this.subscribers[{pl.list[j], producers[i]}] = subscriber;

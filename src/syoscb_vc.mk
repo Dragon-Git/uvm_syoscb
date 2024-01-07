@@ -94,7 +94,7 @@ endif
 ifeq ($(VENDOR),SYNOPSYS)
 .PHONY : compile_syoscb_vc
 compile_syoscb_vc: $(syoscb_SRC) synopsys_uvm
-	vlogan -ntb_opts uvm-1.1 -sverilog \
+	vlogan -ntb_opts uvm-$(UVM_VERSION) -sverilog $(VLOG_OPTS) \
 	  $(foreach inc_dir,$(syoscb_INC_DIR),+incdir+$(inc_dir)) \
           $(syoscb_SRC)
 

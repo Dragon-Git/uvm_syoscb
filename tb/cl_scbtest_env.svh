@@ -54,9 +54,9 @@ function void cl_scbtest_env::build_phase(uvm_phase phase);
                                               cl_syoscb_queue_std::get_type(),
                                               "*");
 
-   factory.set_type_override_by_type(cl_syoscb_compare_base::get_type(),
-                                     cl_syoscb_compare_ooo::get_type(),
-                                     "*");
+   this.set_type_override_by_type(cl_syoscb_compare_base::get_type(),
+                                  cl_syoscb_compare_ooo::get_type(),
+                                  "*");
 
   this.syoscb_cfg = cl_syoscb_cfg::type_id::create("syoscb_cfg");
 
