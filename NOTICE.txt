@@ -4,11 +4,10 @@
 =========================================================================
 
 =========================================================================
-==  UVM Scoreboard SyoSil ApS Notice                                   ==
+==  UVM library SyoSil ApS Notice                                      ==
 =========================================================================
 
-All of the UVM scoreboard were developed by
-SyoSil ApS.
+All of the UVM library were developed by SyoSil ApS.
 
-Copyright (c) 2014 SyoSil ApS
+Copyright (c) 2022 SyoSil ApS
 All rights reserved.

@@ -1,0 +1,10 @@
+<map id="cl_tb_cmp_seq_item_base&lt; TIOBJ, MAX_ARRAY_SIZE &gt;" name="cl_tb_cmp_seq_item_base&lt; TIOBJ, MAX_ARRAY_SIZE &gt;">
+<area shape="rect" id="node2" href="$classcl__tb__cmp__seq__item__base.html" title="cl_tb_cmp_seq_item\l_base\&lt; TIOBJ \&gt;" alt="" coords="320,169,475,210"/>
+<area shape="rect" id="node8" href="$classcl__tb__cmp__seq__item__base.html" title="cl_tb_cmp_seq_item\l_base\&lt; T \&gt;" alt="" coords="320,263,475,305"/>
+<area shape="rect" id="node3" href="$classcl__tb__cmp__a__d__seq__item.html" title="An &quot;a&quot; type item which used a manual do_compare implementation instead of field macros. " alt="" coords="543,5,729,46"/>
+<area shape="rect" id="node4" href="$classcl__tb__cmp__a__m__seq__item.html" title="A &quot;b&quot; type item which used a mix of do_compare implementation and field macros. " alt="" coords="541,70,731,111"/>
+<area shape="rect" id="node5" href="$classcl__tb__cmp__b__d__seq__item.html" title="A &quot;b&quot; type item which used a manual do_compare implementation instead of field macros. " alt="" coords="543,135,729,177"/>
+<area shape="rect" id="node6" href="$classcl__tb__cmp__b__f__seq__item.html" title="A &quot;b&quot; type item which used a field macros instead of manually implementing do_compare. " alt="" coords="545,201,727,242"/>
+<area shape="rect" id="node7" href="$classcl__tb__cmp__b__m__seq__item.html" title="An &quot;a&quot; type item which used a mix of do_compare implementation and field macros. " alt="" coords="541,266,731,307"/>
+<area shape="rect" id="node9" href="$classcl__tb__cmp__a__f__seq__item.html" title="An &quot;a&quot; type item which used a field macros instead of manually implementing do_compare. " alt="" coords="526,332,746,359"/>
+</map>

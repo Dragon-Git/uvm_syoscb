@@ -1,5 +1,5 @@
 #######################################################################
-#   Copyright 2014-2015 SyoSil ApS
+#   Copyright 2005-2022 SyoSil ApS
 #   All Rights Reserved Worldwide
 #
 #   Licensed under the Apache License, Version 2.0 (the
@@ -16,4 +16,4 @@
 #   the License for the specific language governing
 #   permissions and limitations under the License.
 #######################################################################
-1.0.2.5
+1.0.3.0

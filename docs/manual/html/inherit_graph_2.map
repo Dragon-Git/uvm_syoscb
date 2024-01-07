@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classcl__scb__test__cmp__base.html" title="cl_scb_test_cmp_base\l\&lt; ATYPE \&gt;" alt="" coords="6,38,173,79"/>
+<area shape="rect" id="node2" href="$classcl__scb__test__cmp__io.html" title="Base class for specializations of cl_scb_test_cmp_base using IO compare. " alt="" coords="227,5,375,46"/>
+<area shape="rect" id="node3" href="$classcl__scb__test__cmp__ooo.html" title="Base class for specializations of cl_scb_test_cmp_base using OOO compare. " alt="" coords="221,70,381,111"/>
+</map>

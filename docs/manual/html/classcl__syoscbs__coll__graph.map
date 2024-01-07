@@ -1,0 +1,14 @@
+<map id="cl_syoscbs&lt; FIN &gt;" name="cl_syoscbs&lt; FIN &gt;">
+<area shape="rect" id="node2" href="$classcl__syoscbs__base.html" title="Base class for a wrapper around multiple SyoSil Scoreboards. " alt="" coords="20,680,151,707"/>
+<area shape="rect" id="node3" href="$classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard. " alt="" coords="240,589,325,616"/>
+<area shape="rect" id="node4" href="$classcl__syoscb__queue__base.html" title="Class which represents the base concept of a queue. " alt="" coords="659,109,829,136"/>
+<area shape="rect" id="node5" href="$classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard. " alt="" coords="355,200,467,227"/>
+<area shape="rect" id="node8" href="$classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating over queues. " alt="" coords="491,305,716,332"/>
+<area shape="rect" id="node10" href="$classcl__syoscb__compare__base.html" title="Base class for all compare algorithms. " alt="" coords="601,408,788,435"/>
+<area shape="rect" id="node11" href="$classcl__syoscb__proxy__item__base.html" title="Base class for all proxy items. " alt="" coords="703,252,907,279"/>
+<area shape="rect" id="node9" href="$classcl__syoscb__compare.html" title="Component which instantiates the chosen comparison algorithm. " alt="" coords="239,499,388,525"/>
+<area shape="rect" id="node13" href="$classcl__syoscbs__cfg.html" title="Configuration object for the cl_syoscbs_base scoreboard wrapper. " alt="" coords="59,357,177,384"/>
+<area shape="rect" id="node6" href="$classcl__syoscb__cfg__pl.html" title="Utility class for capturing the queue names associated with a producer. " alt="" coords="303,109,433,136"/>
+<area shape="rect" id="node7" href="$classcl__syoscb__item.html" title="The UVM scoreboard item which wraps uvm_sequence_item . " alt="" coords="927,5,1049,32"/>
+<area shape="rect" id="node12" href="$classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard. " alt="" coords="55,499,213,525"/>
+</map>

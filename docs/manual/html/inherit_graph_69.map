@@ -1,0 +1,8 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classcl__tb__cmp__seq__item__base.html" title="cl_tb_cmp_seq_item\l_base\&lt; TIOBJ \&gt;" alt="" coords="5,135,160,177"/>
+<area shape="rect" id="node2" href="$classcl__tb__cmp__a__d__seq__item.html" title="An &quot;a&quot; type item which used a manual do_compare implementation instead of field macros. " alt="" coords="211,5,397,46"/>
+<area shape="rect" id="node3" href="$classcl__tb__cmp__a__m__seq__item.html" title="A &quot;b&quot; type item which used a mix of do_compare implementation and field macros. " alt="" coords="209,70,399,111"/>
+<area shape="rect" id="node4" href="$classcl__tb__cmp__b__d__seq__item.html" title="A &quot;b&quot; type item which used a manual do_compare implementation instead of field macros. " alt="" coords="211,135,397,177"/>
+<area shape="rect" id="node5" href="$classcl__tb__cmp__b__f__seq__item.html" title="A &quot;b&quot; type item which used a field macros instead of manually implementing do_compare. " alt="" coords="213,201,395,242"/>
+<area shape="rect" id="node6" href="$classcl__tb__cmp__b__m__seq__item.html" title="An &quot;a&quot; type item which used a mix of do_compare implementation and field macros. " alt="" coords="209,266,399,307"/>
+</map>

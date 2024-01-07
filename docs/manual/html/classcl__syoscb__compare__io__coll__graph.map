@@ -1,0 +1,9 @@
+<map id="cl_syoscb_compare_io" name="cl_syoscb_compare_io">
+<area shape="rect" id="node2" href="$classcl__syoscb__compare__base.html" title="Base class for all compare algorithms. " alt="" coords="1360,212,1547,239"/>
+<area shape="rect" id="node3" href="$classcl__syoscb__queue__base.html" title="Class which represents the base concept of a queue. " alt="" coords="299,200,469,227"/>
+<area shape="rect" id="node4" href="$classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard. " alt="" coords="587,256,699,283"/>
+<area shape="rect" id="node7" href="$classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating over queues. " alt="" coords="953,184,1178,211"/>
+<area shape="rect" id="node8" href="$classcl__syoscb__proxy__item__base.html" title="Base class for all proxy items. " alt="" coords="723,71,927,97"/>
+<area shape="rect" id="node5" href="$classcl__syoscb__cfg__pl.html" title="Utility class for capturing the queue names associated with a producer. " alt="" coords="319,337,449,364"/>
+<area shape="rect" id="node6" href="$classcl__syoscb__item.html" title="The UVM scoreboard item which wraps uvm_sequence_item . " alt="" coords="5,200,128,227"/>
+</map>

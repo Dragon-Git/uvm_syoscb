@@ -1,0 +1,6 @@
+<map id="cl_syoscb_queue_base" name="cl_syoscb_queue_base">
+<area shape="rect" id="node2" href="$classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard. " alt="" coords="127,200,239,227"/>
+<area shape="rect" id="node5" href="$classcl__syoscb__queue__iterator__base.html" title="Queue iterator base class defining the iterator API used for iterating over queues. " alt="" coords="186,291,411,317"/>
+<area shape="rect" id="node3" href="$classcl__syoscb__cfg__pl.html" title="Utility class for capturing the queue names associated with a producer. " alt="" coords="5,109,136,136"/>
+<area shape="rect" id="node4" href="$classcl__syoscb__item.html" title="The UVM scoreboard item which wraps uvm_sequence_item . " alt="" coords="215,5,337,32"/>
+</map>

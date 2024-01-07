@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classcl__syoscb__queue__base.html" title="Class which represents the base concept of a queue. " alt="" coords="5,85,176,112"/>
+<area shape="rect" id="node2" href="$classcl__syoscb__queue__hash.html" title="Class which represents the base concept of a hash queue. " alt="" coords="225,5,421,46"/>
+<area shape="rect" id="node3" href="$classcl__syoscb__queue__hash.html" title="cl_syoscb_queue_hash\l\&lt; pk_syoscb::MD5_HASH\l_DIGEST_WIDTH \&gt;" alt="" coords="229,71,416,127"/>
+<area shape="rect" id="node5" href="$classcl__syoscb__queue__std.html" title="Standard implementation of a queue. " alt="" coords="243,151,402,177"/>
+<area shape="rect" id="node4" href="$classcl__syoscb__queue__hash__md5.html" title="MD5 implementation of a hash queue which optimizes the OOO compare. " alt="" coords="470,85,677,112"/>
+</map>

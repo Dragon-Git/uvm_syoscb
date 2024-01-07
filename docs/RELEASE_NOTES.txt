@@ -1,0 +1,89 @@
+#######################################################################
+#   Copyright 2005-2022 SyoSil ApS
+#   All Rights Reserved Worldwide
+#
+#   Licensed under the Apache License, Version 2.0 (the
+#   "License"); you may not use this file except in
+#   compliance with the License.  You may obtain a copy of
+#   the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in
+#   writing, software distributed under the License is
+#   distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+#   CONDITIONS OF ANY KIND, either express or implied.  See
+#   the License for the specific language governing
+#   permissions and limitations under the License.
+#######################################################################
+###############################################################################
+# RELASE NOTES for UVM scoreboard version 1.0.3
+#
+# August 9 2022
+#
+###############################################################################
+This file contains information about the 1.0.3 release of the SyoSil
+UVM Scoreboard. The file is structured as follows
+
+* [1]: New features and bug Fixes
+* [2]: Known limitations
+* [3]: Compatibility list
+
+###############################################################################
+# [1]: New features and bug Fixes
+###############################################################################
+As it has been several years since the scoreboard was last updated, features and
+bug fixes have been merged into one list.
+The major points of interest for this release include:
+
+  * The scoreboard now supports UVM 1.1d, 1.2 and IEEE.
+  * Added no items inserted-check.
+  * Add convenience functions for factory overrides in cl_syoscb, making
+    configuration simpler.
+  * Add XML printer and XSLT files to transform XML into HTML or GraphML.
+  * Add orphan dump to file or STDOUT when queues are not empty at the end of sim.
+  * Add scoreboard wrapper and filter transforms to automate instantiation
+    of multiple similar scoreboards.
+  * Added hash queues for *much* faster OOO comparison.
+  * Add IO-2HP comparison, which is an in order comparison optimized for
+    scoreboards with only 2 queues.
+  * Add config knob max_queue_size, generate an error if limit is exceeded.
+  * Add config knob max_search_window controlling number of entries in each
+    queue that are considered for OOO comparison on STD queues.
+  * Queue index and insertion index metadata added to cl_syoscb_item.
+  * Miscompare tables showing failing items side-by-side to make debugging
+    simpler.
+  * Fix IO-based compares to work correctly on MD5 queues. Could previously
+    find matches that were not in order.
+  * Breaking API Change: Changed implementation of queue iterators to match
+    the ListIterator interface from Java.
+    * Removed iterator.is_done and iterator.get_idx
+    * Changed semantics of iterator.next and iterator.previous. Will now
+      advance/reverse the iterator and also return the next/previous item.
+    * Made iterator.get_item_proxy private, as iterator.next/iterator.previous
+      now returns the next object while operating on the iterator.
+    * Added iterator.has_next, iterator.has_previous, iterator.next_index,
+      iterator.previous_index methods.
+  * General: Add many more tests and extensively update all documentation.
+
+In addition to the changes listed above, several bug fixes and minor
+optimizations have been implemented.
+
+###############################################################################
+# [2]: Known limitations
+###############################################################################
+  * The uvm_xml_printer does not handle nested arrays well. This is because
+    there are no field macros for nested arrays and the underlying uvm_printer
+    datastructure does not represent these.
+
+###############################################################################
+# [3]: Compatibility List
+###############################################################################
+The UVM scoreboard has been developed and tested with the following tools:
+
+  * Centos Linux release 7.9
+  * Make version 3.82
+  * UVM version 1.1d, 1.2 and IEEE
+  * Synopsys VCS® version 2022.06
+  * Siemens EDA® Questasim® version 2021.4
+  * Cadence® Xcelium® version 21.09.003

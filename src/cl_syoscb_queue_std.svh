@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//   Copyright 2014-2015 SyoSil ApS
+//   Copyright 2005-2022 SyoSil ApS
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -19,11 +19,11 @@
 /// Standard implementation of a queue. Uses a normal SystemVerilog queue as
 /// implementation. The class implements the queue API as defined by the queue
 /// base class.
-class cl_syoscb_queue_std extends cl_syoscb_queue;
+class cl_syoscb_queue_std extends cl_syoscb_queue_base;
   //-------------------------------------
   // Non randomizable variables
   //-------------------------------------
-  /// Poor mans queue implementation as a SV queue
+  /// Simple queue implementation with a SV queue
   local cl_syoscb_item items[$];
 
   //-------------------------------------
@@ -36,86 +36,84 @@ class cl_syoscb_queue_std extends cl_syoscb_queue;
   //-------------------------------------
   // Constructor
   //-------------------------------------
-  extern function new(string name, uvm_component parent);
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
+  endfunction: new
 
   //-------------------------------------
   // Queue API
   //-------------------------------------
   // Basic queue functions
-  extern virtual function bit add_item(string producer, uvm_sequence_item item);
-  extern virtual function bit delete_item(int unsigned idx);
-  extern virtual function cl_syoscb_item get_item(int unsigned idx);
-  extern virtual function int unsigned get_size();
-  extern virtual function bit empty();
-  extern virtual function bit insert_item(string producer, uvm_sequence_item item, int unsigned idx);
+  extern           virtual function bit            add_item(string producer, uvm_sequence_item item);
+  extern           virtual function bit            delete_item(cl_syoscb_proxy_item_base proxy_item);
+  extern           virtual function cl_syoscb_item get_item(cl_syoscb_proxy_item_base proxy_item);
+  extern           virtual function int unsigned   get_size();
+  extern           virtual function bit            empty();
+  extern           virtual function bit            insert_item(string producer, uvm_sequence_item item, int unsigned idx);
 
   // Iterator support functions
-  extern virtual function cl_syoscb_queue_iterator_base create_iterator();
-  extern virtual function bit delete_iterator(cl_syoscb_queue_iterator_base iterator);
+  extern virtual function cl_syoscb_queue_iterator_base create_iterator(string name = "");
+  extern virtual function bit                           delete_iterator(cl_syoscb_queue_iterator_base iterator);
+
+  // Locator support function
+  extern virtual function cl_syoscb_queue_locator_base get_locator();
+
+  //-------------------------------------
+  // Internal support functions
+  //-------------------------------------
+  extern protected virtual function void do_flush_queue();
+  extern virtual function void           get_native_queue(ref cl_syoscb_item q[$]);
 endclass: cl_syoscb_queue_std
 
-function cl_syoscb_queue_std::new(string name, uvm_component parent);
-  super.new(name, parent);
-endfunction: new
-
-/// <b>Queue API:</b> See cl_syoscb_queue for more details
+/// <b>Queue API:</b> See cl_syoscb_queue_base#add_item for more details
 function bit cl_syoscb_queue_std::add_item(string producer, uvm_sequence_item item);
   cl_syoscb_item new_item;
 
-  // Check that the max_queue_size for this queue is not reached
-  if(this.cfg.get_max_queue_size(this.get_name())>0 &&
-     this.get_size()==this.cfg.get_max_queue_size(this.get_name())) begin
-    `uvm_error("QUEUE_ERROR", $sformatf("[%s]: Maximum number of items (%0d) for queue: %s reached",
-                                       this.cfg.get_scb_name(), 
-                                       this.cfg.get_max_queue_size(this.get_name()),
-                                       this.get_name()))
-    return(1'b0);
-  end
-
-  // Create the new scoreboard item with META data which wraps the
-  // uvm_sequence_item
-  //
-  // *NOTE*: No need for using create.
-  //         New is okay since no customization is needed here
-  //
-  // *NOTE*: Create it once with a default name to be able to retrieve the unique
-  //         instance id and then rename the object with a uniqueue name
-  new_item = new(.name("default-item"));
-  new_item.set_name({producer,"-item-", $psprintf("%0d", new_item.get_inst_id())});
-
-  // Transfer the producer to the item
-  // *NOTE*: No need to check the producer since this is checked by the parent component
-  new_item.set_producer(.producer(producer));
-
-  // Transfer the UVM sequence item to the item
-  // *NOTE*: No need to copy it since it has been copied by the parent
-  new_item.set_item(.item(item));
+  //Generate scoreboard item, assign metadata
+  new_item = this.pre_add_item(producer, item);
 
   // Insert the item in the queue
   this.items.push_back(new_item);
 
-  // Count the number of inserts
-  this.cnt_add_item++;
-  
+  //Perform bookkeeping on counters and shadow queue
+  this.post_add_item(new_item);
+
   // Signal that it worked
   return 1;
 endfunction: add_item
 
-/// <b>Queue API:</b> See cl_syoscb_queue for more details
-function bit cl_syoscb_queue_std::delete_item(int unsigned idx);
+/// <b>Queue API:</b> See cl_syoscb_queue_base#delete_item for more details
+function bit cl_syoscb_queue_std::delete_item(cl_syoscb_proxy_item_base proxy_item);
+  cl_syoscb_proxy_item_std proxy_item_std;
+  int unsigned             idx;
+
+  if(!$cast(proxy_item_std,proxy_item)) begin
+    `uvm_fatal("Incorrect item type", $sformatf("[%s]:Proxy_item ", this.cfg.get_scb_name()));
+    return 0;
+  end else if(proxy_item == null) begin
+    `uvm_info("NULL", $sformatf("[%s] Passed null item to queue %s for deletion. Ignoring it", this.cfg.get_scb_name(), this.get_name()), UVM_DEBUG)
+    return 1'b0;
+  end
+
+  idx = proxy_item_std.idx;
+
   if(idx < this.items.size()) begin
+    string producer;
     cl_syoscb_queue_iterator_base iter[$];
 
     // Wait to get exclusive access to the queue
     // if there are multiple iterators
     while(!this.iter_sem.try_get());
-    items.delete(idx);
+    producer = this.items[idx].get_producer();
+    this.items.delete(idx);
 
     // Update iterators
-    iter = this.iterators.find(x) with (x.get_idx() < idx);
-    for(int i = 0; i < iter.size(); i++) begin
+    iter = this.iterators.find(x) with (x.next_index() > idx);
+    foreach(iter[i]) begin
       void'(iter[i].previous());
     end
+
+    this.decr_cnt_producer(producer);
 
     this.iter_sem.put();
     return 1;
@@ -125,8 +123,18 @@ function bit cl_syoscb_queue_std::delete_item(int unsigned idx);
   end
 endfunction: delete_item
 
-/// <b>Queue API:</b> See cl_syoscb_queue for more details
-function cl_syoscb_item cl_syoscb_queue_std::get_item(int unsigned idx);
+/// <b>Queue API:</b> See cl_syoscb_queue_base#get_item for more details
+function cl_syoscb_item cl_syoscb_queue_std::get_item(cl_syoscb_proxy_item_base proxy_item);
+  cl_syoscb_proxy_item_std proxy_item_std;
+  int unsigned             idx;
+
+  if(!$cast(proxy_item_std, proxy_item)) begin
+    `uvm_fatal("Incorrect item type", $sformatf("[%s]:Proxy_item was of type %0s", this.cfg.get_scb_name(), proxy_item.get_type_name()));
+    return null;
+  end
+  idx = proxy_item_std.idx;
+
+
   if(idx < this.items.size()) begin
     return items[idx];
   end else begin
@@ -135,41 +143,24 @@ function cl_syoscb_item cl_syoscb_queue_std::get_item(int unsigned idx);
   end
 endfunction: get_item
 
-/// <b>Queue API:</b> See cl_syoscb_queue for more details
+/// <b>Queue API:</b> See cl_syoscb_queue_base#get_size for more details
 function int unsigned cl_syoscb_queue_std::get_size();
   return this.items.size();
 endfunction: get_size
 
-/// <b>Queue API:</b> See cl_syoscb_queue for more details
+/// <b>Queue API:</b> See cl_syoscb_queue_base#empty for more details
 function bit cl_syoscb_queue_std::empty();
-  return(this.get_size()!=0 ? 0 : 1);
+  return this.get_size()==0;
 endfunction
 
-/// <b>Queue API:</b> See cl_syoscb_queue for more details
+/// <b>Queue API:</b> See cl_syoscb_queue_base#insert_item for more details
 function bit cl_syoscb_queue_std::insert_item(string producer, uvm_sequence_item item, int unsigned idx);
   cl_syoscb_item new_item;
 
-  // Create the new scoreboard item with META data which wraps the
-  // uvm_sequence_item
-  //
-  // *NOTE*: No need for using create.
-  //         New is okay since no customization is needed here
-  //
-  // *NOTE*: Create it once with a default name to be able to retrieve the unique
-  //         instance id and then rename the object with a uniqueue name
-  new_item = new(.name("default-item"));
-  new_item.set_name({producer,"-item-", $psprintf("%0d", new_item.get_inst_id())});
-
-  // Transfer the producer to the item
-  // *NOTE*: No need to check the producer since this is checked by the parent component
-  new_item.set_producer(.producer(producer));
-
-  // Transfer the UVM sequence item to the item
-  // *NOTE*: No need to copy it since it has been copied by the parent
-  new_item.set_item(.item(item));
+  new_item = this.pre_add_item(producer, item);
 
   if(idx < this.items.size()) begin
-    cl_syoscb_queue_iterator_base iter[$];
+    cl_syoscb_queue_iterator_base iters[$];
 
     // Wait to get exclusive access to the queue
     // if there are multiple iterators
@@ -177,63 +168,97 @@ function bit cl_syoscb_queue_std::insert_item(string producer, uvm_sequence_item
     this.items.insert(idx, new_item);
 
     // Update iterators
-    iter = this.iterators.find(x) with (x.get_idx() >= idx);
-    for(int i = 0; i < iter.size(); i++) begin
+    iters = this.iterators.find(x) with (x.next_index() >= idx);
+    for(int i = 0; i < iters.size(); i++) begin
       // Call .next() blindly. This can never fail by design, since
-      // if it was point at the last element then it points to the second last
+      // if it was pointing at the last element then it points to the second last
       // element prior to the .next(). The .next() call will then just
       // set the iterator to the correct index again after the insertion
-      void'(iter[i].next());
+      void'(iters[i].next());
     end
-
     this.iter_sem.put();
-    return 1;
   end else if(idx == this.items.size()) begin
     this.items.push_back(new_item);
-    return 1;
   end else begin
     `uvm_info("OUT_OF_BOUNDS", $sformatf("[%s]: Idx: %0d too large for queue %0s", this.cfg.get_scb_name(), idx, this.get_name()), UVM_DEBUG);
-    return 0;
+    return 1'b0;
   end
+
+  this.post_add_item(new_item);
+  return 1'b1;
 endfunction: insert_item
 
-
-/// <b>Queue API:</b> See cl_syoscb_queue for more details
-function cl_syoscb_queue_iterator_base cl_syoscb_queue_std::create_iterator();
+/// <b>Queue API:</b> See cl_syoscb_queue_base#create_iterator for more details
+function cl_syoscb_queue_iterator_base cl_syoscb_queue_std::create_iterator(string name = "");
   cl_syoscb_queue_iterator_std result;
+  string iter_name;
+  cl_syoscb_queue_iterator_base f[$];
 
   // Wait to get exclusive access to the queue
   // if there are multiple iterators
   while(this.iter_sem.try_get() == 0);
 
-  result = cl_syoscb_queue_iterator_std::type_id::create(
-  		$sformatf("%s_iter%0d", this.get_name(), this.iter_idx));
+  if(name == "") begin
+    iter_name = $sformatf("%0s_iter%0d", this.get_name(), this.num_iters_created);
+  end else begin
+    iter_name = name;
+  end
+
+  //Check if an iterator with that name already exists
+  f = this.iterators.find_index() with (item.get_name() == name);
+  if(f.size() != 0) begin
+    `uvm_info("ITERATOR", $sformatf("[%0s] An iterator with the name %0s already exists", this.cfg.get_scb_name(), name), UVM_DEBUG)
+    this.iter_sem.put();
+    return null;
+  end
+  result = cl_syoscb_queue_iterator_std::type_id::create(iter_name);
 
   // No need to check return value since set_queue will issue
-  // and `uvm_error of something goes wrong
+  // an `uvm_error of something goes wrong
   void'(result.set_queue(this));
 
   this.iterators[result] = result;
-  this.iter_idx++;
+  this.num_iters_created++;
   this.iter_sem.put();
 
   return result;
 endfunction: create_iterator
 
-/// <b>Queue API:</b> See cl_syoscb_queue for more details
+/// <b>Queue API:</b> See cl_syoscb_queue_base#delete_iterator for more details
 function bit cl_syoscb_queue_std::delete_iterator(cl_syoscb_queue_iterator_base iterator);
   if(iterator == null) begin
     `uvm_info("NULL", $sformatf("[%s]: Asked to delete null iterator from list of iterators in %s",
                                 this.cfg.get_scb_name(), this.get_name()), UVM_DEBUG);
     return 0;
-  end else begin 	
+  end else begin
     // Wait to get exclusive access to the queue
     // if there are multiple iterators
     while(!this.iter_sem.try_get());
 
     this.iterators.delete(iterator);
-    this.iter_idx--;
     this.iter_sem.put();
     return 1;
   end
 endfunction: delete_iterator
+
+/// <b>Queue API:</b> See cl_syoscb_queue_base#get_locator for more details
+function cl_syoscb_queue_locator_base cl_syoscb_queue_std::get_locator();
+  cl_syoscb_queue_locator_std locator;
+
+  locator = cl_syoscb_queue_locator_std::type_id::create($sformatf("%s_loc", this.get_name()));
+  void'(locator.set_queue(this));
+  return locator;
+endfunction: get_locator
+
+/// See cl_syoscb_queue_base#do_flush_queue for more details
+function void cl_syoscb_queue_std::do_flush_queue();
+  this.items = {};
+endfunction: do_flush_queue
+
+// Returns a handle to this queue's underlying SV queue to allow locators to search through it.
+// The returned queue should not be modified by the caller.
+// DO NOT CALL FROM USER CODE
+// \param q Handle to a queue where the results will be returned
+function void cl_syoscb_queue_std::get_native_queue(ref cl_syoscb_item q[$]);
+  q = this.items;
+endfunction: get_native_queue

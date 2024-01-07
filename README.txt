@@ -1,5 +1,5 @@
 #######################################################################
-#   Copyright 2014-2015 SyoSil ApS
+#   Copyright 2005-2022 SyoSil ApS
 #   All Rights Reserved Worldwide
 #
 #   Licensed under the Apache License, Version 2.0 (the
@@ -26,30 +26,32 @@ It is assumed that the UVM scoreboard is unpacked into the directory:
 <UVMSCB>
 
 In general, the UVM scoreboard is documented in the generated
-documentation. See file:///<UVMSCB>/docs/html/index.html for more
+documentation. See file:///<UVMSCB>/docs/manual/html/index.html for more
 information.
 
 Furthermore, the <UVMSCB>/docs/ also contains the latest paper
 describing the fundamentals of the SyoSil UVM scoreboard.
 
-*NOTE*: The documentation is also available in PDF (<UVMSCB>/docs/pdf)
+*NOTE*: The documentation is also available in PDF (<UVMSCB>/docs/manual/pdf)
 
 #######################################################################
 # Directory structure
 #######################################################################
 .
-├── docs          Documentatio
-│   └── html      HTML documentation
-│   └── pdf       PDF documentation
-├── src           SyoSil UVM SCB source code
-└── tb            Simple example testbench
-    └── test      UVM Tests
+├── docs            Documentation
+│   ├── manual      User manual
+│   │   ├──── pdf   Manual in PDF format
+│   │   └──── html  Manual in HTML format
+│   └── papers      DVCon papers presenting the SyoSil UVM SCB
+├── src             SyoSil UVM SCB source code
+├── tb              Simple example testbench
+│  └── test        UVM Tests
 
 #######################################################################
 # Getting started
 #######################################################################
 To get started you need to be able to integrate and configure the UVM
-scoreboard. This is documented in file:///<UVMSCB>/docs/html/index.html
+scoreboard. This is documented in file:///<UVMSCB>/docs/manual/html/index.html
 
 Examples:
 Compilation examples for use with Mentor, Cadence or Synopys are

@@ -1,5 +1,5 @@
 #######################################################################
-#   Copyright 2014-2015 SyoSil ApS
+#   Copyright 2005-2022 SyoSil ApS
 #   All Rights Reserved Worldwide
 #
 #   Licensed under the Apache License, Version 2.0 (the
@@ -18,25 +18,30 @@
 #######################################################################
 syoscb_DEPS :=
 
-syoscb_SRC := $(VC_DIR)/pk_syoscb.sv
+syoscb_SRC := $(UVMLIB_DIR)/pk_utils_uvm.sv \
+              $(VC_DIR)/pk_syoscb.sv
 
 syoscb_INC_DIR := $(VC_DIR)
 
 syoscb_VLOG_OPTS :=
 
 # Simple rule to capture the package dependency on the included files
-$(VC_DIR)/pk_syoscb.sv : $(VC_DIR)/cl_syoscb_cfg_pl.svh \
+$(VC_DIR)/pk_syoscb.sv : $(VC_DIR)/syoscb_common.svh \
+                         $(VC_DIR)/cl_syoscb_cfg_pl.svh \
                          $(VC_DIR)/cl_syoscb_cfg.svh \
+                         $(VC_DIR)/cl_syoscbs_cfg.svh \
                          $(VC_DIR)/cl_syoscb_compare_base.svh \
                          $(VC_DIR)/cl_syoscb_compare.svh \
                          $(VC_DIR)/cl_syoscb_compare_ooo.svh \
                          $(VC_DIR)/cl_syoscb_compare_io.svh \
                          $(VC_DIR)/cl_syoscb_item.svh \
-                         $(VC_DIR)/cl_syoscb_queue.svh \
+                         $(VC_DIR)/cl_syoscb_queue_base.svh \
                          $(VC_DIR)/cl_syoscb_queue_std.svh \
                          $(VC_DIR)/cl_syoscb_queue_iterator_base.svh \
                          $(VC_DIR)/cl_syoscb_queue_iterator_std.svh \
-                         $(VC_DIR)/cl_syoscb.svh
+                         $(VC_DIR)/cl_syoscb.svh \
+                         $(VC_DIR)/cl_syoscbs.svh
+
 	@touch $(VC_DIR)/pk_syoscb.sv
 
 #############################################################################

@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classcl__syoscb__compare__base.html" title="Base class for all compare algorithms. " alt="" coords="5,56,192,83"/>
+<area shape="rect" id="node2" href="$classcl__syoscb__compare__io.html" title="Implementation of the in&#45;order comparison algorithm for N queues. " alt="" coords="247,5,415,32"/>
+<area shape="rect" id="node4" href="$classcl__syoscb__compare__iop.html" title="Class which implements the in order by producer compare algorithm. " alt="" coords="243,56,419,83"/>
+<area shape="rect" id="node5" href="$classcl__syoscb__compare__ooo.html" title="Class which implements the out of order compare algorithm. " alt="" coords="241,107,421,133"/>
+<area shape="rect" id="node3" href="$classcl__syoscb__compare__io__2hp.html" title="Implementation of the 2&#45;queue, high speed in&#45;order comparison algorithm. " alt="" coords="470,5,669,32"/>
+</map>

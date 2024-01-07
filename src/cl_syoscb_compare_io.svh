@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//   Copyright 2014-2015 SyoSil ApS
+//   Copyright 2005-2022 SyoSil ApS
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -16,12 +16,18 @@
 //   the License for the specific language governing
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
-/// Class which implements the in order compare algorithm
+/// Implementation of the in-order comparison algorithm for N queues.
 class cl_syoscb_compare_io extends cl_syoscb_compare_base;
+
+  ///Scoreboard wrapper item from the primary queue
+  cl_syoscb_item primary_item;
+
   //-------------------------------------
   // UVM Macros
   //-------------------------------------
-  `uvm_object_utils(cl_syoscb_compare_io)
+  `uvm_object_utils_begin(cl_syoscb_compare_io)
+    `uvm_field_object(primary_item, UVM_DEFAULT)
+  `uvm_object_utils_end
 
   //-------------------------------------
   // Constructor
@@ -29,153 +35,106 @@ class cl_syoscb_compare_io extends cl_syoscb_compare_base;
   extern function new(string name = "cl_syoscb_compare_io");
 
   //-------------------------------------
-  // Compare API
+  // Compare Strategy API
   //-------------------------------------
-  extern virtual function void compare();
-  extern function void compare_do();
+  extern protected virtual function void primary_loop_do();
+  extern protected virtual function void count_producers(string producer = "");
+  extern protected virtual function void secondary_loop_do();
+
 endclass: cl_syoscb_compare_io
 
 function cl_syoscb_compare_io::new(string name = "cl_syoscb_compare_io");
   super.new(name);
 endfunction: new
 
-/// <b>Compare API</b>: Mandatory overwriting of the base class' compare method.
-/// Currently, this just calls do_compare() blindly 
-function void cl_syoscb_compare_io::compare();
-  // Here any state variables should be queried
-  // to compute if the compare should be done or not
-  this.compare_do();
-endfunction: compare
-
-/// <b>Compare API</b>: Mandatory overwriting of the base class' do_compare method.
-/// Here the actual in order compare is implemented.
+/// <b>Compare Strategy API</b>: Implementation of the in-order comparison algorithm.
 ///
-/// The algorithm gets the primary queue and then loops over all other queues to see if
-/// it can find primary item as the first item in all of the other queues. If so then the items
-/// are removed from all queues. If not then a UVM error is issued.
-function void cl_syoscb_compare_io::compare_do();
-  string primary_queue_name;
-  cl_syoscb_queue primary_queue;
-  cl_syoscb_queue_iterator_base primary_queue_iter;
-  string queue_names[];
-  int unsigned secondary_item_found[string];
-  bit compare_continue = 1'b1;
-  bit compare_result = 1'b0;
-  cl_syoscb_item primary_item;
+/// In the primary loop, the algorithm extracts the oldest inserted element
+/// from the primary queue, and then starts looping over all secondary queues
+/// to find a matching item in #secondary_loop_do.
+/// If matching items are found, these are removed from all of the queues
+/// If no matching items are found, a miscompare is generated and a UVM_ERROR is issued.
+function void cl_syoscb_compare_io::primary_loop_do();
+  `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: number of queues: %0d", this.cfg.get_scb_name(), this.secondary_queues.size()+1), UVM_FULL);
+  `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: primary queue: %s", this.cfg.get_scb_name(), this.primary_queue_name), UVM_FULL);
 
-  // Initialize state variables
-  primary_queue_name = this.get_primary_queue_name();
-  this.cfg.get_queues(queue_names);
+  // Get first item in primary queue
+  // *NOTE*: No need to check if there is any item since compare_do is only invoked
+  //         if there is at least a single element in all queues
+  //Iterator has already been reset in create_primary_iterator, so we can get the item right now
+  this.primary_item_proxy = this.primary_queue_iter.next();
+  this.primary_item       = this.primary_queue.get_item(this.primary_item_proxy);
 
-  primary_queue = this.cfg.get_queue(primary_queue_name);
-  if(primary_queue == null) begin
-    `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: cmp-io: Unable to retrieve primary queue handle", this.cfg.get_scb_name()));
-  end
+  `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: Now comparing primary transaction:\n%s",
+                     this.cfg.get_scb_name(),
+                     cl_syoscb_string_library::sprint_item(primary_item, this.cfg)),
+             UVM_FULL);
 
-  primary_queue_iter = primary_queue.create_iterator();
+  // Clear secondary match item counter before starting new secondary queue loop
+  this.secondary_item_found.delete();
 
-  `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: primary queue: %s", this.cfg.get_scb_name(), primary_queue_name), UVM_FULL);
-  `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: number of queues: %0d", this.cfg.get_scb_name(), queue_names.size()), UVM_FULL);
+  this.secondary_loop_do();
 
-  // Outer loop loops through all
-  while(!primary_queue_iter.is_done()) begin
-    primary_item = primary_queue_iter.get_item();
+  void'(this.delete());
+endfunction: primary_loop_do
 
-    `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: Now comparing primary transaction:\n%s", this.cfg.get_scb_name(), primary_item.sprint()), UVM_FULL); 
+function void cl_syoscb_compare_io::count_producers(string producer = "");
+  // For io compare, this function is kept empty. This because
+  // for io, the count_producers does not make sense because
+  // Item are ever matched starting from the first element in each queue
+  // Idependently by the producer. If the inserted item belongs to a different producer,
+  // a simply miscompare error will be generated
+endfunction: count_producers
 
-    // Clear list of found slave items before starting new inner loop
-    secondary_item_found.delete();
+/// <b>Compare Strategy API:</b> Loop through all the secondary queues, checking if the first item in that
+/// secondary queues matches the first in the primary queue.
+/// If a match is found, this is recorded in cl_syoscb_compare_base#secondary_items_found
+function void cl_syoscb_compare_io::secondary_loop_do();
+  foreach(this.secondary_queues[i]) begin
+    `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: Looking at secondary queue: %s", this.cfg.get_scb_name(), this.secondary_queue_names[i]), UVM_FULL);
 
-    // Inner loop through all queues
-    foreach(queue_names[i]) begin
-      `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: Looking at queue: %s", this.cfg.get_scb_name(), queue_names[i]), UVM_FULL);
+    `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: %0d items in queue: %s", this.cfg.get_scb_name(),secondary_queues[i].get_size(), this.secondary_queue_names[i]), UVM_FULL);
 
-      if(queue_names[i] != primary_queue_name) begin
-        cl_syoscb_queue secondary_queue;
-        cl_syoscb_queue_iterator_base secondary_queue_iter;
-        cl_syoscb_item sih;
+    // Do the compare
+    begin
+      cl_syoscb_item                secondary_item;
+      string                        sec_queue_name;
+      cl_syoscb_proxy_item_base     sec_proxy;
+      uvm_comparer                  comparer;
+      cl_syoscb_queue_iterator_base iter;
 
-        `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: %s is a secondary queue - now comparing", this.cfg.get_scb_name(), queue_names[i]), UVM_FULL);
+      sec_queue_name = this.secondary_queue_names[i];
 
-        // Get the secondary queue
-        secondary_queue = this.cfg.get_queue(queue_names[i]);
+      //Get first item of sec. queue using an iterator
+      //Cannot use proxy item to get it, as this will allow hash-queues to find items that are not in order
+      iter = this.secondary_queues[i].get_iterator("default");
+      if(iter == null) begin
+        iter = this.secondary_queues[i].create_iterator("default");
+      end
+      void'(iter.first());
+      sec_proxy = iter.next();
 
-        if(secondary_queue == null) begin
-          `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: cmp-io: Unable to retrieve secondary queue handle", this.cfg.get_scb_name()));
-        end
+      secondary_item = this.secondary_queues[i].get_item(sec_proxy);
+      comparer = this.cfg.get_comparer(this.primary_queue_name, this.primary_item.get_producer());
+      if(comparer == null) begin
+        comparer = this.cfg.get_default_comparer();
+      end
 
-        `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: %0d items in queue: %s", this.cfg.get_scb_name(), secondary_queue.get_size(), queue_names[i]), UVM_FULL);
+      if(secondary_item.compare(this.primary_item, comparer) == 1'b1) begin
+        `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: Secondary item found:\n%s",
+                                     this.cfg.get_scb_name(),
+                                     cl_syoscb_string_library::sprint_item(secondary_item, this.cfg)),
+                  UVM_FULL);
 
-        // Get an iterator for the secondary queue
-        secondary_queue_iter = secondary_queue.create_iterator();
-
-        // Only do the compare if there are actually an item in the secondary queue
-        if(!secondary_queue_iter.is_done()) begin         
-          // Get the first item from the secondary queue       
-          sih = secondary_queue_iter.get_item();
-
-          if(sih.compare(primary_item) == 1'b1) begin
-            secondary_item_found[queue_names[i]] = secondary_queue_iter.get_idx();
-            `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: Secondary item found at index: %0d:\n%s", this.cfg.get_scb_name(), secondary_queue_iter.get_idx(), sih.sprint()), UVM_FULL);
-          end else begin
-            `uvm_error("COMPARE_ERROR", $sformatf("[%s]: cmp-io: Item:\n%s\nfrom primary queue: %s not found in secondary queue: %s. Found this item in %s instead:\n%s", this.cfg.get_scb_name(), primary_item.sprint(), primary_queue_name, queue_names[i], queue_names[i], sih.sprint()))
-
-            // The first element was not a match => break since this is an in order compare  
-            break; 
-          end
-        end else begin
-          `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: %s is empty - skipping", this.cfg.get_scb_name(), queue_names[i]), UVM_FULL);
-        end
-
-        if(!secondary_queue.delete_iterator(secondary_queue_iter)) begin
-          `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: cmp-io: Unable to delete iterator from secondaery queue: %s", this.cfg.get_scb_name(), queue_names[i]));
-        end
+        this.secondary_item_found[sec_queue_name] = sec_proxy;
       end else begin
-        `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: %s is the primary queue - skipping", this.cfg.get_scb_name(), queue_names[i]), UVM_FULL);
+        string miscmp_table;
+
+        miscmp_table = this.generate_miscmp_table(this.primary_item, secondary_item, sec_queue_name, comparer, "cmp-io");
+        `uvm_error("COMPARE_ERROR", $sformatf("\n%0s", miscmp_table))
+
+        break; //Exit foreach loop on error
       end
     end
-
-    // Only start to remove items if all slave items are found (One from each slave queue)
-    if(secondary_item_found.size() == queue_names.size()-1) begin
-      string queue_name;
-      cl_syoscb_item pih;
-
-      // Get the item from the primary queue
-      pih = primary_queue_iter.get_item();
-
-      `uvm_info("DEBUG", $sformatf("[%s]: cmp-io: Found match for primary queue item :\n%s", this.cfg.get_scb_name(), pih.sprint()), UVM_FULL);
-
-      // Remove from primary
-      if(!primary_queue.delete_item(primary_queue_iter.get_idx())) begin
-        `uvm_error("QUEUE_ERROR", $sformatf("[%s]: cmp-io: Unable to delete item idx %0d from queue %s",
-                                            this.cfg.get_scb_name(), primary_queue_iter.get_idx(), primary_queue.get_name()));
-      end
-
-      // Remove from all secondaries
-      while(secondary_item_found.next(queue_name)) begin
-        cl_syoscb_queue secondary_queue;
-
-	// Get the secondary queue
-        secondary_queue = this.cfg.get_queue(queue_name);
-
-        if(secondary_queue == null) begin
-          `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: cmp-io: Unable to retrieve secondary queue handle", this.cfg.get_scb_name()));
-        end
-
-        if(!secondary_queue.delete_item(secondary_item_found[queue_name])) begin
-          `uvm_error("QUEUE_ERROR", $sformatf("[%s]: cmp-io: Unable to delete item idx %0d from queue %s",
-                                              this.cfg.get_scb_name(), secondary_item_found[queue_name], secondary_queue.get_name()));
-        end
-      end
-    end
-
-    // Call .next() blindly since we do not care about the
-    // return value, since we might be at the end of the queue.
-    // Thus, .next() will return 1'b0 at the end of the queue
-    void'(primary_queue_iter.next());
   end
-
-  if(!primary_queue.delete_iterator(primary_queue_iter)) begin
-    `uvm_fatal("QUEUE_ERROR", $sformatf("[%s]: cmp-io: Unable to delete iterator from primary queue: %s", this.cfg.get_scb_name(), primary_queue_name));
-  end
-endfunction: compare_do
+endfunction: secondary_loop_do

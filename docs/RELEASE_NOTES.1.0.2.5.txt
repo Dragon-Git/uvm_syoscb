@@ -1,0 +1,65 @@
+#######################################################################
+# RELASE NOTES for UVM scoreboard version 1.0 RC build 6
+#
+# November 28 2015
+#
+#######################################################################
+This file contains miscellanous information about this particular
+relase of the UVM scoreboard.
+
+The index:
+
+  * [1]: General Information
+  * [2]: Bug Fixes
+  * [3]: New Features
+  * [4]: Know Limitations
+  * [5]: Compatibility List
+
+#######################################################################
+# [1]: General Information
+#######################################################################
+This version of the UVM scoreboard is the sixth RC for version 1.0 of the
+UVM scoreboard architecture presented at DVCon 2015 in the paper:
+Versatile UVM Scoreboarding. Never versions will be made accesible via:
+
+  www.syosil.com
+
+#######################################################################
+# [2]: Bug Fixes
+#######################################################################
+
+  * Fixed problem with multiple instances (Kudos to John Aynsley)
+  * Added missing break in compare loops when a mismatch was located
+
+#######################################################################
+# [3]: New Features
+#######################################################################
+
+  * Added simple statistics which are printed by a queues report_phase
+  * Added more debug statements to all compare algorithms. Run with
+    UVM_VERBOSITY=UVM_FULL to enable
+
+#######################################################################
+# [4]: Known Limitations
+#######################################################################
+The current known limitations for this relase are:
+
+  1. uvm_sequence_item_vmm not implemented
+  2. item_time_out_queue and item_time_out_producer knobs not implemented
+  3. Locater API and queue specific versions not implemented
+  4. Only a standard SystemVerilog queue is supported
+  5. The subscribers are not working properly with parameterized sequence
+     items
+
+#######################################################################
+# [5]: Compatibility List
+#######################################################################
+The UVM scoreboard has been developed and tested with the following
+tools:
+
+  * Centos Linux release 6.6
+  * Make version 3.81
+  * UVM version 1.2
+  * Synopsys VCS® version J-2014.12-SP1-1
+  * Mentor Questa® Advanced Simulator version 10.4a
+  * Cadence® Incisive® version 14.20.006

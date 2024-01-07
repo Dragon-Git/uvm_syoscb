@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//   Copyright 2014-2015 SyoSil ApS
+//   Copyright 2005-2022 SyoSil ApS
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -23,8 +23,12 @@ class cl_syoscb_subscriber extends uvm_subscriber#(uvm_sequence_item);
   //-------------------------------------
   // Non randomizable variables
   //-------------------------------------
+  /// The name of the queue this subscriber writes data to
   local string queue_name;
+  /// The name of the producer that this is subscribed to
   local string producer;
+  /// Whether to use mutexed add_item calls (1) or non-mutexed (0)
+  local bit mutexed_add_item_enable = 1'b0;
 
   //-------------------------------------
   // UVM Macros
@@ -47,17 +51,18 @@ class cl_syoscb_subscriber extends uvm_subscriber#(uvm_sequence_item);
   //-------------------------------------
   // Subscriber API
   //-------------------------------------
-  extern function string get_queue_name();
-  extern function void set_queue_name(string qn);
-  extern function string get_producer();
-  extern function void set_producer(string p);
+  extern virtual function string get_queue_name();
+  extern virtual function void   set_queue_name(string qn);
+  extern virtual function string get_producer();
+  extern virtual function void   set_producer(string p);
+  extern virtual function void   set_mutexed_add_item_enable(bit maie);
 endclass: cl_syoscb_subscriber
 
 function cl_syoscb_subscriber::new(string name = "cl_syoscb_subscriber", uvm_component parent = null);
   super.new(name, parent);
 endfunction: new
 
-/// The write method which must be implemented when extending uvm_subscriber.
+/// Implementation of the write method which must be implemented when extending uvm_subscriber.
 function void cl_syoscb_subscriber::write(uvm_sequence_item t);
   cl_syoscb parent;
 
@@ -75,9 +80,15 @@ function void cl_syoscb_subscriber::write(uvm_sequence_item t);
   end
 
   `uvm_info("DEBUG", $sformatf("Trigger add_item by subscriber: %s (Queue: %s, Producer: %s)", this.get_name(), this.queue_name, this.producer), UVM_FULL);
-  
+
   // Add the item to the queue
-  parent.add_item(this.queue_name, this.producer, t);
+  if(this.mutexed_add_item_enable) begin
+    fork
+      parent.add_item_mutexed(this.queue_name, this.producer, t);
+    join_none
+  end else begin
+    parent.add_item(this.queue_name, this.producer, t);
+  end
 endfunction
 
 /// <b>Subscriber API</b>: Returns the name of the queue which this subscriber is connected to.
@@ -99,3 +110,9 @@ endfunction: get_producer
 function void cl_syoscb_subscriber::set_producer(string p);
   this.producer = p;
 endfunction: set_producer
+
+/// <b>Subscriber API</b>: Controls whether items should be added in a mutexed fashion or not.
+/// Must be called during cl_syoscb#build_phase
+function void cl_syoscb_subscriber::set_mutexed_add_item_enable(bit maie);
+  this.mutexed_add_item_enable = maie;
+endfunction: set_mutexed_add_item_enable
