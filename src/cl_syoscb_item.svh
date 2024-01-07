@@ -24,10 +24,10 @@ class cl_syoscb_item extends uvm_object;
   // Non randomizable variables
   //-------------------------------------
   /// Hold the name of the producer
-  string producer;
+  local string producer;
 
   /// Handle to the wrapped uvm_sequence_item
-  uvm_sequence_item item;
+  local uvm_sequence_item item;
 
   //-------------------------------------
   // UVM Macros

@@ -88,7 +88,7 @@ window.onload = initDynSections;
 </div>
 <div class="contents">
 <h1>cl_syoscb_subscriber.svh</h1><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/// Generic subscriber for the scoreboard. It provides the write method</span>
-<a name="l00002"></a>00002 <span class="comment"></span><span class="comment">/// for UVM monitors and utilizes the function based API of the scb to insert</span>
+<a name="l00002"></a>00002 <span class="comment"></span><span class="comment">/// for UVM monitors and utilizes the function based API of the scoreboard to insert</span>
 <a name="l00003"></a>00003 <span class="comment"></span><span class="comment">/// the items received through the write method.</span>
 <a name="l00004"></a><a class="code" href="classcl__syoscb__subscriber.html">00004</a> <span class="comment"></span><span class="keyword">class </span><a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a> <span class="keyword">extends</span> uvm_subscriber#(uvm_sequence_item);
 <a name="l00005"></a>00005   <span class="comment">//-------------------------------------</span>
@@ -110,7 +110,7 @@ window.onload = initDynSections;
 <a name="l00021"></a>00021   <span class="comment">//-------------------------------------</span>
 <a name="l00022"></a>00022   <span class="comment">// UVM overwrites/extensions</span>
 <a name="l00023"></a>00023   <span class="comment">//-------------------------------------</span>
-<a name="l00024"></a>00024   extern function void <a class="code" href="classcl__syoscb__subscriber.html#a5c82d3099a20e85b0eedd78728b8d967" title="The write method which must be implemented when extening uvm_subscriber.">write</a>(uvm_sequence_item t);
+<a name="l00024"></a>00024   extern function void <a class="code" href="classcl__syoscb__subscriber.html#a5c82d3099a20e85b0eedd78728b8d967" title="The write method which must be implemented when extending uvm_subscriber.">write</a>(uvm_sequence_item t);
 <a name="l00025"></a>00025 
 <a name="l00026"></a>00026   <span class="comment">//-------------------------------------</span>
 <a name="l00027"></a>00027   <span class="comment">// Subscriber API</span>
@@ -125,8 +125,8 @@ window.onload = initDynSections;
 <a name="l00036"></a>00036   super.new(name, parent);
 <a name="l00037"></a>00037 endfunction: new
 <a name="l00038"></a>00038 <span class="comment"></span>
-<a name="l00039"></a>00039 <span class="comment">/// The write method which must be implemented when extening uvm_subscriber.</span>
-<a name="l00040"></a><a class="code" href="classcl__syoscb__subscriber.html#a5c82d3099a20e85b0eedd78728b8d967">00040</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::<a class="code" href="classcl__syoscb__subscriber.html#a5c82d3099a20e85b0eedd78728b8d967" title="The write method which must be implemented when extening uvm_subscriber.">write</a>(uvm_sequence_item t);
+<a name="l00039"></a>00039 <span class="comment">/// The write method which must be implemented when extending uvm_subscriber.</span>
+<a name="l00040"></a><a class="code" href="classcl__syoscb__subscriber.html#a5c82d3099a20e85b0eedd78728b8d967">00040</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a>::<a class="code" href="classcl__syoscb__subscriber.html#a5c82d3099a20e85b0eedd78728b8d967" title="The write method which must be implemented when extending uvm_subscriber.">write</a>(uvm_sequence_item t);
 <a name="l00041"></a>00041   <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a> parent;
 <a name="l00042"></a>00042 
 <a name="l00043"></a>00043   <span class="comment">// Get the parent which is the SCB top</span>
@@ -226,7 +226,7 @@ window.onload = initDynSections;
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.3<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.4<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -248,7 +248,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Sep 28 02:57:58 2015</small></address>
+      Mon Oct 26 03:49:53 2015</small></address>
    </td>
   </tr>
 </table>

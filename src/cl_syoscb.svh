@@ -27,7 +27,7 @@ class cl_syoscb extends uvm_scoreboard;
   /// Array holding handles to all queues
   local cl_syoscb_queue queues[];
 
-  // Handle to the compare startegy
+  // Handle to the compare strategy
   local cl_syoscb_compare compare_strategy;
 
   // Assoc array holding each uvm_subscriber
@@ -183,8 +183,13 @@ function void cl_syoscb::compare();
 endfunction: compare
 
 /// Returns a UVM subscriber for a given combination of queue and producer
-/// The retrurned UVM subscriber can then be connected to a UVM monitor or similar
+/// The returned UVM subscriber can then be connected to a UVM monitor or similar
 /// which produces transactions which should be scoreboarded.
 function cl_syoscb_subscriber cl_syoscb::get_subscriber(string queue_name, string producer);
+  if(this.subscribers.exists({queue_name, producer})) begin
     return(this.subscribers[{queue_name, producer}]);
+  end else begin
+  	`uvm_fatal("SUBSCRIBER_ERROR", $sformatf("Unable to get subscriber for queue: %s and producer: %s", queue_name, producer));
+	return(null);
+  end
 endfunction: get_subscriber

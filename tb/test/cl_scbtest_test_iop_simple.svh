@@ -17,59 +17,71 @@
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
 // *NOTES*:
-// Heavy OOO compare test using the function based API
-// A 100 insertions returns after a little while, but 1000
-// puts the CPU to sleep.
+// Simple iopP compare test using the function based API
 
-class cl_scbtest_test_ooo_heavy extends cl_scbtest_test_base;
+class cl_scbtest_test_iop_simple extends cl_scbtest_test_base;
   //-------------------------------------
   // UVM Macros
   //-------------------------------------
-  `uvm_component_utils(cl_scbtest_test_ooo_heavy)
+  `uvm_component_utils(cl_scbtest_test_iop_simple)
 
   //-------------------------------------
   // Constructor
   //-------------------------------------
-  extern function new(string name = "cl_scbtest_test_ooo_heavy", uvm_component parent = null);
+  extern function new(string name = "cl_scbtest_test_iop_simple", uvm_component parent = null);
 
   //-------------------------------------
   // UVM Phase methods
   //-------------------------------------
   extern function void build_phase(uvm_phase phase);
   extern task run_phase(uvm_phase phase);
-endclass: cl_scbtest_test_ooo_heavy
+endclass : cl_scbtest_test_iop_simple
 
-function cl_scbtest_test_ooo_heavy::new(string name = "cl_scbtest_test_ooo_heavy", uvm_component parent = null);
+function cl_scbtest_test_iop_simple::new(string name = "cl_scbtest_test_iop_simple", uvm_component parent = null);
   super.new(name, parent);
 endfunction : new
 
-function void cl_scbtest_test_ooo_heavy::build_phase(uvm_phase phase);
-	cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              
+function void cl_scbtest_test_iop_simple::build_phase(uvm_phase phase);
+  cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              
                                              cl_syoscb_queue_std::get_type(),
-                                       			"*");
+                                             "*");
 
-	this.set_type_override_by_type(cl_syoscb_compare_base::get_type(),
-                                 cl_syoscb_compare_ooo::get_type(),
+  this.set_type_override_by_type(cl_syoscb_compare_base::get_type(),
+                                 cl_syoscb_compare_iop::get_type(),
                                  "*");
-	super.build_phase(phase);
+  super.build_phase(phase);
 endfunction: build_phase
-
-
-
-task cl_scbtest_test_ooo_heavy::run_phase(uvm_phase phase);
+  
+task cl_scbtest_test_iop_simple::run_phase(uvm_phase phase);
   super.run_phase(phase);
-  for (int i=0; i<1000; i++) begin
-    begin
+
+  fork
+	for(int unsigned i=0; i<10; i++) begin
       cl_scbtest_seq_item item1;
       item1 = cl_scbtest_seq_item::type_id::create("item1");
       item1.int_a = i;
       scbtest_env.syoscb.add_item("Q1", "P1", item1);
     end
-    begin
-      cl_scbtest_seq_item item1;
-      item1 = cl_scbtest_seq_item::type_id::create("item1");
-      item1.int_a = i+'h80000000;
-      scbtest_env.syoscb.add_item("Q2", "P1", item1);
+
+    for(int unsigned i=0; i<10; i++) begin
+    	cl_scbtest_seq_item item1;
+    	item1 = cl_scbtest_seq_item::type_id::create("item1");
+    	item1.int_a = i;
+    	scbtest_env.syoscb.add_item("Q1", "P2", item1);
     end
-  end
+
+    for(int unsigned i=0; i<10; i++) begin
+    	cl_scbtest_seq_item item1;
+    	item1 = cl_scbtest_seq_item::type_id::create("item1");
+    	item1.int_a = i;
+    	scbtest_env.syoscb.add_item("Q2", "P1", item1);
+    end
+
+    for(int unsigned i=0; i<10; i++) begin
+    	cl_scbtest_seq_item item1;
+    	item1 = cl_scbtest_seq_item::type_id::create("item1");
+    	item1.int_a = i;
+    	scbtest_env.syoscb.add_item("Q2", "P2", item1);
+    end
+  join
 endtask: run_phase

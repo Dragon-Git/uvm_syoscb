@@ -32,14 +32,15 @@ information.
 Furthermore, the <UVMSCB>/docs/ also contains the latest paper
 describing the fundamentals of the SyoSil UVM scoreboard.
 
-*NOTE*: The documentation is also available in PDF (<UVMSCB>/docs/)
+*NOTE*: The documentation is also available in PDF (<UVMSCB>/docs/pdf)
 
 #######################################################################
 # Directory structure
 #######################################################################
 .
-├── docs          Documentation
+├── docs          Documentatio
 │   └── html      HTML documentation
+│   └── pdf       PDF documentation
 ├── src           SyoSil UVM SCB source code
 └── tb            Simple example testbench
     └── test      UVM Tests

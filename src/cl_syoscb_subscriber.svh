@@ -17,7 +17,7 @@
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
 /// Generic subscriber for the scoreboard. It provides the write method
-/// for UVM monitors and utilizes the function based API of the scb to insert
+/// for UVM monitors and utilizes the function based API of the scoreboard to insert
 /// the items received through the write method.
 class cl_syoscb_subscriber extends uvm_subscriber#(uvm_sequence_item);
   //-------------------------------------
@@ -54,7 +54,7 @@ function cl_syoscb_subscriber::new(string name = "cl_syoscb_subscriber", uvm_com
   super.new(name, parent);
 endfunction: new
 
-/// The write method which must be implemented when extening uvm_subscriber.
+/// The write method which must be implemented when extending uvm_subscriber.
 function void cl_syoscb_subscriber::write(uvm_sequence_item t);
   cl_syoscb parent;
 

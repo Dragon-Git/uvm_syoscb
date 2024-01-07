@@ -17,30 +17,42 @@
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
 // *NOTES*:
-// Simple OOO compare test using the function based API
+// Simple OOO compare test for TLM generic payload using the function based API
 
-class cl_scbtest_test_gp extends cl_scbtest_test_base;
+class cl_scbtest_test_ooo_gp extends cl_scbtest_test_base;
   //-------------------------------------
   // UVM Macros
   //-------------------------------------
-  `uvm_component_utils(cl_scbtest_test_gp)
+  `uvm_component_utils(cl_scbtest_test_ooo_gp)
 
   //-------------------------------------
   // Constructor
   //-------------------------------------
-  extern function new(string name = "cl_scbtest_test_gp", uvm_component parent = null);
+  extern function new(string name = "cl_scbtest_test_ooo_gp", uvm_component parent = null);
 
   //-------------------------------------
   // UVM Phase methods
   //-------------------------------------
+  extern function void build_phase(uvm_phase phase);
   extern task run_phase(uvm_phase phase);
-endclass : cl_scbtest_test_gp
+endclass : cl_scbtest_test_ooo_gp
 
-function cl_scbtest_test_gp::new(string name = "cl_scbtest_test_gp", uvm_component parent = null);
+function cl_scbtest_test_ooo_gp::new(string name = "cl_scbtest_test_ooo_gp", uvm_component parent = null);
   super.new(name, parent);
 endfunction : new
 
-task cl_scbtest_test_gp::run_phase(uvm_phase phase);
+function void cl_scbtest_test_ooo_gp::build_phase(uvm_phase phase);
+  cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              
+                                             cl_syoscb_queue_std::get_type(),
+                                             "*");
+
+  this.set_type_override_by_type(cl_syoscb_compare_base::get_type(),
+                                 cl_syoscb_compare_ooo::get_type(),
+                                 "*");
+  super.build_phase(phase);
+endfunction: build_phase
+
+task cl_scbtest_test_ooo_gp::run_phase(uvm_phase phase);
   super.run_phase(phase);
   
   begin

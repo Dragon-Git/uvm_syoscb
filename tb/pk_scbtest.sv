@@ -28,10 +28,12 @@ package pk_scbtest;
   `include "cl_scbtest_env.svh"
   `include "cl_scbtest_seq_item.svh"
   `include "cl_scbtest_test_base.svh"
-  `include "cl_scbtest_test_simple1.svh"
+  `include "cl_scbtest_test_ooo_simple.svh"
+  `include "cl_scbtest_test_io_simple.svh"
+  `include "cl_scbtest_test_iop_simple.svh"
   `include "cl_scbtest_test_ooo_heavy.svh"
-  `include "cl_scbtest_test_tlm.svh"
-  `include "cl_scbtest_test_gp.svh"
+  `include "cl_scbtest_test_ooo_tlm.svh"
+  `include "cl_scbtest_test_ooo_gp.svh"
    
 endpackage: pk_scbtest
 

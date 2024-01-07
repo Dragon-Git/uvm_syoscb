@@ -50,14 +50,6 @@ endfunction: new
 function void cl_scbtest_env::build_phase(uvm_phase phase);
   super.build_phase(phase);
 
-   cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              
-                                              cl_syoscb_queue_std::get_type(),
-                                              "*");
-
-   this.set_type_override_by_type(cl_syoscb_compare_base::get_type(),
-                                  cl_syoscb_compare_ooo::get_type(),
-                                  "*");
-
   this.syoscb_cfg = cl_syoscb_cfg::type_id::create("syoscb_cfg");
 
   // Set queues Q1 and Q2
@@ -74,6 +66,11 @@ function void cl_scbtest_env::build_phase(uvm_phase phase);
   // Set producer "P1" for queues: "Q1" and "Q2"
   if(!this.syoscb_cfg.set_producer("P1", {"Q1", "Q2"})) begin
     `uvm_fatal("CFG_ERROR", "syoscb_cfg.set_producer call failed!")
+  end
+
+  // Set producer "P2" for queues: "Q1" and "Q2"
+  if(!this.syoscb_cfg.set_producer("P2", {"Q1", "Q2"})) begin
+  	`uvm_fatal("CFG_ERROR", "syoscb_cfg.set_producer call failed!")
   end
 
   uvm_config_db #(cl_syoscb_cfg)::set(this, "syoscb", "cfg", this.syoscb_cfg); 

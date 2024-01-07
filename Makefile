@@ -25,7 +25,7 @@ SYOSIL_DISABLE_TLM_GP_CMP_WORKAROUND ?= 0
 # Global UVM Options
 #############################################################################
 UVM_VERBOSITY ?= UVM_MEDIUM
-UVM_TESTNAME  ?= cl_scbtest_test_simple1
+UVM_TESTNAME  ?= cl_scbtest_test_ooo_simple
 UVM_VERSION   ?= 1.2
 
 #############################################################################
@@ -96,8 +96,10 @@ $(COMPILE_DIR) :
 #############################################################################
 .PHONY: regression
 regression:
-	make UVM_TESTNAME=cl_scbtest_test_simple1 sim
-	make UVM_TESTNAME=cl_scbtest_test_tlm sim
+	make UVM_TESTNAME=cl_scbtest_test_ooo_simple sim
+	make UVM_TESTNAME=cl_scbtest_test_io_simple sim
+	make UVM_TESTNAME=cl_scbtest_test_iop_simple sim
+	make UVM_TESTNAME=cl_scbtest_test_ooo_tlm sim
 
 #############################################################################
 # Mentor targets
@@ -231,10 +233,12 @@ help_top:
 	@echo "  VENDOR=MENTOR | CADENCE | SYNOPSYS"
 	@echo "  Current value: $(VENDOR)"
 	@echo ""
-	@echo "  UVM_TESTNAME = cl_scbtest_test_base      |"
-	@echo "                 cl_scbtest_test_simple1   |"
-	@echo "                 cl_scbtest_test_tlm       |"
-	@echo "                 cl_scbtest_test_ooo_heavy |"
+	@echo "  UVM_TESTNAME = cl_scbtest_test_base       |"
+	@echo "                 cl_scbtest_test_ooo_simple |"
+	@echo "                 cl_scbtest_test_ooo_tlm    |"
+	@echo "                 cl_scbtest_test_ooo_heavy  |"
+	@echo "                 cl_scbtest_test_io_simple  |"
+	@echo "                 cl_scbtest_test_iop_simple |"
 	@echo "                 cl_scbtest_test_gp         "
 	@echo "  Current value: $(UVM_TESTNAME)"
 	@echo ""

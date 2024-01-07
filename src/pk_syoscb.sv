@@ -282,6 +282,7 @@
 ///
 ///   -# Out-of-Order (cl_syoscb_compare_ooo)
 ///   -# In-Order (cl_syoscb_compare_io)
+///   -# In-Order by producer (cl_syoscb_compare_iop)
 ///
 /// The following example shows how they are configured:
 ///
@@ -373,7 +374,11 @@
 ///    <td>COMPARE_ERROR</td>
 ///    <td>Compare error. Issued, e.g. when the in order compare fails</td>
 ///  </tr>
-///</table>
+///  <tr>
+///    <td>SUBSCRIBER_ERROR</td>
+///    <td>Subscriber error. Issued, e.g. when the call to cl_syoscb::get_subscriber() fails</td>
+///  </tr>
+///  </table>
 ///   
 /// @section sMultipleQueueRefs Multiple queue references
 /// Both the top level class cl_syoscb and the configuration class cl_syoscb_cfg contains
@@ -409,6 +414,7 @@ package pk_syoscb;
   `include "cl_syoscb_compare.svh"
   `include "cl_syoscb_compare_ooo.svh"
   `include "cl_syoscb_compare_io.svh"
+  `include "cl_syoscb_compare_iop.svh"
   `include "cl_syoscb_report_catcher.svh"
   `include "cl_syoscb_subscriber.svh"
   `include "cl_syoscb.svh"

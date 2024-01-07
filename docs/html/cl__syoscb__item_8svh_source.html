@@ -95,10 +95,10 @@ window.onload = initDynSections;
 <a name="l00006"></a>00006   <span class="comment">// Non randomizable variables</span>
 <a name="l00007"></a>00007   <span class="comment">//-------------------------------------</span><span class="comment"></span>
 <a name="l00008"></a>00008 <span class="comment">  /// Hold the name of the producer</span>
-<a name="l00009"></a><a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb">00009</a> <span class="comment"></span>  string <a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb" title="Hold the name of the producer.">producer</a>;
+<a name="l00009"></a>00009 <span class="comment"></span>  local string producer;
 <a name="l00010"></a>00010 <span class="comment"></span>
 <a name="l00011"></a>00011 <span class="comment">  /// Handle to the wrapped uvm_sequence_item</span>
-<a name="l00012"></a><a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203">00012</a> <span class="comment"></span>  uvm_sequence_item <a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203" title="Handle to the wrapped uvm_sequence_item.">item</a>;
+<a name="l00012"></a>00012 <span class="comment"></span>  local uvm_sequence_item item;
 <a name="l00013"></a>00013 
 <a name="l00014"></a>00014   <span class="comment">//-------------------------------------</span>
 <a name="l00015"></a>00015   <span class="comment">// UVM Macros</span>
@@ -168,7 +168,7 @@ window.onload = initDynSections;
 <a name="l00079"></a><a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f">00079</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f" title="Item API: Sets the producer">set_producer</a>(string producer);
 <a name="l00080"></a>00080   <span class="comment">// The producer has been checked by the parent prior</span>
 <a name="l00081"></a>00081   <span class="comment">// to the insertion</span>
-<a name="l00082"></a>00082   this.<a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb" title="Hold the name of the producer.">producer</a> = <a class="code" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb" title="Hold the name of the producer.">producer</a>;
+<a name="l00082"></a>00082   this.producer = producer;
 <a name="l00083"></a>00083 endfunction: <a class="code" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f" title="Item API: Sets the producer">set_producer</a>
 <a name="l00084"></a>00084 <span class="comment"></span>
 <a name="l00085"></a>00085 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Returns the wrapped uvm_sequence_item</span>
@@ -178,7 +178,7 @@ window.onload = initDynSections;
 <a name="l00089"></a>00089 <span class="comment"></span>
 <a name="l00090"></a>00090 <span class="comment">/// &lt;b&gt;Item API:&lt;/b&gt; Sets the to be wrapped uvm_sequence_item</span>
 <a name="l00091"></a><a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb">00091</a> <span class="comment"></span>function void <a class="code" href="classcl__syoscb__item.html" title="The UVM scoreboard item.">cl_syoscb_item</a>::<a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb" title="Item API: Sets the to be wrapped uvm_sequence_item">set_item</a>(uvm_sequence_item item);
-<a name="l00092"></a>00092   this.<a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203" title="Handle to the wrapped uvm_sequence_item.">item</a> = <a class="code" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203" title="Handle to the wrapped uvm_sequence_item.">item</a>;
+<a name="l00092"></a>00092   this.item = item;
 <a name="l00093"></a>00093 endfunction: <a class="code" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb" title="Item API: Sets the to be wrapped uvm_sequence_item">set_item</a>
 </pre></div></div>
 <!--- window showing the filter options -->
@@ -242,7 +242,7 @@ window.onload = initDynSections;
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.3<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.4<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -264,7 +264,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Sep 28 02:57:58 2015</small></address>
+      Mon Oct 26 03:49:53 2015</small></address>
    </td>
   </tr>
 </table>

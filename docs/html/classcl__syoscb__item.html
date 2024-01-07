@@ -96,25 +96,18 @@ window.onload = initDynSections;
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a856bc5754caaf121b2297775423a9da5"></a><!-- doxytag: member="cl_syoscb_item::get_producer" ref="a856bc5754caaf121b2297775423a9da5" args="()" -->
-UVM_DEFAULT uvm_field_object(<a class="el" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203">item</a>, <br class="typebreak"/>
+UVM_DEFAULT uvm_field_object(item, <br class="typebreak"/>
 UVM_DEFAULT) public string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__item.html#a856bc5754caaf121b2297775423a9da5">get_producer</a> ()</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Item API:</b> Returns the producer <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f7a926f3e4e1b57f992dcf2b053593f"></a><!-- doxytag: member="cl_syoscb_item::set_producer" ref="a3f7a926f3e4e1b57f992dcf2b053593f" args="(string producer)" -->
-void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f">set_producer</a> (string <a class="el" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb">producer</a>)</td></tr>
+void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__item.html#a3f7a926f3e4e1b57f992dcf2b053593f">set_producer</a> (string producer)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Item API:</b> Sets the producer <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a479775c83c85427005d8709061bb42cb"></a><!-- doxytag: member="cl_syoscb_item::get_item" ref="a479775c83c85427005d8709061bb42cb" args="()" -->
 uvm_sequence_item&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__item.html#a479775c83c85427005d8709061bb42cb">get_item</a> ()</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Item API:</b> Returns the wrapped uvm_sequence_item <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4739ab1d56e8afe6452af21bd64f5ceb"></a><!-- doxytag: member="cl_syoscb_item::set_item" ref="a4739ab1d56e8afe6452af21bd64f5ceb" args="(uvm_sequence_item item)" -->
-void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb">set_item</a> (uvm_sequence_item <a class="el" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203">item</a>)</td></tr>
+void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__item.html#a4739ab1d56e8afe6452af21bd64f5ceb">set_item</a> (uvm_sequence_item item)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><b>Item API:</b> Sets the to be wrapped uvm_sequence_item <br/></td></tr>
-<tr><td colspan="2"><h2>Public Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af9c2b3c97992431146612dbb78aef0bb"></a><!-- doxytag: member="cl_syoscb_item::producer" ref="af9c2b3c97992431146612dbb78aef0bb" args="" -->
-string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__item.html#af9c2b3c97992431146612dbb78aef0bb">producer</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Hold the name of the producer. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a95b47af8f893dfa22bd2338dc721a203"></a><!-- doxytag: member="cl_syoscb_item::item" ref="a95b47af8f893dfa22bd2338dc721a203" args="" -->
-uvm_sequence_item&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcl__syoscb__item.html#a95b47af8f893dfa22bd2338dc721a203">item</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Handle to the wrapped uvm_sequence_item. <br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>The UVM scoreboard item. </p>
@@ -186,7 +179,7 @@ uvm_sequence_item&nbsp;</td><td class="memItemRight" valign="bottom"><a class="e
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.3<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.4<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -208,7 +201,7 @@ uvm_sequence_item&nbsp;</td><td class="memItemRight" valign="bottom"><a class="e
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Sep 28 02:58:00 2015</small></address>
+      Mon Oct 26 03:49:54 2015</small></address>
    </td>
   </tr>
 </table>

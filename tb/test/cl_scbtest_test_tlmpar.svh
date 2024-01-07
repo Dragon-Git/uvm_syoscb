@@ -169,11 +169,14 @@ function void cl_scbtest_test_tlmpar::connect_phase(uvm_phase phase);
   //         montors and the scoreboard. However, these monitors only
   //         exists for this specific test. Thus, it is done here locally.
   begin
-    cl_syoscb_subscriber subscriber;
+    cl_syoscb_subscriber#(cl_scbtest_par_seq_item#(.WIDTH(64))) subscriber;
 
     // Get the subscriber for Producer: P1 for queue: Q1 and connect it
     // to the UVM monitor producing transactions for this queue
     subscriber = this.scbtest_env.syoscb.get_subscriber("Q1", "P1");
+
+    $cast(subscriber, this.scbtest_env.syoscb.get_subscriber("Q1", "P1"));
+
     this.monQ1P1.anls_port.connect(subscriber.analysis_export);
 
     // Get the subscriber for Producer: P1 for queue: Q2 and connect it

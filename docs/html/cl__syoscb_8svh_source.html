@@ -98,7 +98,7 @@ window.onload = initDynSections;
 <a name="l00009"></a>00009 <span class="comment">  /// Array holding handles to all queues</span>
 <a name="l00010"></a>00010 <span class="comment"></span>  local <a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a> queues[];
 <a name="l00011"></a>00011 
-<a name="l00012"></a>00012   <span class="comment">// Handle to the compare startegy</span>
+<a name="l00012"></a>00012   <span class="comment">// Handle to the compare strategy</span>
 <a name="l00013"></a>00013   local <a class="code" href="classcl__syoscb__compare.html" title="Class which act as the root of the compare algorithm.">cl_syoscb_compare</a> compare_strategy;
 <a name="l00014"></a>00014 
 <a name="l00015"></a>00015   <span class="comment">// Assoc array holding each uvm_subscriber</span>
@@ -132,7 +132,7 @@ window.onload = initDynSections;
 <a name="l00043"></a>00043   <span class="comment">//-------------------------------------</span>
 <a name="l00044"></a>00044   <span class="comment">// Transaction based API</span>
 <a name="l00045"></a>00045   <span class="comment">//-------------------------------------</span>
-<a name="l00046"></a>00046   extern function <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a> <a class="code" href="classcl__syoscb.html#a1d3983a0946cc4e38f74b249b5bb0e16" title="Returns a UVM subscriber for a given combination of queue and producer The retrurned...">get_subscriber</a>(string queue_name, string producer);
+<a name="l00046"></a>00046   extern function <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a> <a class="code" href="classcl__syoscb.html#a1d3983a0946cc4e38f74b249b5bb0e16" title="Returns a UVM subscriber for a given combination of queue and producer The returned...">get_subscriber</a>(string queue_name, string producer);
 <a name="l00047"></a>00047 endclass: <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a>
 <a name="l00048"></a>00048 
 <a name="l00049"></a>00049 function <a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a>::new(string name = &quot;cl_syoscb&quot;, uvm_component parent = null);
@@ -254,11 +254,16 @@ window.onload = initDynSections;
 <a name="l00165"></a>00165 endfunction: compare
 <a name="l00166"></a>00166 <span class="comment"></span>
 <a name="l00167"></a>00167 <span class="comment">/// Returns a UVM subscriber for a given combination of queue and producer</span>
-<a name="l00168"></a>00168 <span class="comment">/// The retrurned UVM subscriber can then be connected to a UVM monitor or similar</span>
+<a name="l00168"></a>00168 <span class="comment">/// The returned UVM subscriber can then be connected to a UVM monitor or similar</span>
 <a name="l00169"></a>00169 <span class="comment">/// which produces transactions which should be scoreboarded.</span>
-<a name="l00170"></a><a class="code" href="classcl__syoscb.html#a1d3983a0946cc4e38f74b249b5bb0e16">00170</a> <span class="comment"></span>function <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a> <a class="code" href="classcl__syoscb.html#a1d3983a0946cc4e38f74b249b5bb0e16" title="Returns a UVM subscriber for a given combination of queue and producer The retrurned...">cl_syoscb::get_subscriber</a>(<span class="keywordtype">string</span> queue_name, <span class="keywordtype">string</span> producer);
-<a name="l00171"></a>00171     <span class="keywordflow">return</span>(this.subscribers[{queue_name, producer}]);
-<a name="l00172"></a>00172 endfunction: get_subscriber
+<a name="l00170"></a><a class="code" href="classcl__syoscb.html#a1d3983a0946cc4e38f74b249b5bb0e16">00170</a> <span class="comment"></span>function <a class="code" href="classcl__syoscb__subscriber.html" title="Generic subscriber for the scoreboard.">cl_syoscb_subscriber</a> <a class="code" href="classcl__syoscb.html#a1d3983a0946cc4e38f74b249b5bb0e16" title="Returns a UVM subscriber for a given combination of queue and producer The returned...">cl_syoscb::get_subscriber</a>(<span class="keywordtype">string</span> queue_name, <span class="keywordtype">string</span> producer);
+<a name="l00171"></a>00171   <span class="keywordflow">if</span>(this.subscribers.exists({queue_name, producer})) begin
+<a name="l00172"></a>00172     <span class="keywordflow">return</span>(this.subscribers[{queue_name, producer}]);
+<a name="l00173"></a>00173   end <span class="keywordflow">else</span> begin
+<a name="l00174"></a>00174    `uvm_fatal(<span class="stringliteral">&quot;SUBSCRIBER_ERROR&quot;</span>, $sformatf(<span class="stringliteral">&quot;Unable to get subscriber for queue: %s and producer: %s&quot;</span>, queue_name, producer));
+<a name="l00175"></a>00175    <span class="keywordflow">return</span>(null);
+<a name="l00176"></a>00176   end
+<a name="l00177"></a>00177 endfunction: get_subscriber
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -321,7 +326,7 @@ window.onload = initDynSections;
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.3<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.4<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -343,7 +348,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Sep 28 02:57:58 2015</small></address>
+      Mon Oct 26 03:49:53 2015</small></address>
    </td>
   </tr>
 </table>

@@ -353,139 +353,145 @@ window.onload = initDynSections;
 <a name="l00264"></a>00264 <span class="comment">///</span>
 <a name="l00265"></a>00265 <span class="comment">///   -# Out-of-Order (cl_syoscb_compare_ooo)</span>
 <a name="l00266"></a>00266 <span class="comment">///   -# In-Order (cl_syoscb_compare_io)</span>
-<a name="l00267"></a>00267 <span class="comment">///</span>
-<a name="l00268"></a>00268 <span class="comment">/// The following example shows how they are configured:</span>
-<a name="l00269"></a>00269 <span class="comment">///</span>
-<a name="l00270"></a>00270 <span class="comment">/// @code</span>
-<a name="l00271"></a>00271 <span class="comment">///   cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              </span>
-<a name="l00272"></a>00272 <span class="comment">///                                              cl_syoscb_queue_std::get_type(),</span>
-<a name="l00273"></a>00273 <span class="comment">///                                              &quot;*&quot;);</span>
-<a name="l00274"></a>00274 <span class="comment">///</span>
-<a name="l00275"></a>00275 <span class="comment">///   factory.set_type_override_by_type(cl_syoscb_compare_base::get_type(),</span>
-<a name="l00276"></a>00276 <span class="comment">///                                     cl_syoscb_compare_ooo::get_type(),</span>
-<a name="l00277"></a>00277 <span class="comment">///                                     &quot;*&quot;);</span>
-<a name="l00278"></a>00278 <span class="comment">/// @endcode</span>
-<a name="l00279"></a>00279 <span class="comment">///</span>
-<a name="l00280"></a>00280 <span class="comment">/// The full build phase, including the factory overwrites, of cl_scbtest_env is shown here for completeness:</span>
-<a name="l00281"></a>00281 <span class="comment">///</span>
-<a name="l00282"></a>00282 <span class="comment">/// @code</span>
-<a name="l00283"></a>00283 <span class="comment">///   function void cl_scbtest_env::build_phase(uvm_phase phase);</span>
-<a name="l00284"></a>00284 <span class="comment">///     super.build_phase(phase);</span>
-<a name="l00285"></a>00285 <span class="comment">///</span>
-<a name="l00286"></a>00286 <span class="comment">///     // Use the standard SV queue implementation as scoreboard queue</span>
-<a name="l00287"></a>00287 <span class="comment">///     cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              </span>
-<a name="l00288"></a>00288 <span class="comment">///                                                cl_syoscb_queue_std::get_type(),</span>
-<a name="l00289"></a>00289 <span class="comment">///                                                &quot;*&quot;);</span>
-<a name="l00290"></a>00290 <span class="comment">///</span>
-<a name="l00291"></a>00291 <span class="comment">///     // Set the compare strategy to be OOO</span>
-<a name="l00292"></a>00292 <span class="comment">///     factory.set_type_override_by_type(cl_syoscb_compare_base::get_type(),</span>
-<a name="l00293"></a>00293 <span class="comment">///                                       cl_syoscb_compare_ooo::get_type(),</span>
-<a name="l00294"></a>00294 <span class="comment">///                                       &quot;*&quot;);</span>
-<a name="l00295"></a>00295 <span class="comment">///</span>
-<a name="l00296"></a>00296 <span class="comment">///     // Create the scoreboard configuration object</span>
-<a name="l00297"></a>00297 <span class="comment">///     this.syoscb_cfg = cl_syoscb_cfg::type_id::create(&quot;syoscb_cfg&quot;);</span>
-<a name="l00298"></a>00298 <span class="comment">///</span>
-<a name="l00299"></a>00299 <span class="comment">///     // Configure the scoreboard</span>
-<a name="l00300"></a>00300 <span class="comment">///     this.syoscb_cfg.set_queues({&quot;Q1&quot;, &quot;Q2&quot;});</span>
-<a name="l00301"></a>00301 <span class="comment">///     void&apos;(this.syoscb_cfg.set_primary_queue(&quot;Q1&quot;)); </span>
-<a name="l00302"></a>00302 <span class="comment">///     void&apos;(this.syoscb_cfg.set_producer(&quot;P1&quot;, {&quot;Q1&quot;, &quot;Q2&quot;})); </span>
-<a name="l00303"></a>00303 <span class="comment">///</span>
-<a name="l00304"></a>00304 <span class="comment">///     // Pass the scoreboard configuration object to the config_db</span>
-<a name="l00305"></a>00305 <span class="comment">///     uvm_config_db #(cl_syoscb_cfg)::set(this, &quot;syoscb&quot;, &quot;cfg&quot;, this.syoscb_cfg);</span>
-<a name="l00306"></a>00306 <span class="comment">///</span>
-<a name="l00307"></a>00307 <span class="comment">///     // Create the scoreboard</span>
-<a name="l00308"></a>00308 <span class="comment">///     this.syoscb = cl_syoscb::type_id::create(&quot;syoscb&quot;, this);</span>
-<a name="l00309"></a>00309 <span class="comment">///               </span>
-<a name="l00310"></a>00310 <span class="comment">///     ...</span>
-<a name="l00311"></a>00311 <span class="comment">///</span>
-<a name="l00312"></a>00312 <span class="comment">///   endfunction: build_phase</span>
-<a name="l00313"></a>00313 <span class="comment">/// @endcode</span>
-<a name="l00314"></a>00314 <span class="comment">///</span>
-<a name="l00315"></a>00315 <span class="comment">/// @page pImplementationNotes Implementation notes</span>
-<a name="l00316"></a>00316 <span class="comment">///</span>
-<a name="l00317"></a>00317 <span class="comment">/// @section sAPIs Implementation APIs</span>
-<a name="l00318"></a>00318 <span class="comment">///</span>
-<a name="l00319"></a>00319 <span class="comment">/// The following APIs have been defined for easy extension fo the scoreboard classes:</span>
-<a name="l00320"></a>00320 <span class="comment">///</span>
-<a name="l00321"></a>00321 <span class="comment">///   -# Configuration API: cl_syoscb_cfg</span>
-<a name="l00322"></a>00322 <span class="comment">///   -# Item API: cl_syoscb_item</span>
-<a name="l00323"></a>00323 <span class="comment">///   -# Queue API: cl_syoscb_queue</span>
-<a name="l00324"></a>00324 <span class="comment">///   -# Compare API: cl_syoscb_compare_base</span>
-<a name="l00325"></a>00325 <span class="comment">///   -# Subscriber API: cl_syoscb_subscriber</span>
-<a name="l00326"></a>00326 <span class="comment">///   -# Iterator API: cl_syoscb_queue_iterator_base</span>
-<a name="l00327"></a>00327 <span class="comment">///</span>
-<a name="l00328"></a>00328 <span class="comment">/// @section sGeneralErrorHandling General error handling</span>
-<a name="l00329"></a>00329 <span class="comment">/// In general when a lower level method detects an error then two concepts are used. Primarily, the method will either issue a UVM info with some information about what went wrong or issue a UVM error/fatal immediately. The first one will then return &lt;b&gt;1&apos;b0&lt;/b&gt; to signal that something went wrong. Thus, it is up to the parent levels to catch the error and convert them into UVM errors/fatals etc. This method was chosen since the parent level typically provides more and better information when things go wrong. </span>
-<a name="l00330"></a>00330 <span class="comment">/// @section sErrorCategories Error categories</span>
-<a name="l00331"></a>00331 <span class="comment">/// There are several ERROR categories. The following table lists them with some explanation:</span>
-<a name="l00332"></a>00332 <span class="comment">///</span>
-<a name="l00333"></a>00333 <span class="comment">///  &lt;table&gt;</span>
-<a name="l00334"></a>00334 <span class="comment">///  &lt;tr&gt;</span>
-<a name="l00335"></a>00335 <span class="comment">///    &lt;th&gt;Error Category&lt;/th&gt;</span>
-<a name="l00336"></a>00336 <span class="comment">///    &lt;th&gt;Description&lt;/th&gt;</span>
-<a name="l00337"></a>00337 <span class="comment">///  &lt;/tr&gt;</span>
-<a name="l00338"></a>00338 <span class="comment">///  &lt;tr&gt;</span>
-<a name="l00339"></a>00339 <span class="comment">///    &lt;td&gt;IMPL_ERROR&lt;/td&gt;</span>
-<a name="l00340"></a>00340 <span class="comment">///    &lt;td&gt;Implementation error. Something is really broken&lt;/td&gt;</span>
-<a name="l00341"></a>00341 <span class="comment">///  &lt;/tr&gt;</span>
-<a name="l00342"></a>00342 <span class="comment">///  &lt;tr&gt;</span>
-<a name="l00343"></a>00343 <span class="comment">///    &lt;td&gt;QUEUE_ERROR&lt;/td&gt;</span>
-<a name="l00344"></a>00344 <span class="comment">///    &lt;td&gt;A queue related error, e.g. the queue could not be found&lt;/td&gt;</span>
-<a name="l00345"></a>00345 <span class="comment">///  &lt;/tr&gt;</span>
-<a name="l00346"></a>00346 <span class="comment">///  &lt;tr&gt;</span>
-<a name="l00347"></a>00347 <span class="comment">///    &lt;td&gt;CFG_ERROR&lt;/td&gt;</span>
-<a name="l00348"></a>00348 <span class="comment">///    &lt;td&gt;Configuration error. Usually, because the configuration object is missing&lt;/td&gt;</span>
-<a name="l00349"></a>00349 <span class="comment">///  &lt;/tr&gt;</span>
-<a name="l00350"></a>00350 <span class="comment">///  &lt;tr&gt;</span>
-<a name="l00351"></a>00351 <span class="comment">///    &lt;td&gt;TYPE_ERROR&lt;/td&gt;</span>
-<a name="l00352"></a>00352 <span class="comment">///    &lt;td&gt;Type error. Typically issued when $cast() fails&lt;/td&gt;</span>
-<a name="l00353"></a>00353 <span class="comment">///  &lt;/tr&gt;</span>
-<a name="l00354"></a>00354 <span class="comment">///  &lt;tr&gt;</span>
-<a name="l00355"></a>00355 <span class="comment">///    &lt;td&gt;COMPARE_ERROR&lt;/td&gt;</span>
-<a name="l00356"></a>00356 <span class="comment">///    &lt;td&gt;Compare error. Issued, e.g. when the in order compare fails&lt;/td&gt;</span>
-<a name="l00357"></a>00357 <span class="comment">///  &lt;/tr&gt;</span>
-<a name="l00358"></a>00358 <span class="comment">///&lt;/table&gt;</span>
-<a name="l00359"></a>00359 <span class="comment">///   </span>
-<a name="l00360"></a>00360 <span class="comment">/// @section sMultipleQueueRefs Multiple queue references</span>
-<a name="l00361"></a>00361 <span class="comment">/// Both the top level class cl_syoscb and the configuration class cl_syoscb_cfg contains</span>
-<a name="l00362"></a>00362 <span class="comment">/// handles to all queues. The former uses an ordinary array which provides a fast way of</span>
-<a name="l00363"></a>00363 <span class="comment">/// looping over the queues and the latter an associative which makes it easy to find</span>
-<a name="l00364"></a>00364 <span class="comment">/// a queue using only its name.</span>
-<a name="l00365"></a>00365 <span class="comment"></span>
-<a name="l00366"></a>00366 <span class="keyword">package </span>pk_syoscb;<span class="comment"></span>
-<a name="l00367"></a>00367 <span class="comment">  ////////////////////////////////////////////////////////////////////////////</span>
-<a name="l00368"></a>00368 <span class="comment"></span>  <span class="comment">// Imported packages</span><span class="comment"></span>
-<a name="l00369"></a>00369 <span class="comment">  ////////////////////////////////////////////////////////////////////////////</span>
-<a name="l00370"></a>00370 <span class="comment"></span>  <span class="keyword">import</span> uvm_pkg::*;
-<a name="l00371"></a>00371   `include <span class="stringliteral">&quot;uvm_macros.svh&quot;</span>
-<a name="l00372"></a>00372 <span class="comment"></span>
-<a name="l00373"></a>00373 <span class="comment">  ////////////////////////////////////////////////////////////////////////////</span>
-<a name="l00374"></a>00374 <span class="comment"></span>  <span class="comment">// Type definitions</span><span class="comment"></span>
-<a name="l00375"></a>00375 <span class="comment">  ////////////////////////////////////////////////////////////////////////////</span>
-<a name="l00376"></a>00376 <span class="comment"></span>  <span class="keyword">typedef</span> <span class="keyword">class </span><a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a>;
-<a name="l00377"></a>00377   <span class="keyword">typedef</span> <span class="keyword">class </span><a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>;
-<a name="l00378"></a>00378   <span class="keyword">typedef</span> <span class="keyword">class </span><a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>;
-<a name="l00379"></a>00379 <span class="comment"></span>
+<a name="l00267"></a>00267 <span class="comment">///   -# In-Order by producer (cl_syoscb_compare_iop)</span>
+<a name="l00268"></a>00268 <span class="comment">///</span>
+<a name="l00269"></a>00269 <span class="comment">/// The following example shows how they are configured:</span>
+<a name="l00270"></a>00270 <span class="comment">///</span>
+<a name="l00271"></a>00271 <span class="comment">/// @code</span>
+<a name="l00272"></a>00272 <span class="comment">///   cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              </span>
+<a name="l00273"></a>00273 <span class="comment">///                                              cl_syoscb_queue_std::get_type(),</span>
+<a name="l00274"></a>00274 <span class="comment">///                                              &quot;*&quot;);</span>
+<a name="l00275"></a>00275 <span class="comment">///</span>
+<a name="l00276"></a>00276 <span class="comment">///   factory.set_type_override_by_type(cl_syoscb_compare_base::get_type(),</span>
+<a name="l00277"></a>00277 <span class="comment">///                                     cl_syoscb_compare_ooo::get_type(),</span>
+<a name="l00278"></a>00278 <span class="comment">///                                     &quot;*&quot;);</span>
+<a name="l00279"></a>00279 <span class="comment">/// @endcode</span>
+<a name="l00280"></a>00280 <span class="comment">///</span>
+<a name="l00281"></a>00281 <span class="comment">/// The full build phase, including the factory overwrites, of cl_scbtest_env is shown here for completeness:</span>
+<a name="l00282"></a>00282 <span class="comment">///</span>
+<a name="l00283"></a>00283 <span class="comment">/// @code</span>
+<a name="l00284"></a>00284 <span class="comment">///   function void cl_scbtest_env::build_phase(uvm_phase phase);</span>
+<a name="l00285"></a>00285 <span class="comment">///     super.build_phase(phase);</span>
+<a name="l00286"></a>00286 <span class="comment">///</span>
+<a name="l00287"></a>00287 <span class="comment">///     // Use the standard SV queue implementation as scoreboard queue</span>
+<a name="l00288"></a>00288 <span class="comment">///     cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              </span>
+<a name="l00289"></a>00289 <span class="comment">///                                                cl_syoscb_queue_std::get_type(),</span>
+<a name="l00290"></a>00290 <span class="comment">///                                                &quot;*&quot;);</span>
+<a name="l00291"></a>00291 <span class="comment">///</span>
+<a name="l00292"></a>00292 <span class="comment">///     // Set the compare strategy to be OOO</span>
+<a name="l00293"></a>00293 <span class="comment">///     factory.set_type_override_by_type(cl_syoscb_compare_base::get_type(),</span>
+<a name="l00294"></a>00294 <span class="comment">///                                       cl_syoscb_compare_ooo::get_type(),</span>
+<a name="l00295"></a>00295 <span class="comment">///                                       &quot;*&quot;);</span>
+<a name="l00296"></a>00296 <span class="comment">///</span>
+<a name="l00297"></a>00297 <span class="comment">///     // Create the scoreboard configuration object</span>
+<a name="l00298"></a>00298 <span class="comment">///     this.syoscb_cfg = cl_syoscb_cfg::type_id::create(&quot;syoscb_cfg&quot;);</span>
+<a name="l00299"></a>00299 <span class="comment">///</span>
+<a name="l00300"></a>00300 <span class="comment">///     // Configure the scoreboard</span>
+<a name="l00301"></a>00301 <span class="comment">///     this.syoscb_cfg.set_queues({&quot;Q1&quot;, &quot;Q2&quot;});</span>
+<a name="l00302"></a>00302 <span class="comment">///     void&apos;(this.syoscb_cfg.set_primary_queue(&quot;Q1&quot;)); </span>
+<a name="l00303"></a>00303 <span class="comment">///     void&apos;(this.syoscb_cfg.set_producer(&quot;P1&quot;, {&quot;Q1&quot;, &quot;Q2&quot;})); </span>
+<a name="l00304"></a>00304 <span class="comment">///</span>
+<a name="l00305"></a>00305 <span class="comment">///     // Pass the scoreboard configuration object to the config_db</span>
+<a name="l00306"></a>00306 <span class="comment">///     uvm_config_db #(cl_syoscb_cfg)::set(this, &quot;syoscb&quot;, &quot;cfg&quot;, this.syoscb_cfg);</span>
+<a name="l00307"></a>00307 <span class="comment">///</span>
+<a name="l00308"></a>00308 <span class="comment">///     // Create the scoreboard</span>
+<a name="l00309"></a>00309 <span class="comment">///     this.syoscb = cl_syoscb::type_id::create(&quot;syoscb&quot;, this);</span>
+<a name="l00310"></a>00310 <span class="comment">///               </span>
+<a name="l00311"></a>00311 <span class="comment">///     ...</span>
+<a name="l00312"></a>00312 <span class="comment">///</span>
+<a name="l00313"></a>00313 <span class="comment">///   endfunction: build_phase</span>
+<a name="l00314"></a>00314 <span class="comment">/// @endcode</span>
+<a name="l00315"></a>00315 <span class="comment">///</span>
+<a name="l00316"></a>00316 <span class="comment">/// @page pImplementationNotes Implementation notes</span>
+<a name="l00317"></a>00317 <span class="comment">///</span>
+<a name="l00318"></a>00318 <span class="comment">/// @section sAPIs Implementation APIs</span>
+<a name="l00319"></a>00319 <span class="comment">///</span>
+<a name="l00320"></a>00320 <span class="comment">/// The following APIs have been defined for easy extension fo the scoreboard classes:</span>
+<a name="l00321"></a>00321 <span class="comment">///</span>
+<a name="l00322"></a>00322 <span class="comment">///   -# Configuration API: cl_syoscb_cfg</span>
+<a name="l00323"></a>00323 <span class="comment">///   -# Item API: cl_syoscb_item</span>
+<a name="l00324"></a>00324 <span class="comment">///   -# Queue API: cl_syoscb_queue</span>
+<a name="l00325"></a>00325 <span class="comment">///   -# Compare API: cl_syoscb_compare_base</span>
+<a name="l00326"></a>00326 <span class="comment">///   -# Subscriber API: cl_syoscb_subscriber</span>
+<a name="l00327"></a>00327 <span class="comment">///   -# Iterator API: cl_syoscb_queue_iterator_base</span>
+<a name="l00328"></a>00328 <span class="comment">///</span>
+<a name="l00329"></a>00329 <span class="comment">/// @section sGeneralErrorHandling General error handling</span>
+<a name="l00330"></a>00330 <span class="comment">/// In general when a lower level method detects an error then two concepts are used. Primarily, the method will either issue a UVM info with some information about what went wrong or issue a UVM error/fatal immediately. The first one will then return &lt;b&gt;1&apos;b0&lt;/b&gt; to signal that something went wrong. Thus, it is up to the parent levels to catch the error and convert them into UVM errors/fatals etc. This method was chosen since the parent level typically provides more and better information when things go wrong. </span>
+<a name="l00331"></a>00331 <span class="comment">/// @section sErrorCategories Error categories</span>
+<a name="l00332"></a>00332 <span class="comment">/// There are several ERROR categories. The following table lists them with some explanation:</span>
+<a name="l00333"></a>00333 <span class="comment">///</span>
+<a name="l00334"></a>00334 <span class="comment">///  &lt;table&gt;</span>
+<a name="l00335"></a>00335 <span class="comment">///  &lt;tr&gt;</span>
+<a name="l00336"></a>00336 <span class="comment">///    &lt;th&gt;Error Category&lt;/th&gt;</span>
+<a name="l00337"></a>00337 <span class="comment">///    &lt;th&gt;Description&lt;/th&gt;</span>
+<a name="l00338"></a>00338 <span class="comment">///  &lt;/tr&gt;</span>
+<a name="l00339"></a>00339 <span class="comment">///  &lt;tr&gt;</span>
+<a name="l00340"></a>00340 <span class="comment">///    &lt;td&gt;IMPL_ERROR&lt;/td&gt;</span>
+<a name="l00341"></a>00341 <span class="comment">///    &lt;td&gt;Implementation error. Something is really broken&lt;/td&gt;</span>
+<a name="l00342"></a>00342 <span class="comment">///  &lt;/tr&gt;</span>
+<a name="l00343"></a>00343 <span class="comment">///  &lt;tr&gt;</span>
+<a name="l00344"></a>00344 <span class="comment">///    &lt;td&gt;QUEUE_ERROR&lt;/td&gt;</span>
+<a name="l00345"></a>00345 <span class="comment">///    &lt;td&gt;A queue related error, e.g. the queue could not be found&lt;/td&gt;</span>
+<a name="l00346"></a>00346 <span class="comment">///  &lt;/tr&gt;</span>
+<a name="l00347"></a>00347 <span class="comment">///  &lt;tr&gt;</span>
+<a name="l00348"></a>00348 <span class="comment">///    &lt;td&gt;CFG_ERROR&lt;/td&gt;</span>
+<a name="l00349"></a>00349 <span class="comment">///    &lt;td&gt;Configuration error. Usually, because the configuration object is missing&lt;/td&gt;</span>
+<a name="l00350"></a>00350 <span class="comment">///  &lt;/tr&gt;</span>
+<a name="l00351"></a>00351 <span class="comment">///  &lt;tr&gt;</span>
+<a name="l00352"></a>00352 <span class="comment">///    &lt;td&gt;TYPE_ERROR&lt;/td&gt;</span>
+<a name="l00353"></a>00353 <span class="comment">///    &lt;td&gt;Type error. Typically issued when $cast() fails&lt;/td&gt;</span>
+<a name="l00354"></a>00354 <span class="comment">///  &lt;/tr&gt;</span>
+<a name="l00355"></a>00355 <span class="comment">///  &lt;tr&gt;</span>
+<a name="l00356"></a>00356 <span class="comment">///    &lt;td&gt;COMPARE_ERROR&lt;/td&gt;</span>
+<a name="l00357"></a>00357 <span class="comment">///    &lt;td&gt;Compare error. Issued, e.g. when the in order compare fails&lt;/td&gt;</span>
+<a name="l00358"></a>00358 <span class="comment">///  &lt;/tr&gt;</span>
+<a name="l00359"></a>00359 <span class="comment">///  &lt;tr&gt;</span>
+<a name="l00360"></a>00360 <span class="comment">///    &lt;td&gt;SUBSCRIBER_ERROR&lt;/td&gt;</span>
+<a name="l00361"></a>00361 <span class="comment">///    &lt;td&gt;Subscriber error. Issued, e.g. when the call to cl_syoscb::get_subscriber() fails&lt;/td&gt;</span>
+<a name="l00362"></a>00362 <span class="comment">///  &lt;/tr&gt;</span>
+<a name="l00363"></a>00363 <span class="comment">///  &lt;/table&gt;</span>
+<a name="l00364"></a>00364 <span class="comment">///   </span>
+<a name="l00365"></a>00365 <span class="comment">/// @section sMultipleQueueRefs Multiple queue references</span>
+<a name="l00366"></a>00366 <span class="comment">/// Both the top level class cl_syoscb and the configuration class cl_syoscb_cfg contains</span>
+<a name="l00367"></a>00367 <span class="comment">/// handles to all queues. The former uses an ordinary array which provides a fast way of</span>
+<a name="l00368"></a>00368 <span class="comment">/// looping over the queues and the latter an associative which makes it easy to find</span>
+<a name="l00369"></a>00369 <span class="comment">/// a queue using only its name.</span>
+<a name="l00370"></a>00370 <span class="comment"></span>
+<a name="l00371"></a>00371 <span class="keyword">package </span>pk_syoscb;<span class="comment"></span>
+<a name="l00372"></a>00372 <span class="comment">  ////////////////////////////////////////////////////////////////////////////</span>
+<a name="l00373"></a>00373 <span class="comment"></span>  <span class="comment">// Imported packages</span><span class="comment"></span>
+<a name="l00374"></a>00374 <span class="comment">  ////////////////////////////////////////////////////////////////////////////</span>
+<a name="l00375"></a>00375 <span class="comment"></span>  <span class="keyword">import</span> uvm_pkg::*;
+<a name="l00376"></a>00376   `include <span class="stringliteral">&quot;uvm_macros.svh&quot;</span>
+<a name="l00377"></a>00377 <span class="comment"></span>
+<a name="l00378"></a>00378 <span class="comment">  ////////////////////////////////////////////////////////////////////////////</span>
+<a name="l00379"></a>00379 <span class="comment"></span>  <span class="comment">// Type definitions</span><span class="comment"></span>
 <a name="l00380"></a>00380 <span class="comment">  ////////////////////////////////////////////////////////////////////////////</span>
-<a name="l00381"></a>00381 <span class="comment"></span>  <span class="comment">// Package source files</span><span class="comment"></span>
-<a name="l00382"></a>00382 <span class="comment">  ////////////////////////////////////////////////////////////////////////////</span>
-<a name="l00383"></a>00383 <span class="comment"></span>  `include <span class="stringliteral">&quot;cl_syoscb_cfg_pl.svh&quot;</span>
-<a name="l00384"></a>00384   `include <span class="stringliteral">&quot;cl_syoscb_cfg.svh&quot;</span>
-<a name="l00385"></a>00385   `include <span class="stringliteral">&quot;cl_syoscb_item.svh&quot;</span>
-<a name="l00386"></a>00386   `include <span class="stringliteral">&quot;cl_syoscb_queue_iterator_base.svh&quot;</span>
-<a name="l00387"></a>00387   `include <span class="stringliteral">&quot;cl_syoscb_queue_iterator_std.svh&quot;</span>
-<a name="l00388"></a>00388   `include <span class="stringliteral">&quot;cl_syoscb_queue.svh&quot;</span>
-<a name="l00389"></a>00389   `include <span class="stringliteral">&quot;cl_syoscb_queue_std.svh&quot;</span>
-<a name="l00390"></a>00390   `include <span class="stringliteral">&quot;cl_syoscb_compare_base.svh&quot;</span>
-<a name="l00391"></a>00391   `include <span class="stringliteral">&quot;cl_syoscb_compare.svh&quot;</span>
-<a name="l00392"></a>00392   `include <span class="stringliteral">&quot;cl_syoscb_compare_ooo.svh&quot;</span>
-<a name="l00393"></a>00393   `include <span class="stringliteral">&quot;cl_syoscb_compare_io.svh&quot;</span>
-<a name="l00394"></a>00394   `include <span class="stringliteral">&quot;cl_syoscb_report_catcher.svh&quot;</span>
-<a name="l00395"></a>00395   `include <span class="stringliteral">&quot;cl_syoscb_subscriber.svh&quot;</span>
-<a name="l00396"></a>00396   `include <span class="stringliteral">&quot;cl_syoscb.svh&quot;</span>
-<a name="l00397"></a>00397 endpackage: pk_syoscb
-<a name="l00398"></a>00398 
-<a name="l00399"></a>00399 `endif <span class="comment">//  __PK_SYOSCB_SV__</span>
+<a name="l00381"></a>00381 <span class="comment"></span>  <span class="keyword">typedef</span> <span class="keyword">class </span><a class="code" href="classcl__syoscb.html" title="Top level class implementing the root of the SyoSil UVM scoreboard.">cl_syoscb</a>;
+<a name="l00382"></a>00382   <span class="keyword">typedef</span> <span class="keyword">class </span><a class="code" href="classcl__syoscb__cfg.html" title="Configuration class for the SyoSil UVM scoreboard.">cl_syoscb_cfg</a>;
+<a name="l00383"></a>00383   <span class="keyword">typedef</span> <span class="keyword">class </span><a class="code" href="classcl__syoscb__queue.html" title="Class which base concet of a queue.">cl_syoscb_queue</a>;
+<a name="l00384"></a>00384 <span class="comment"></span>
+<a name="l00385"></a>00385 <span class="comment">  ////////////////////////////////////////////////////////////////////////////</span>
+<a name="l00386"></a>00386 <span class="comment"></span>  <span class="comment">// Package source files</span><span class="comment"></span>
+<a name="l00387"></a>00387 <span class="comment">  ////////////////////////////////////////////////////////////////////////////</span>
+<a name="l00388"></a>00388 <span class="comment"></span>  `include <span class="stringliteral">&quot;cl_syoscb_cfg_pl.svh&quot;</span>
+<a name="l00389"></a>00389   `include <span class="stringliteral">&quot;cl_syoscb_cfg.svh&quot;</span>
+<a name="l00390"></a>00390   `include <span class="stringliteral">&quot;cl_syoscb_item.svh&quot;</span>
+<a name="l00391"></a>00391   `include <span class="stringliteral">&quot;cl_syoscb_queue_iterator_base.svh&quot;</span>
+<a name="l00392"></a>00392   `include <span class="stringliteral">&quot;cl_syoscb_queue_iterator_std.svh&quot;</span>
+<a name="l00393"></a>00393   `include <span class="stringliteral">&quot;cl_syoscb_queue.svh&quot;</span>
+<a name="l00394"></a>00394   `include <span class="stringliteral">&quot;cl_syoscb_queue_std.svh&quot;</span>
+<a name="l00395"></a>00395   `include <span class="stringliteral">&quot;cl_syoscb_compare_base.svh&quot;</span>
+<a name="l00396"></a>00396   `include <span class="stringliteral">&quot;cl_syoscb_compare.svh&quot;</span>
+<a name="l00397"></a>00397   `include <span class="stringliteral">&quot;cl_syoscb_compare_ooo.svh&quot;</span>
+<a name="l00398"></a>00398   `include <span class="stringliteral">&quot;cl_syoscb_compare_io.svh&quot;</span>
+<a name="l00399"></a>00399   `include <span class="stringliteral">&quot;cl_syoscb_compare_iop.svh&quot;</span>
+<a name="l00400"></a>00400   `include <span class="stringliteral">&quot;cl_syoscb_report_catcher.svh&quot;</span>
+<a name="l00401"></a>00401   `include <span class="stringliteral">&quot;cl_syoscb_subscriber.svh&quot;</span>
+<a name="l00402"></a>00402   `include <span class="stringliteral">&quot;cl_syoscb.svh&quot;</span>
+<a name="l00403"></a>00403 endpackage: pk_syoscb
+<a name="l00404"></a>00404 
+<a name="l00405"></a>00405 `endif <span class="comment">//  __PK_SYOSCB_SV__</span>
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -548,7 +554,7 @@ window.onload = initDynSections;
     </td>
     <td width = "60%">
        <address style="text-align: center;">
-       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.3<br>
+       Project: SyoSil ApS UVM Scoreboard, Revision: 1.0.2.4<br>
        <br>
        Copyright 2014-2015 SyoSil ApS<br>
        All Rights Reserved Worldwide<br>
@@ -570,7 +576,7 @@ window.onload = initDynSections;
       <a href="http://www.doxygen.org/index.html"><img src="doxygen.png" alt="doxygen" align="middle" border="0"></a><br>
       <a href="http://www.doxygen.org/index.html">Doxygen</a> Version: 1.6.1<br>
       <a href="http://www.intelligentdv.com/index.html">IDV SV Filter</a> Version: 2.6.2<br>
-      Mon Sep 28 02:57:58 2015</small></address>
+      Mon Oct 26 03:49:53 2015</small></address>
    </td>
   </tr>
 </table>

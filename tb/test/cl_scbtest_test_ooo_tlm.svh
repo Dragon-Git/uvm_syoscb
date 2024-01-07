@@ -21,7 +21,7 @@
 
 // This class implements a monitor which does a sequence of
 // writes on it's analysis port with random waits in between
-class cl_tlm_monitor extends uvm_monitor; 
+class cl_ooo_tlm_monitor extends uvm_monitor; 
   //-------------------------------------
   // Non randomizable variables
   //-------------------------------------
@@ -30,7 +30,7 @@ class cl_tlm_monitor extends uvm_monitor;
   //-------------------------------------
   // UVM Macros
   //-------------------------------------
-  `uvm_component_utils(cl_tlm_monitor)
+  `uvm_component_utils(cl_ooo_tlm_monitor)
 
   //-------------------------------------
   // Constructor
@@ -42,18 +42,26 @@ class cl_tlm_monitor extends uvm_monitor;
   //-------------------------------------
   extern function void build_phase(uvm_phase phase);
   extern task run_phase(uvm_phase phase);
-endclass: cl_tlm_monitor
+endclass: cl_ooo_tlm_monitor
 
-function cl_tlm_monitor::new(string name, uvm_component p = null); 
+function cl_ooo_tlm_monitor::new(string name, uvm_component p = null); 
   super.new(name,p); 
 endfunction 
 
-function void cl_tlm_monitor::build_phase(uvm_phase phase);
+function void cl_ooo_tlm_monitor::build_phase(uvm_phase phase);
+  cl_syoscb_queue::set_type_override_by_type(cl_syoscb_queue::get_type(),              
+                                             cl_syoscb_queue_std::get_type(),
+                                             "*");
+
+  this.set_type_override_by_type(cl_syoscb_compare_base::get_type(),
+                                 cl_syoscb_compare_iop::get_type(),
+                                 "*");
+  
   super.build_phase(phase);
   this.anls_port = new("anls_port", this); 
 endfunction: build_phase
 
-task cl_tlm_monitor::run_phase(uvm_phase phase);
+task cl_ooo_tlm_monitor::run_phase(uvm_phase phase);
   cl_scbtest_seq_item a;
 
   // Raise objection
@@ -71,12 +79,12 @@ task cl_tlm_monitor::run_phase(uvm_phase phase);
     // Generate random wait
     ws = $urandom_range(100, 10);
 
-    `uvm_info("TLM_MON", $sformatf("[%0d]: Waiting %0d time units", i, ws), UVM_NONE);
+    `uvm_info("OOO_TLM_MON", $sformatf("[%0d]: Waiting %0d time units", i, ws), UVM_NONE);
 
     // Do the wait
     #(ws); 
 
-    `uvm_info("TLM_MON", $sformatf("[%0d]: Wait done", i), UVM_NONE);
+    `uvm_info("OOO_TLM_MON", $sformatf("[%0d]: Wait done", i), UVM_NONE);
 
     // Use increasing values. This will work since we have an OOO compare
     a.int_a = i;
@@ -90,22 +98,22 @@ task cl_tlm_monitor::run_phase(uvm_phase phase);
   phase.drop_objection(this);
 endtask: run_phase
 
-class cl_scbtest_test_tlm extends cl_scbtest_test_base;
+class cl_scbtest_test_ooo_tlm extends cl_scbtest_test_base;
   //-------------------------------------
   // Non randomizable variables
   //-------------------------------------
-  cl_tlm_monitor monQ1P1;
-  cl_tlm_monitor monQ2P1;
+  cl_ooo_tlm_monitor monQ1P1;
+  cl_ooo_tlm_monitor monQ2P1;
 
   //-------------------------------------
   // UVM Macros
   //-------------------------------------
-  `uvm_component_utils(cl_scbtest_test_tlm)
+  `uvm_component_utils(cl_scbtest_test_ooo_tlm)
 
   //-------------------------------------
   // Constructor
   //-------------------------------------
-  extern function new(string name = "cl_scbtest_test_tlm", uvm_component parent = null);
+  extern function new(string name = "cl_scbtest_test_ooo_tlm", uvm_component parent = null);
 
   //-------------------------------------
   // UVM Phase methods
@@ -113,20 +121,20 @@ class cl_scbtest_test_tlm extends cl_scbtest_test_base;
   extern function void build_phase(uvm_phase phase);
   extern function void connect_phase(uvm_phase phase);
   extern task run_phase(uvm_phase phase);
-endclass : cl_scbtest_test_tlm
+endclass : cl_scbtest_test_ooo_tlm
 
-function cl_scbtest_test_tlm::new(string name = "cl_scbtest_test_tlm", uvm_component parent = null);
+function cl_scbtest_test_ooo_tlm::new(string name = "cl_scbtest_test_ooo_tlm", uvm_component parent = null);
   super.new(name, parent);
 endfunction : new
 
-function void cl_scbtest_test_tlm::build_phase(uvm_phase phase);
+function void cl_scbtest_test_ooo_tlm::build_phase(uvm_phase phase);
   super.build_phase(phase);
 
   this.monQ1P1 = new("monQ1P1", this);
   this.monQ2P1 = new("monQ2P1", this);
 endfunction: build_phase
 
-function void cl_scbtest_test_tlm::connect_phase(uvm_phase phase);
+function void cl_scbtest_test_ooo_tlm::connect_phase(uvm_phase phase);
   super.connect_phase(phase);
 
   // *NOTE*: This will hook up the TLM monitors with the TLM API of the
@@ -149,7 +157,7 @@ function void cl_scbtest_test_tlm::connect_phase(uvm_phase phase);
   end
 endfunction: connect_phase
 
-task cl_scbtest_test_tlm::run_phase(uvm_phase phase);
+task cl_scbtest_test_ooo_tlm::run_phase(uvm_phase phase);
   // Raise objection
   phase.raise_objection(this);
 

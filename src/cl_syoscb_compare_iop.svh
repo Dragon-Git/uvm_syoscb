@@ -16,44 +16,46 @@
 //   the License for the specific language governing
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
-/// Class which implements the in order compare algorithm
-class cl_syoscb_compare_io extends cl_syoscb_compare_base;
+// Class which implements the in order by producer compare algorithm
+class cl_syoscb_compare_iop extends cl_syoscb_compare_base;
   //-------------------------------------
   // UVM Macros
   //-------------------------------------
-  `uvm_object_utils(cl_syoscb_compare_io)
+  `uvm_object_utils(cl_syoscb_compare_iop)
 
   //-------------------------------------
   // Constructor
   //-------------------------------------
-  extern function new(string name = "cl_syoscb_compare_io");
+  extern function new(string name = "cl_syoscb_compare_iop");
 
   //-------------------------------------
   // Compare API
   //-------------------------------------
   extern virtual function void compare();
   extern function void compare_do();
-endclass: cl_syoscb_compare_io
+endclass: cl_syoscb_compare_iop
 
-function cl_syoscb_compare_io::new(string name = "cl_syoscb_compare_io");
+function cl_syoscb_compare_iop::new(string name = "cl_syoscb_compare_iop");
   super.new(name);
 endfunction: new
 
 /// <b>Compare API</b>: Mandatory overwriting of the base class' compare method.
 /// Currently, this just calls do_copy() blindly 
-function void cl_syoscb_compare_io::compare();
+function void cl_syoscb_compare_iop::compare();
   // Here any state variables should be queried
   // to compute if the compare should be done or not
   this.compare_do();
 endfunction: compare
 
 /// <b>Compare API</b>: Mandatory overwriting of the base class' do_compare method.
-/// Here the actual in order compare is implemented.
+/// Here the actual out of order compare is implemented.
 ///
 /// The algorithm gets the primary queue and then loops over all other queues to see if
-/// it can find primary item as the first item in all of the other queues. If so then the items
-/// are removed from all queues. If not then a UVM error is issued.
-function void cl_syoscb_compare_io::compare_do();
+/// it can find the primary item as the first item of the same producer in all of the other queues.
+/// If so then the items are removed from all queues. If not then nothing is done. Thus, if some items are not
+/// matched then the result is that the queue will be non-empty at the end of simulation.
+/// This will then be caught by the check_phase.
+function void cl_syoscb_compare_iop::compare_do();
   string primary_queue_name;
   cl_syoscb_queue primary_queue;
   cl_syoscb_queue_iterator_base primary_queue_iter;
@@ -74,11 +76,11 @@ function void cl_syoscb_compare_io::compare_do();
 
   primary_queue_iter = primary_queue.create_iterator();
 
-  `uvm_info("DEBUG", $sformatf("cmp-io: primary queue: %s", primary_queue_name), UVM_FULL);
-  `uvm_info("DEBUG", $sformatf("cmp-io: number of queues: %0d", queue_names.size()), UVM_FULL);
+  `uvm_info("DEBUG", $sformatf("cmp-iop: primary queue: %s", primary_queue_name), UVM_FULL);
+  `uvm_info("DEBUG", $sformatf("cmp-iop: number of queues: %0d", queue_names.size()), UVM_FULL);
 
   // Outer loop loops through all
-  while(!primary_queue_iter.is_done()) begin
+  while (!primary_queue_iter.is_done()) begin
     primary_item = primary_queue_iter.get_item();
 
     `uvm_info("DEBUG", $sformatf("Now comparing primary transaction:\n%s", primary_item.sprint()), UVM_FULL); 
@@ -93,7 +95,6 @@ function void cl_syoscb_compare_io::compare_do();
       if(queue_names[i] != primary_queue_name) begin
         cl_syoscb_queue secondary_queue;
         cl_syoscb_queue_iterator_base secondary_queue_iter;
-        cl_syoscb_item sih;
 
         `uvm_info("DEBUG", $sformatf("%s is a secondary queue - now comparing", queue_names[i]), UVM_FULL);
 
@@ -109,21 +110,26 @@ function void cl_syoscb_compare_io::compare_do();
         // Get an iterator for the secondary queue
         secondary_queue_iter = secondary_queue.create_iterator();
 
-        // Only do the compare if there are actually an item in the secondary queue
-        if(!secondary_queue_iter.is_done()) begin
-          // Get the first item from the secondary queue       
-          sih = secondary_queue_iter.get_item();
+        // Only the first match is removed
+        while(!secondary_queue_iter.is_done()) begin
+          // Get the item from the secondary queue
+          cl_syoscb_item sih = secondary_queue_iter.get_item();
 
-          if(sih.compare(primary_item) == 1'b1) begin
-            secondary_item_found[queue_names[i]] = secondary_queue_iter.get_idx();
-            `uvm_info("DEBUG", $sformatf("Secondary item found at index: %0d:\n%s", secondary_queue_iter.get_idx(), sih.sprint()), UVM_FULL);
-          end else begin
-            `uvm_error("COMPARE_ERROR", $sformatf("Item:\n%s\nfrom primary queue: %s not found in secondary queue: %s. Found this item in %s instead:\n%s", primary_item.sprint(), primary_queue_name, queue_names[i], queue_names[i], sih.sprint()))
+          // Only do the compare if the producers match
+          if(primary_item.get_producer == sih.get_producer()) begin
+            if(sih.compare(primary_item) == 1'b1) begin
+              secondary_item_found[queue_names[i]] = secondary_queue_iter.get_idx();
+              `uvm_info("DEBUG", $sformatf("Secondary item found at index: %0d:\n%s", secondary_queue_iter.get_idx(), sih.sprint()), UVM_FULL);
+              break;
+            end else begin
+              `uvm_error("COMPARE_ERROR", $sformatf("Item:\n%s\nfrom primary queue: %s not found in secondary queue: %s. Found this item in %s instead:\n%s", primary_item.sprint(), primary_queue_name, queue_names[i], queue_names[i], sih.sprint()))
+            end
           end
-        end else begin
-          `uvm_info("DEBUG", "End of queue reached", UVM_FULL);
-        end
 
+          if(!secondary_queue_iter.next()) begin
+            `uvm_fatal("QUEUE_ERROR", $sformatf("Unable to get next element from iterator on secondary queue: %s", queue_names[i]));
+          end	  
+        end
         if(!secondary_queue.delete_iterator(secondary_queue_iter)) begin
           `uvm_fatal("QUEUE_ERROR", $sformatf("Unable to delete iterator from secondaery queue: %s", queue_names[i]));
         end
@@ -153,7 +159,7 @@ function void cl_syoscb_compare_io::compare_do();
       while(secondary_item_found.next(queue_name)) begin
         cl_syoscb_queue secondary_queue;
 
-	// Get the secondary queue
+        // Get the secondary queue
         secondary_queue = this.cfg.get_queue(queue_name);
 
         if(secondary_queue == null) begin
